@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "lume_story": {
+      "type": "lume-story",
+      "settings": {
+        "buy_url": "/products/lume-smart-ring"
+      }
+    }
+  },
+  "order": ["lume_story"]
+}

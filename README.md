@@ -2,6 +2,13 @@
 
 Landing page cinematográfica de alta conversão para o smart ring **Lume**, com estética premium no nível de Apple, Oura e Nothing. Dark mode quente, tipografia grande e animações de scroll suaves.
 
+Este repositório contém duas versões:
+
+- **`/` (raiz)** — landing page estática standalone (HTML/CSS/JS + GSAP/Lenis), publicável em GitHub Pages / Vercel / Netlify.
+- **[`/shopify-theme`](shopify-theme)** — a mesma experiência portada para um **tema Shopify** (Horizon customizado), publicada e no ar na loja Lume. A home é a seção custom `sections/lume-story.liquid` + `assets/lume.css` + `assets/lume.js`.
+
+> Nota sobre scroll no tema Shopify: o Horizon rola dentro de `.page-wrapper` (não na `window`), então o `assets/lume.js` aponta o GSAP ScrollTrigger para esse container — sem isso as animações de scroll não disparam.
+
 **Demo local:** abra `index.html` ou rode um servidor estático na pasta.
 
 ```bash
