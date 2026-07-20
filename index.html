@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#171411" />
+
+  <title>Lume — O futuro da sua saúde começa no seu dedo</title>
+  <meta name="description" content="Lume é o smart ring que acompanha sono, frequência cardíaca, estresse, temperatura e oxigenação — com a elegância de uma joia. Titânio, 7 dias de bateria, sem assinatura." />
+  <meta name="author" content="Lume" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="product" />
+  <meta property="og:site_name" content="Lume" />
+  <meta property="og:title" content="Lume — O futuro da sua saúde começa no seu dedo" />
+  <meta property="og:description" content="Acompanhe sono, frequência cardíaca, estresse e temperatura sem abrir mão da elegância. O smart ring premium da Lume." />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:image" content="assets/og-image.svg" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Lume — Smart Ring premium" />
+  <meta name="twitter:description" content="Toda a tecnologia. Sem chamar atenção." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <!-- Schema.org Product -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Lume Smart Ring",
+    "image": "assets/og-image.svg",
+    "description": "Smart ring premium em titânio que monitora sono, frequência cardíaca, variabilidade cardíaca, estresse, temperatura corporal e oxigenação (SpO2). Até 7 dias de bateria, resistente à água e sem assinatura.",
+    "brand": { "@type": "Brand", "name": "Lume" },
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "BRL",
+      "price": "1490.00",
+      "availability": "https://schema.org/InStock",
+      "url": "https://lume.example.com"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "2184"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Custom cursor -->
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" aria-hidden="true"><span></span></div>
+
+  <!-- Navbar -->
+  <header class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#hero" class="nav__logo" aria-label="Lume — início">
+        <span class="nav__logo-mark"></span>Lume
+      </a>
+      <nav class="nav__links" aria-label="Principal">
+        <a href="#tech">Tecnologia</a>
+        <a href="#sleep">Sono</a>
+        <a href="#app">App</a>
+        <a href="#compare">Comparar</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a href="#buy" class="btn btn--sm" data-hover>Comprar</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="hero">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="hero__grain" aria-hidden="true"></div>
+      <div class="hero__content">
+        <p class="eyebrow reveal">Smart Ring · Geração III</p>
+        <h1 class="hero__title">
+          <span class="line"><span>O futuro da sua saúde</span></span>
+          <span class="line"><span>começa no seu dedo.</span></span>
+        </h1>
+        <p class="hero__sub reveal">Acompanhe sono, frequência cardíaca, estresse, temperatura corporal e muito mais — sem abrir mão da elegância.</p>
+        <div class="hero__cta reveal">
+          <a href="#buy" class="btn btn--primary" data-hover>Comprar Agora</a>
+          <a href="#watch" class="btn btn--ghost" data-hover>Conheça a Lume</a>
+        </div>
+        <ul class="hero__trust reveal" aria-label="Garantias">
+          <li>Frete grátis</li>
+          <li>12x sem juros</li>
+          <li>30 dias de teste</li>
+          <li>Sem assinatura</li>
+        </ul>
+      </div>
+
+      <div class="hero__ring" data-ring>
+        <div class="ring" aria-label="Anel inteligente Lume girando" role="img">
+          <div class="ring__band"></div>
+          <div class="ring__inner"></div>
+          <div class="ring__sensor s1"></div>
+          <div class="ring__sensor s2"></div>
+          <div class="ring__sensor s3"></div>
+          <div class="ring__shine"></div>
+        </div>
+      </div>
+
+      <div class="hero__scroll" aria-hidden="true"><span>Role</span><i></i></div>
+    </section>
+
+    <!-- ===== SEÇÃO 1 — smartwatch ficou no passado ===== -->
+    <section class="past" id="watch">
+      <div class="past__sticky">
+        <div class="past__watch" data-watch aria-hidden="true">
+          <div class="watch"><div class="watch__screen"></div><div class="watch__crown"></div></div>
+        </div>
+        <div class="past__ring" data-past-ring aria-hidden="true">
+          <div class="ring ring--sm"><div class="ring__band"></div><div class="ring__inner"></div><div class="ring__shine"></div></div>
+        </div>
+        <div class="past__text">
+          <h2 class="section-title" data-split>O smartwatch ficou no passado.</h2>
+          <p class="past__line" data-fade>Toda tecnologia.<br /><span>Sem chamar atenção.</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 2 — anatomia / tecnologia ===== -->
+    <section class="tech" id="tech">
+      <div class="tech__head">
+        <p class="eyebrow" data-fade>Engenharia invisível</p>
+        <h2 class="section-title" data-split>Seis sensores. Um único anel.</h2>
+      </div>
+      <div class="tech__grid">
+        <article class="feature-card glass" data-card>
+          <span class="feature-card__ico" data-ico="heart"></span>
+          <h3>Batimentos</h3>
+          <p>Fotopletismografia de precisão lendo sua frequência cardíaca 24 horas por dia.</p>
+        </article>
+        <article class="feature-card glass" data-card>
+          <span class="feature-card__ico" data-ico="spo2"></span>
+          <h3>Oxigênio (SpO2)</h3>
+          <p>LEDs vermelho e infravermelho medem a saturação de oxigênio no sangue durante a noite.</p>
+        </article>
+        <article class="feature-card glass" data-card>
+          <span class="feature-card__ico" data-ico="temp"></span>
+          <h3>Temperatura</h3>
+          <p>Sensor de temperatura de pele que revela tendências e antecipa sinais do corpo.</p>
+        </article>
+        <article class="feature-card glass" data-card>
+          <span class="feature-card__ico" data-ico="accel"></span>
+          <h3>Acelerômetro 3D</h3>
+          <p>Detecta movimento, passos e treinos automaticamente, com consumo mínimo.</p>
+        </article>
+        <article class="feature-card glass" data-card>
+          <span class="feature-card__ico" data-ico="led"></span>
+          <h3>Matriz de LED</h3>
+          <p>Array óptico calibrado para leituras estáveis mesmo em movimento.</p>
+        </article>
+        <article class="feature-card glass" data-card>
+          <span class="feature-card__ico" data-ico="hrv"></span>
+          <h3>Variabilidade (HRV)</h3>
+          <p>Traduz o equilíbrio do sistema nervoso em um score de recuperação diário.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 3 — SONO ===== -->
+    <section class="sleep" id="sleep">
+      <div class="stars" data-stars aria-hidden="true"></div>
+      <div class="sleep__inner">
+        <div class="sleep__copy">
+          <p class="eyebrow" data-fade>Sono</p>
+          <h2 class="section-title" data-split>Noites melhores.<br />Dias melhores.</h2>
+          <p class="lead" data-fade>Cada estágio do seu sono, medido com precisão clínica e traduzido em um único número claro ao acordar.</p>
+        </div>
+        <div class="dashboard glass" data-card>
+          <div class="dashboard__top">
+            <span>Score de Sono</span>
+            <strong class="dashboard__score" data-count="92">0</strong>
+          </div>
+          <div class="dashboard__bars">
+            <div class="bar" style="--h:38%"><i></i><small>Profundo</small></div>
+            <div class="bar" style="--h:64%"><i></i><small>REM</small></div>
+            <div class="bar" style="--h:88%"><i></i><small>Leve</small></div>
+            <div class="bar" style="--h:22%"><i></i><small>Acordado</small></div>
+          </div>
+          <div class="dashboard__stats">
+            <div><span>Tempo dormindo</span><strong>7h 42min</strong></div>
+            <div><span>Qualidade</span><strong>Excelente</strong></div>
+            <div><span>Recuperação</span><strong>96%</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 4 — 24h ===== -->
+    <section class="monitor" id="monitor">
+      <div class="monitor__head">
+        <p class="eyebrow" data-fade>Monitoramento contínuo</p>
+        <h2 class="section-title" data-split>Seu corpo, 24 horas por dia.</h2>
+      </div>
+      <div class="metrics">
+        <div class="metric glass" data-card><span class="metric__label">Batimentos</span><strong class="metric__val" data-count="62">0</strong><span class="metric__unit">bpm</span><div class="metric__spark" data-spark></div></div>
+        <div class="metric glass" data-card><span class="metric__label">Estresse</span><strong class="metric__val" data-count="18">0</strong><span class="metric__unit">baixo</span><div class="metric__spark" data-spark></div></div>
+        <div class="metric glass" data-card><span class="metric__label">Temperatura</span><strong class="metric__val" data-count="36" data-suffix=",4">0</strong><span class="metric__unit">°C</span><div class="metric__spark" data-spark></div></div>
+        <div class="metric glass" data-card><span class="metric__label">Passos</span><strong class="metric__val" data-count="8420">0</strong><span class="metric__unit">hoje</span><div class="metric__spark" data-spark></div></div>
+        <div class="metric glass" data-card><span class="metric__label">Calorias</span><strong class="metric__val" data-count="2140">0</strong><span class="metric__unit">kcal</span><div class="metric__spark" data-spark></div></div>
+        <div class="metric glass" data-card><span class="metric__label">SpO2</span><strong class="metric__val" data-count="98">0</strong><span class="metric__unit">%</span><div class="metric__spark" data-spark></div></div>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 5 — MATERIAIS ===== -->
+    <section class="material" id="material">
+      <div class="material__media" data-parallax>
+        <div class="ring ring--macro"><div class="ring__band"></div><div class="ring__inner"></div><div class="ring__shine"></div><div class="ring__edge"></div></div>
+      </div>
+      <div class="material__copy">
+        <p class="eyebrow" data-fade>Materiais</p>
+        <h2 class="section-title" data-split>Titânio aeroespacial. 3 gramas.</h2>
+        <p class="lead" data-fade>Um acabamento pensado para durar uma vida. Leve a ponto de esquecer que está usando, resistente a ponto de nunca precisar tirar.</p>
+        <ul class="material__list">
+          <li data-fade><span>01</span> Titânio grau 5 hipoalergênico</li>
+          <li data-fade><span>02</span> Revestimento cerâmico anti-risco</li>
+          <li data-fade><span>03</span> Resistente à água até 100m</li>
+          <li data-fade><span>04</span> Apenas 3g — mais leve que uma aliança</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 6 — LIFESTYLE ===== -->
+    <section class="life" id="life">
+      <div class="life__head">
+        <h2 class="section-title" data-split>Feito para cada momento.</h2>
+      </div>
+      <div class="life__track" data-hscroll>
+        <figure class="life__card" data-tone="a"><figcaption>Academia</figcaption></figure>
+        <figure class="life__card" data-tone="b"><figcaption>Escritório</figcaption></figure>
+        <figure class="life__card" data-tone="c"><figcaption>Descanso</figcaption></figure>
+        <figure class="life__card" data-tone="d"><figcaption>Corrida</figcaption></figure>
+        <figure class="life__card" data-tone="e"><figcaption>Viagem</figcaption></figure>
+        <figure class="life__card" data-tone="f"><figcaption>Rotina</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 7 — APP ===== -->
+    <section class="app" id="app">
+      <div class="app__copy">
+        <p class="eyebrow" data-fade>Aplicativo Lume</p>
+        <h2 class="section-title" data-split>Seus dados, com beleza.</h2>
+        <p class="lead" data-fade>Uma interface calma e escura que transforma milhares de leituras em orientações simples. iOS e Android.</p>
+        <div class="app__badges">
+          <span class="badge-store" data-hover> App Store</span>
+          <span class="badge-store" data-hover>▶ Google Play</span>
+        </div>
+      </div>
+      <div class="app__phones" data-parallax>
+        <div class="phone phone--back">
+          <div class="phone__screen">
+            <div class="phone__ring-chart"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50"/><circle cx="60" cy="60" r="50" class="prog" style="--p:0.88"/></svg><span>88</span></div>
+            <p class="phone__cap">Prontidão</p>
+          </div>
+        </div>
+        <div class="phone phone--front">
+          <div class="phone__screen">
+            <div class="phone__wave"></div>
+            <div class="phone__rows">
+              <div><span>Sono</span><b>7h42</b></div>
+              <div><span>HRV</span><b>68ms</b></div>
+              <div><span>Repouso</span><b>54bpm</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 8 — COMPARAÇÃO ===== -->
+    <section class="compare" id="compare">
+      <div class="compare__head">
+        <p class="eyebrow" data-fade>Por que o anel</p>
+        <h2 class="section-title" data-split>Menos no pulso. Mais no dado.</h2>
+      </div>
+      <div class="compare__table" role="table" aria-label="Comparação Lume, smartwatch e pulseira">
+        <div class="compare__row compare__row--head" role="row">
+          <span role="columnheader">Recurso</span>
+          <span class="is-lume" role="columnheader">Lume</span>
+          <span role="columnheader">Smartwatch</span>
+          <span role="columnheader">Pulseira</span>
+        </div>
+        <div class="compare__row" role="row" data-row><span>Bateria</span><span class="is-lume">7 dias</span><span>1 dia</span><span>5 dias</span></div>
+        <div class="compare__row" role="row" data-row><span>Conforto ao dormir</span><span class="is-lume yes">Sim</span><span class="no">Não</span><span class="mid">Médio</span></div>
+        <div class="compare__row" role="row" data-row><span>Discrição</span><span class="is-lume yes">Sim</span><span class="no">Não</span><span class="mid">Médio</span></div>
+        <div class="compare__row" role="row" data-row><span>Precisão de sono</span><span class="is-lume yes">Alta</span><span class="mid">Média</span><span class="no">Baixa</span></div>
+        <div class="compare__row" role="row" data-row><span>Sem assinatura</span><span class="is-lume yes">Sim</span><span class="no">Não</span><span class="mid">Varia</span></div>
+        <div class="compare__row" role="row" data-row><span>Design premium</span><span class="is-lume yes">Titânio</span><span class="mid">Plástico</span><span class="no">Silicone</span></div>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 9 — DEPOIMENTOS ===== -->
+    <section class="reviews" id="reviews">
+      <div class="reviews__head">
+        <p class="eyebrow" data-fade>4,9 / 5 · 2.184 avaliações</p>
+        <h2 class="section-title" data-split>Quem usa, não tira mais.</h2>
+      </div>
+      <div class="reviews__grid">
+        <blockquote class="review glass" data-card>
+          <div class="stars5" aria-label="5 estrelas">★★★★★</div>
+          <p>"Em duas semanas entendi mais sobre meu sono do que em anos. O score da manhã virou meu ritual."</p>
+          <footer><span class="avatar" data-i="1"></span><cite>Mariana C.<small>São Paulo, SP</small></cite></footer>
+        </blockquote>
+        <blockquote class="review glass" data-card>
+          <div class="stars5" aria-label="5 estrelas">★★★★★</div>
+          <p>"Uso no treino, no banho e no mar. Esqueço que está no dedo — e a bateria dura a semana inteira."</p>
+          <footer><span class="avatar" data-i="2"></span><cite>Rafael T.<small>Florianópolis, SC</small></cite></footer>
+        </blockquote>
+        <blockquote class="review glass" data-card>
+          <div class="stars5" aria-label="5 estrelas">★★★★★</div>
+          <p>"A detecção de estresse me avisou antes de mim. Mudou como organizo meu dia de trabalho."</p>
+          <footer><span class="avatar" data-i="3"></span><cite>Ana L.<small>Belo Horizonte, MG</small></cite></footer>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 10 — FAQ ===== -->
+    <section class="faq" id="faq">
+      <div class="faq__head"><h2 class="section-title" data-split>Perguntas frequentes</h2></div>
+      <div class="faq__list">
+        <details class="faq__item" data-fade><summary>O anel é compatível com o meu celular?<i></i></summary><div class="faq__body"><p>Sim. O app Lume está disponível para iOS 13+ e Android 8+, com sincronização via Bluetooth de baixo consumo.</p></div></details>
+        <details class="faq__item" data-fade><summary>Quanto tempo dura a bateria?<i></i></summary><div class="faq__body"><p>Até 7 dias com uma única carga. A recarga completa leva cerca de 90 minutos na base magnética inclusa.</p></div></details>
+        <details class="faq__item" data-fade><summary>Posso usar na água?<i></i></summary><div class="faq__body"><p>Pode. Resistência à água de até 100 metros — banho, piscina e mar sem preocupação.</p></div></details>
+        <details class="faq__item" data-fade><summary>Como escolho o tamanho certo?<i></i></summary><div class="faq__body"><p>Enviamos gratuitamente um kit de medição com todos os tamanhos para testar em casa antes do anel definitivo.</p></div></details>
+        <details class="faq__item" data-fade><summary>Preciso pagar assinatura?<i></i></summary><div class="faq__body"><p>Nunca. Todos os recursos do app são inclusos para sempre. Seus dados são só seus.</p></div></details>
+        <details class="faq__item" data-fade><summary>Existe garantia?<i></i></summary><div class="faq__body"><p>12 meses de garantia e 30 dias para testar — se não amar, devolvemos seu dinheiro.</p></div></details>
+      </div>
+    </section>
+
+    <!-- ===== CTA / BUY ===== -->
+    <section class="buy" id="buy">
+      <div class="buy__glow" aria-hidden="true"></div>
+      <div class="buy__inner glass" data-card>
+        <p class="eyebrow">Edição limitada · Geração III</p>
+        <h2 class="buy__title">Comece hoje a evoluir.</h2>
+        <div class="buy__price"><span class="buy__from">de R$ 1.990</span><strong>R$ 1.490</strong><small>ou 12x de R$ 124,16</small></div>
+        <a href="#" class="btn btn--primary btn--lg" data-hover>Comprar Lume</a>
+        <ul class="buy__perks">
+          <li>Frete grátis</li><li>30 dias de teste</li><li>Garantia de 12 meses</li><li>Compra 100% segura</li>
+        </ul>
+        <p class="buy__scarcity"><i></i> Estoque limitado desta série</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <a href="#hero" class="nav__logo"><span class="nav__logo-mark"></span>Lume</a>
+      <nav class="footer__links" aria-label="Rodapé">
+        <a href="#tech">Tecnologia</a><a href="#app">App</a><a href="#faq">FAQ</a><a href="#buy">Comprar</a>
+      </nav>
+      <p class="footer__copy">© 2026 Lume. Luz, clareza e evolução pessoal.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
