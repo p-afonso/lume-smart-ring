@@ -1,0 +1,442 @@
+{%- comment -%}
+  Lume — Guia de Tamanho (ferramenta interativa client-side)
+  Vanilla JS + Pointer Events, escopado por #lume-sz-{{ section.id }}.
+  Sem dependência de GSAP/IntersectionObserver.
+{%- endcomment -%}
+<div id="lume-sz-{{ section.id }}" class="lsz" data-lsz>
+  <div class="lsz__wrap">
+    <header class="lsz__head">
+      <p class="lsz__eyebrow">{{ section.settings.eyebrow | default: 'Guia de Tamanho' }}</p>
+      <h2 class="lsz__title">{{ section.settings.title | default: 'Encontre seu tamanho' }}</h2>
+      <p class="lsz__sub">{{ section.settings.subtitle | default: 'Calibre a tela e ajuste o anel — sem sair da página.' }}</p>
+    </header>
+
+    {%- comment -%} ===== TABS ===== {%- endcomment -%}
+    <div class="lsz__tabs" role="tablist" aria-label="Guia de tamanho">
+      <button class="lsz__tab is-active" role="tab" id="lsz-tab-cal-{{ section.id }}" aria-selected="true" aria-controls="lsz-panel-cal-{{ section.id }}" data-tab="cal">Calibrar</button>
+      <button class="lsz__tab" role="tab" id="lsz-tab-inp-{{ section.id }}" aria-selected="false" aria-controls="lsz-panel-inp-{{ section.id }}" data-tab="inp" tabindex="-1">Digitar medida</button>
+      <button class="lsz__tab" role="tab" id="lsz-tab-tab-{{ section.id }}" aria-selected="false" aria-controls="lsz-panel-tab-{{ section.id }}" data-tab="tab" tabindex="-1">Tabela</button>
+    </div>
+
+    {%- comment -%} ===== PANEL 1 · CALIBRAR ===== {%- endcomment -%}
+    <div class="lsz__panel is-active" role="tabpanel" id="lsz-panel-cal-{{ section.id }}" aria-labelledby="lsz-tab-cal-{{ section.id }}" data-panel="cal">
+
+      {%- comment -%} Step 1 {%- endcomment -%}
+      <section class="lsz__step is-active" data-step="1">
+        <div class="lsz__steprow">
+          <h3 class="lsz__h3"><span class="lsz__stepnum">1</span> Calibrar a tela</h3>
+          <button type="button" class="lsz__help" data-help="calibrar">Como calibrar</button>
+        </div>
+        <p class="lsz__instr">Coloque um cartão de banco na vertical sobre o retângulo. Arraste a borda inferior até encaixar perfeitamente.</p>
+
+        <div class="lsz__cardstage">
+          <div class="lsz__card" data-card>
+            <span class="lsz__cardlabel">CARTÃO NA VERTICAL<br><small>54 × 85,6 mm — ISO 7810</small></span>
+            <button type="button" class="lsz__cardhandle" data-card-handle aria-label="Arraste para ajustar a altura do cartão">
+              <span class="lsz__grip"></span>
+            </button>
+          </div>
+        </div>
+        <p class="lsz__hint">Arraste a borda inferior até encaixar na borda do cartão.</p>
+
+        <button type="button" class="lsz__btn lsz__btn--primary" data-goto-step="2">Confirmar e ajustar o anel →</button>
+      </section>
+
+      {%- comment -%} Step 2 {%- endcomment -%}
+      <section class="lsz__step" data-step="2" hidden>
+        <div class="lsz__steprow">
+          <h3 class="lsz__h3"><span class="lsz__stepnum">2</span> Ajustar o anel</h3>
+          <button type="button" class="lsz__help" data-help="ajustar">Como ajustar</button>
+        </div>
+        <p class="lsz__instr">Coloque seu anel sobre a tela e ajuste o círculo até encaixar no diâmetro interno. Sem o anel? Use o slider para estimar.</p>
+
+        <div class="lsz__ringstage">
+          <div class="lsz__circle" data-circle>
+            <button type="button" class="lsz__circlehandle" data-circle-handle aria-label="Arraste para redimensionar o círculo"></button>
+          </div>
+        </div>
+
+        <div class="lsz__readout">
+          <div><span class="lsz__rlabel">DIÂMETRO</span><strong data-out-dia>19,5 mm</strong></div>
+          <div><span class="lsz__rlabel">TAMANHO</span><strong data-out-size>10</strong></div>
+        </div>
+
+        <div class="lsz__slider">
+          <button type="button" class="lsz__step-btn" data-nudge="-1" aria-label="Diminuir">−</button>
+          <div class="lsz__track">
+            <input type="range" data-range aria-label="Diâmetro do anel"
+              role="slider" min="17.1" max="22.0" step="0.1" value="19.5"
+              aria-valuemin="17.1" aria-valuemax="22.0" aria-valuenow="19.5">
+            <div class="lsz__ticks"><span>7 · 17,1mm</span><span>13 · 22,0mm</span></div>
+          </div>
+          <button type="button" class="lsz__step-btn" data-nudge="1" aria-label="Aumentar">+</button>
+        </div>
+
+        <p class="lsz__badge" data-badge>Tamanho 10 — encaixe perfeito</p>
+        <button type="button" class="lsz__btn lsz__btn--ghost" data-goto-step="1">← Recalibrar a tela</button>
+      </section>
+    </div>
+
+    {%- comment -%} ===== PANEL 2 · DIGITAR MEDIDA ===== {%- endcomment -%}
+    <div class="lsz__panel" role="tabpanel" id="lsz-panel-inp-{{ section.id }}" aria-labelledby="lsz-tab-inp-{{ section.id }}" data-panel="inp" hidden>
+      <div class="lsz__steprow">
+        <h3 class="lsz__h3">Digite a circunferência</h3>
+        <button type="button" class="lsz__help" data-help="medir">Como medir</button>
+      </div>
+      <p class="lsz__instr">Meça a circunferência do dedo com uma tira de papel e uma régua em milímetros.</p>
+
+      <label class="lsz__field">
+        <span class="lsz__flabel">CIRCUNFERÊNCIA DO DEDO (MM)</span>
+        <input type="number" inputmode="decimal" data-circ-input placeholder="60" min="40" max="90" step="0.1">
+      </label>
+
+      <div class="lsz__reco" data-reco hidden>
+        <span class="lsz__rlabel">TAMANHO RECOMENDADO</span>
+        <strong class="lsz__reconum" data-reco-num>8</strong>
+        <p class="lsz__reconame" data-reco-name>Tamanho 8</p>
+        <p class="lsz__recometa" data-reco-meta>Ø 17,8mm · Circ. 55,9mm</p>
+      </div>
+    </div>
+
+    {%- comment -%} ===== PANEL 3 · TABELA ===== {%- endcomment -%}
+    <div class="lsz__panel" role="tabpanel" id="lsz-panel-tab-{{ section.id }}" aria-labelledby="lsz-tab-tab-{{ section.id }}" data-panel="tab" hidden>
+      <table class="lsz__table">
+        <thead><tr><th>TAM.</th><th>CIRCUNFERÊNCIA</th><th>DIÂMETRO</th></tr></thead>
+        <tbody data-table-body></tbody>
+      </table>
+    </div>
+  </div>
+
+  {%- comment -%} ===== MODAIS DE AJUDA ===== {%- endcomment -%}
+  <dialog class="lsz__modal" data-modal="calibrar">
+    <h4>Como calibrar a tela</h4>
+    <ol>
+      <li>Pegue qualquer cartão de banco, de crédito ou de transporte (todos seguem o padrão ISO 7810).</li>
+      <li>Apoie o cartão na vertical, encostado na tela, alinhando o topo com a borda superior do retângulo.</li>
+      <li>Arraste a alça inferior até que a base do retângulo coincida exatamente com a base do cartão.</li>
+      <li>Pronto — a tela está calibrada. A medida fica salva para as próximas visitas.</li>
+    </ol>
+    <button type="button" class="lsz__btn lsz__btn--primary" data-close>Fechar</button>
+  </dialog>
+
+  <dialog class="lsz__modal" data-modal="ajustar">
+    <h4>Como ajustar o anel</h4>
+    <ol>
+      <li>Pegue um anel que já sirva bem no dedo desejado.</li>
+      <li>Apoie o anel sobre a tela, sobre o círculo.</li>
+      <li>Arraste a alça do círculo (ou use o slider e os botões − / +) até o círculo encaixar no diâmetro interno do anel.</li>
+      <li>Leia o tamanho recomendado. Sem um anel de referência? Use só o slider para estimar.</li>
+    </ol>
+    <button type="button" class="lsz__btn lsz__btn--primary" data-close>Fechar</button>
+  </dialog>
+
+  <dialog class="lsz__modal" data-modal="medir">
+    <h4>Como medir a circunferência</h4>
+    <ol>
+      <li>Corte uma tira fina de papel.</li>
+      <li>Enrole no dedo, na base, sem apertar demais, e marque onde a tira se encontra.</li>
+      <li>Estique a tira e meça o comprimento em milímetros com uma régua.</li>
+      <li>Digite esse valor no campo — esse é a circunferência do seu dedo.</li>
+    </ol>
+    <button type="button" class="lsz__btn lsz__btn--primary" data-close>Fechar</button>
+  </dialog>
+</div>
+
+<style>
+  #lume-sz-{{ section.id }} {
+    --sz-ink: #2D2D2D; --sz-dark: #181818; --sz-accent: #C9A97A;
+    --sz-bg: #F7F3EC; --sz-panel: #ffffff; --sz-line: #e5ddd0; --sz-muted: #8a8272;
+    background: var(--sz-bg); color: var(--sz-ink);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    padding: clamp(40px, 8vh, 88px) clamp(16px, 5vw, 48px);
+  }
+  #lume-sz-{{ section.id }} * { box-sizing: border-box; }
+  #lume-sz-{{ section.id }} .lsz__wrap { max-width: 720px; margin: 0 auto; }
+  #lume-sz-{{ section.id }} .lsz__head { text-align: center; margin-bottom: 30px; }
+  #lume-sz-{{ section.id }} .lsz__eyebrow { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--sz-accent); margin: 0 0 12px; font-weight: 600; }
+  #lume-sz-{{ section.id }} .lsz__title { font-family: "Instrument Serif", "Times New Roman", serif; font-weight: 400; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; margin: 0 0 10px; color: var(--sz-dark); }
+  #lume-sz-{{ section.id }} .lsz__sub { color: var(--sz-muted); margin: 0; font-size: .98rem; }
+
+  #lume-sz-{{ section.id }} .lsz__tabs { display: flex; gap: 4px; background: #efe7da; padding: 5px; border-radius: 14px; margin: 0 auto 26px; max-width: 460px; }
+  #lume-sz-{{ section.id }} .lsz__tab { flex: 1; border: 0; background: transparent; color: var(--sz-muted); font: inherit; font-weight: 600; font-size: .9rem; padding: 11px 8px; border-radius: 10px; cursor: pointer; transition: background .2s, color .2s; }
+  #lume-sz-{{ section.id }} .lsz__tab.is-active { background: var(--sz-panel); color: var(--sz-dark); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+
+  #lume-sz-{{ section.id }} .lsz__panel { display: none; }
+  #lume-sz-{{ section.id }} .lsz__panel.is-active { display: block; }
+  #lume-sz-{{ section.id }} .lsz__step { display: none; }
+  #lume-sz-{{ section.id }} .lsz__step.is-active { display: block; }
+
+  #lume-sz-{{ section.id }} .lsz__steprow { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  #lume-sz-{{ section.id }} .lsz__h3 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 1.6rem; margin: 0; color: var(--sz-dark); display: flex; align-items: center; gap: 10px; }
+  #lume-sz-{{ section.id }} .lsz__stepnum { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--sz-dark); color: var(--sz-bg); font-family: "Inter", sans-serif; font-size: .85rem; font-weight: 700; }
+  #lume-sz-{{ section.id }} .lsz__help { border: 1px solid var(--sz-line); background: var(--sz-panel); color: var(--sz-ink); font: inherit; font-size: .82rem; font-weight: 600; padding: 7px 13px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+  #lume-sz-{{ section.id }} .lsz__help:hover { border-color: var(--sz-accent); }
+  #lume-sz-{{ section.id }} .lsz__instr { color: var(--sz-muted); font-size: .95rem; margin: 0 0 22px; max-width: 52ch; }
+  #lume-sz-{{ section.id }} .lsz__hint { text-align: center; color: var(--sz-muted); font-size: .82rem; margin: 12px 0 24px; }
+
+  /* card calibration */
+  #lume-sz-{{ section.id }} .lsz__cardstage { display: flex; justify-content: center; }
+  #lume-sz-{{ section.id }} .lsz__card { position: relative; width: 204px; height: 323px; border: 2px solid var(--sz-dark); border-radius: 14px; background: linear-gradient(150deg, #fbf8f2, #efe7da); display: grid; place-items: center; touch-action: none; }
+  #lume-sz-{{ section.id }} .lsz__cardlabel { text-align: center; font-size: .72rem; letter-spacing: .12em; color: var(--sz-muted); font-weight: 600; line-height: 1.6; }
+  #lume-sz-{{ section.id }} .lsz__cardlabel small { font-weight: 500; letter-spacing: .04em; }
+  #lume-sz-{{ section.id }} .lsz__cardhandle { position: absolute; left: 0; right: 0; bottom: -13px; height: 26px; background: transparent; border: 0; cursor: ns-resize; display: grid; place-items: center; touch-action: none; }
+  #lume-sz-{{ section.id }} .lsz__grip { width: 56px; height: 6px; border-radius: 999px; background: var(--sz-accent); box-shadow: 0 0 0 4px rgba(201,169,122,.2); }
+
+  /* ring circle */
+  #lume-sz-{{ section.id }} .lsz__ringstage { display: flex; justify-content: center; align-items: center; min-height: 220px; margin-bottom: 8px; }
+  #lume-sz-{{ section.id }} .lsz__circle { position: relative; border: 2px solid var(--sz-dark); border-radius: 50%; background: rgba(201,169,122,.08); touch-action: none; }
+  #lume-sz-{{ section.id }} .lsz__circlehandle { position: absolute; right: -11px; bottom: 50%; width: 22px; height: 22px; transform: translateY(50%); border-radius: 50%; background: var(--sz-accent); border: 3px solid var(--sz-panel); box-shadow: 0 1px 4px rgba(0,0,0,.25); cursor: nwse-resize; touch-action: none; }
+
+  #lume-sz-{{ section.id }} .lsz__readout { display: flex; justify-content: center; gap: 40px; margin: 6px 0 20px; text-align: center; }
+  #lume-sz-{{ section.id }} .lsz__rlabel { display: block; font-size: .7rem; letter-spacing: .16em; color: var(--sz-muted); font-weight: 600; margin-bottom: 4px; }
+  #lume-sz-{{ section.id }} .lsz__readout strong { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 1.9rem; color: var(--sz-dark); }
+
+  #lume-sz-{{ section.id }} .lsz__slider { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  #lume-sz-{{ section.id }} .lsz__track { flex: 1; }
+  #lume-sz-{{ section.id }} .lsz__track input[type=range] { width: 100%; accent-color: var(--sz-accent); }
+  #lume-sz-{{ section.id }} .lsz__ticks { display: flex; justify-content: space-between; font-size: .72rem; color: var(--sz-muted); margin-top: 4px; }
+  #lume-sz-{{ section.id }} .lsz__step-btn { width: 40px; height: 40px; flex-shrink: 0; border-radius: 12px; border: 1px solid var(--sz-line); background: var(--sz-panel); color: var(--sz-dark); font-size: 1.3rem; line-height: 1; cursor: pointer; }
+  #lume-sz-{{ section.id }} .lsz__step-btn:hover { border-color: var(--sz-accent); }
+
+  #lume-sz-{{ section.id }} .lsz__badge { text-align: center; background: rgba(201,169,122,.16); color: #7a5c30; font-weight: 600; font-size: .92rem; padding: 12px; border-radius: 12px; margin: 0 0 18px; }
+
+  #lume-sz-{{ section.id }} .lsz__btn { display: block; width: 100%; text-align: center; font: inherit; font-weight: 600; font-size: .98rem; padding: 15px; border-radius: 14px; cursor: pointer; border: 1px solid transparent; }
+  #lume-sz-{{ section.id }} .lsz__btn--primary { background: var(--sz-dark); color: var(--sz-bg); }
+  #lume-sz-{{ section.id }} .lsz__btn--ghost { background: transparent; border-color: var(--sz-line); color: var(--sz-ink); margin-top: 10px; }
+
+  /* input tab */
+  #lume-sz-{{ section.id }} .lsz__field { display: block; margin-bottom: 22px; }
+  #lume-sz-{{ section.id }} .lsz__flabel { display: block; font-size: .72rem; letter-spacing: .14em; color: var(--sz-muted); font-weight: 600; margin-bottom: 8px; }
+  #lume-sz-{{ section.id }} .lsz__field input { width: 100%; font: inherit; font-size: 1.4rem; padding: 14px 16px; border: 1px solid var(--sz-line); border-radius: 14px; background: var(--sz-panel); color: var(--sz-dark); }
+  #lume-sz-{{ section.id }} .lsz__field input:focus { outline: 2px solid var(--sz-accent); outline-offset: 1px; border-color: transparent; }
+  #lume-sz-{{ section.id }} .lsz__reco { text-align: center; background: var(--sz-panel); border: 1px solid var(--sz-line); border-radius: 18px; padding: 26px; }
+  #lume-sz-{{ section.id }} .lsz__reconum { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 4rem; line-height: 1; color: var(--sz-dark); display: block; margin: 6px 0; }
+  #lume-sz-{{ section.id }} .lsz__reconame { font-weight: 600; margin: 0 0 4px; color: var(--sz-dark); }
+  #lume-sz-{{ section.id }} .lsz__recometa { color: var(--sz-muted); font-size: .9rem; margin: 0; }
+
+  /* table */
+  #lume-sz-{{ section.id }} .lsz__table { width: 100%; border-collapse: collapse; }
+  #lume-sz-{{ section.id }} .lsz__table th, #lume-sz-{{ section.id }} .lsz__table td { text-align: left; padding: 14px 12px; border-bottom: 1px solid var(--sz-line); }
+  #lume-sz-{{ section.id }} .lsz__table th { font-size: .72rem; letter-spacing: .12em; color: var(--sz-muted); font-weight: 600; }
+  #lume-sz-{{ section.id }} .lsz__table td { color: var(--sz-dark); }
+  #lume-sz-{{ section.id }} .lsz__table td:first-child { font-weight: 700; }
+  #lume-sz-{{ section.id }} .lsz__table tr[data-hl] td { background: rgba(201,169,122,.14); }
+
+  /* modal */
+  #lume-sz-{{ section.id }} .lsz__modal { border: 0; border-radius: 18px; padding: 28px; max-width: 440px; width: calc(100% - 32px); color: var(--sz-ink); }
+  #lume-sz-{{ section.id }} .lsz__modal::backdrop { background: rgba(24,24,24,.55); }
+  #lume-sz-{{ section.id }} .lsz__modal h4 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 1.5rem; margin: 0 0 14px; color: var(--sz-dark); }
+  #lume-sz-{{ section.id }} .lsz__modal ol { margin: 0 0 20px; padding-left: 20px; color: var(--sz-ink); }
+  #lume-sz-{{ section.id }} .lsz__modal li { margin-bottom: 10px; font-size: .95rem; }
+
+  @media (max-width: 560px) {
+    #lume-sz-{{ section.id }} .lsz__steprow { flex-direction: column; align-items: flex-start; }
+    #lume-sz-{{ section.id }} .lsz__readout { gap: 28px; }
+  }
+</style>
+
+<script>
+(function () {
+  var root = document.getElementById('lume-sz-{{ section.id }}');
+  if (!root || root.dataset.init) return;
+  root.dataset.init = '1';
+
+  var SIZES = [
+    { size: 7,  circ: 53.6, dia: 17.1 },
+    { size: 8,  circ: 55.9, dia: 17.8 },
+    { size: 9,  circ: 58.8, dia: 18.7 },
+    { size: 10, circ: 61.2, dia: 19.5 },
+    { size: 11, circ: 64.0, dia: 20.4 },
+    { size: 12, circ: 66.3, dia: 21.1 },
+    { size: 13, circ: 69.0, dia: 22.0 }
+  ];
+  var CARD_MM = 85.6;               // altura do cartão ISO 7810 na vertical
+  var DEFAULT_PPMM = 96 / 25.4;     // ~3.78 px/mm (CSS px @96dpi)
+  var LS_KEY = 'lume_ppmm';
+  var MIN_DIA = 17.1, MAX_DIA = 22.0;
+
+  var $ = function (s) { return root.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
+  var fmt = function (n, d) { return n.toFixed(d == null ? 1 : d).replace('.', ','); };
+
+  /* ---- utilitários pedidos no prompt ---- */
+  function pxParaMm(px) { return px / ppmm; }
+  function mmParaTamanhoPorDiametro(mm) {
+    return SIZES.reduce(function (a, b) { return Math.abs(b.dia - mm) < Math.abs(a.dia - mm) ? b : a; });
+  }
+  function mmParaTamanhoPorCircunferencia(mm) {
+    return SIZES.reduce(function (a, b) { return Math.abs(b.circ - mm) < Math.abs(a.circ - mm) ? b : a; });
+  }
+
+  /* ---- estado ---- */
+  var stored = parseFloat(localStorage.getItem(LS_KEY));
+  var ppmm = (stored && stored > 0) ? stored : DEFAULT_PPMM;
+  var curDia = 19.5;
+
+  /* ================= TABS ================= */
+  var tabs = $$('.lsz__tab');
+  var panels = $$('.lsz__panel');
+  function selectTab(name) {
+    tabs.forEach(function (t) {
+      var on = t.dataset.tab === name;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    panels.forEach(function (p) {
+      var on = p.dataset.panel === name;
+      p.classList.toggle('is-active', on);
+      if (on) { p.removeAttribute('hidden'); } else { p.setAttribute('hidden', ''); }
+    });
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { selectTab(t.dataset.tab); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        var dir = e.key === 'ArrowRight' ? 1 : -1;
+        var next = tabs[(i + dir + tabs.length) % tabs.length];
+        next.focus(); selectTab(next.dataset.tab);
+      }
+    });
+  });
+
+  /* ================= STEPS (aba Calibrar) ================= */
+  var steps = $$('.lsz__step');
+  function gotoStep(n) {
+    steps.forEach(function (s) {
+      var on = s.dataset.step === String(n);
+      s.classList.toggle('is-active', on);
+      if (on) { s.removeAttribute('hidden'); } else { s.setAttribute('hidden', ''); }
+    });
+    if (n === 2) syncCircleFromDia();
+  }
+  $$('[data-goto-step]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (b.dataset.gotoStep === '2') saveCalibration();
+      gotoStep(parseInt(b.dataset.gotoStep, 10));
+    });
+  });
+
+  /* ================= STEP 1 · calibração do cartão ================= */
+  var card = $('[data-card]');
+  var cardHandle = $('[data-card-handle]');
+  // altura inicial reflete o ppmm atual
+  function setCardHeight(px) {
+    px = Math.max(160, Math.min(620, px));
+    card.style.height = px + 'px';
+    card.style.width = (px * 0.6308) + 'px';   // proporção ISO 54/85.6
+    ppmm = px / CARD_MM;
+  }
+  setCardHeight(ppmm * CARD_MM);
+  function saveCalibration() {
+    try { localStorage.setItem(LS_KEY, String(ppmm)); } catch (e) {}
+  }
+  dragResize(cardHandle, function (dxdy) {
+    var rect = card.getBoundingClientRect();
+    setCardHeight(dxdy.clientY - rect.top);
+  });
+
+  /* ================= STEP 2 · círculo do anel ================= */
+  var circle = $('[data-circle]');
+  var circleHandle = $('[data-circle-handle]');
+  var range = $('[data-range]');
+  var outDia = $('[data-out-dia]');
+  var outSize = $('[data-out-size]');
+  var badge = $('[data-badge]');
+
+  function renderRing() {
+    curDia = Math.max(MIN_DIA, Math.min(MAX_DIA, curDia));
+    var px = curDia * ppmm;
+    circle.style.width = px + 'px';
+    circle.style.height = px + 'px';
+    var s = mmParaTamanhoPorDiametro(curDia);
+    outDia.textContent = fmt(curDia) + ' mm';
+    outSize.textContent = s.size;
+    badge.textContent = 'Tamanho ' + s.size + ' — encaixe perfeito';
+    range.value = curDia.toFixed(1);
+    range.setAttribute('aria-valuenow', curDia.toFixed(1));
+    range.setAttribute('aria-valuetext', 'Tamanho ' + s.size + ', ' + fmt(curDia) + ' milímetros');
+  }
+  function syncCircleFromDia() { renderRing(); }
+
+  range.addEventListener('input', function () { curDia = parseFloat(range.value); renderRing(); });
+  $$('[data-nudge]').forEach(function (b) {
+    b.addEventListener('click', function () { curDia += parseInt(b.dataset.nudge, 10) * 0.1; renderRing(); });
+  });
+  dragResize(circleHandle, function (p) {
+    var rect = circle.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+    var radiusPx = Math.hypot(p.clientX - cx, p.clientY - cy);
+    curDia = pxParaMm(radiusPx * 2);
+    renderRing();
+  });
+
+  /* ================= ABA 2 · digitar circunferência ================= */
+  var circInput = $('[data-circ-input]');
+  var reco = $('[data-reco]');
+  circInput.addEventListener('input', function () {
+    var v = parseFloat(circInput.value);
+    if (!v || v < 30 || v > 100) { reco.setAttribute('hidden', ''); return; }
+    var s = mmParaTamanhoPorCircunferencia(v);
+    $('[data-reco-num]').textContent = s.size;
+    $('[data-reco-name]').textContent = 'Tamanho ' + s.size;
+    $('[data-reco-meta]').textContent = 'Ø ' + fmt(s.dia) + 'mm · Circ. ' + fmt(s.circ) + 'mm';
+    reco.removeAttribute('hidden');
+  });
+
+  /* ================= ABA 3 · tabela ================= */
+  var tbody = $('[data-table-body]');
+  tbody.innerHTML = SIZES.map(function (s) {
+    return '<tr><td>' + s.size + '</td><td>' + fmt(s.circ) + ' mm</td><td>' + fmt(s.dia) + ' mm</td></tr>';
+  }).join('');
+
+  /* ================= MODAIS ================= */
+  $$('[data-help]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var m = root.querySelector('.lsz__modal[data-modal="' + b.dataset.help + '"]');
+      if (m && m.showModal) m.showModal();
+    });
+  });
+  $$('.lsz__modal').forEach(function (m) {
+    m.querySelector('[data-close]').addEventListener('click', function () { m.close(); });
+    m.addEventListener('click', function (e) { if (e.target === m) m.close(); });
+  });
+
+  /* ================= drag helper (pointer events) ================= */
+  function dragResize(handle, onMove) {
+    handle.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      handle.setPointerCapture(e.pointerId);
+      function move(ev) { onMove({ clientX: ev.clientX, clientY: ev.clientY }); }
+      function up(ev) {
+        handle.releasePointerCapture(e.pointerId);
+        handle.removeEventListener('pointermove', move);
+        handle.removeEventListener('pointerup', up);
+        handle.removeEventListener('pointercancel', up);
+        saveCalibration();
+      }
+      handle.addEventListener('pointermove', move);
+      handle.addEventListener('pointerup', up);
+      handle.addEventListener('pointercancel', up);
+    });
+  }
+
+  renderRing();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Guia de Tamanho",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Guia de Tamanho" },
+    { "type": "text", "id": "title", "label": "Título", "default": "Encontre seu tamanho" },
+    { "type": "text", "id": "subtitle", "label": "Subtítulo", "default": "Calibre a tela e ajuste o anel — sem sair da página." }
+  ],
+  "presets": [
+    { "name": "Guia de Tamanho", "category": "Lume" }
+  ]
+}
+{% endschema %}
