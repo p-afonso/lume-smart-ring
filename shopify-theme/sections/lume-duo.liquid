@@ -1,0 +1,170 @@
+<div id="lume-duo-{{ section.id }}" class="lume-duo">
+  <div class="lume-duo__grid">
+    {% for block in section.blocks %}
+      <a
+        class="lume-duo__card"
+        href="{{ block.settings.link | default: '/' }}"
+        aria-label="{{ block.settings.button_label | default: 'Comprar' }} {{ block.settings.title | escape }}"
+        {{ block.shopify_attributes }}
+      >
+        {% if block.settings.image %}
+          {{ block.settings.image | image_url: width: 1400 | image_tag:
+            widths: '600, 900, 1400',
+            sizes: '(max-width: 767px) 100vw, 50vw',
+            loading: 'lazy',
+            class: 'lume-duo__img',
+            alt: block.settings.image.alt | default: block.settings.title
+          }}
+        {% elsif block.settings.fallback_asset != blank %}
+          <img
+            src="{{ block.settings.fallback_asset | asset_url }}"
+            class="lume-duo__img"
+            loading="lazy"
+            alt="{{ block.settings.title | escape }}"
+            width="1122"
+            height="1402"
+          >
+        {% else %}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'lume-duo__img lume-duo__img--placeholder' }}
+        {% endif %}
+        <div class="lume-duo__overlay" aria-hidden="true"></div>
+        <div class="lume-duo__content">
+          <div class="lume-duo__text">
+            <h3 class="lume-duo__title">{{ block.settings.title }}</h3>
+            {% if block.settings.subtitle != blank %}
+              <p class="lume-duo__subtitle">{{ block.settings.subtitle }}</p>
+            {% endif %}
+          </div>
+          <span class="lume-duo__btn">{{ block.settings.button_label | default: 'Comprar' }}</span>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  #lume-duo-{{ section.id }} {
+    background: #171411;
+    padding: {{ section.settings.padding_y }}px clamp(16px, 4vw, 48px);
+  }
+  #lume-duo-{{ section.id }} .lume-duo__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+  #lume-duo-{{ section.id }} .lume-duo__card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 24px;
+    aspect-ratio: 4 / 3.4;
+    text-decoration: none;
+    transform: translateZ(0);
+    transition: transform .4s cubic-bezier(.22,1,.36,1);
+  }
+  #lume-duo-{{ section.id }} .lume-duo__card:hover { transform: scale(1.01); }
+  #lume-duo-{{ section.id }} .lume-duo__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter .4s ease;
+  }
+  #lume-duo-{{ section.id }} .lume-duo__card:hover .lume-duo__img { filter: brightness(1.05); }
+  #lume-duo-{{ section.id }} .lume-duo__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 42%);
+  }
+  #lume-duo-{{ section.id }} .lume-duo__content {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    padding: clamp(20px, 3vw, 36px);
+  }
+  #lume-duo-{{ section.id }} .lume-duo__title {
+    margin: 0;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    color: #fff;
+    line-height: 1.15;
+  }
+  #lume-duo-{{ section.id }} .lume-duo__subtitle {
+    margin: 6px 0 0;
+    font-size: clamp(.85rem, 1.1vw, 1rem);
+    color: rgba(255,255,255,.75);
+  }
+  #lume-duo-{{ section.id }} .lume-duo__btn {
+    flex-shrink: 0;
+    background: #d7c3a3;
+    color: #171411;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    font-size: .95rem;
+    padding: .7em 1.6em;
+    border-radius: 999px;
+    transition: background .3s ease;
+  }
+  #lume-duo-{{ section.id }} .lume-duo__card:hover .lume-duo__btn { background: #e8d9c0; }
+  @media (max-width: 767px) {
+    #lume-duo-{{ section.id }} .lume-duo__grid { grid-template-columns: 1fr; }
+    #lume-duo-{{ section.id }} .lume-duo__card { aspect-ratio: 4 / 5; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Lume Duo",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_y",
+      "label": "Espaçamento vertical",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "limit": 2,
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Imagem" },
+        {
+          "type": "text",
+          "id": "fallback_asset",
+          "label": "Asset padrão (arquivo em assets/)",
+          "info": "Usado quando nenhuma imagem for escolhida acima"
+        },
+        { "type": "text", "id": "title", "label": "Título", "default": "Produto" },
+        { "type": "text", "id": "subtitle", "label": "Subtítulo" },
+        { "type": "url", "id": "link", "label": "Link do produto" },
+        { "type": "text", "id": "button_label", "label": "Texto do botão", "default": "Comprar" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lume Duo",
+      "category": "Lume",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

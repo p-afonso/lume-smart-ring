@@ -3,7 +3,36 @@
     "lume_ring": {
       "type": "lume-ring",
       "settings": {}
+    },
+    "lume_duo": {
+      "type": "lume-duo",
+      "blocks": {
+        "card_band": {
+          "type": "card",
+          "settings": {
+            "fallback_asset": "lume-band-lifestyle.jpg",
+            "title": "Lume Band",
+            "subtitle": "Monitoramento contínuo, no pulso.",
+            "link": "/products/lume-band",
+            "button_label": "Comprar"
+          }
+        },
+        "card_ring": {
+          "type": "card",
+          "settings": {
+            "fallback_asset": "lume-ring-lifestyle.jpg",
+            "title": "Lume Ring",
+            "subtitle": "Tecnologia sem distração.",
+            "link": "/products/lume-smart-ring",
+            "button_label": "Comprar"
+          }
+        }
+      },
+      "block_order": ["card_band", "card_ring"],
+      "settings": {
+        "padding_y": 64
+      }
     }
   },
-  "order": ["lume_ring"]
+  "order": ["lume_ring", "lume_duo"]
 }
