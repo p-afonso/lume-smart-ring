@@ -3,7 +3,15 @@
     "lume_ring": {
       "type": "lume-ring",
       "settings": {}
+    },
+    "size_guide": {
+      "type": "lume-size-guide",
+      "settings": {
+        "eyebrow": "Guia de Tamanho",
+        "title": "Encontre seu tamanho",
+        "subtitle": "Calibre a tela e ajuste o anel — sem sair da página."
+      }
     }
   },
-  "order": ["lume_ring"]
+  "order": ["lume_ring", "size_guide"]
 }
