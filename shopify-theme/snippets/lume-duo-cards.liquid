@@ -1,0 +1,119 @@
+{%- comment -%}
+  Lume Duo — dois cards grandes (Band + Ring) estilo Whoop.
+  Renderizado dentro de lume-ring.liquid no lugar do bloco "40%".
+{%- endcomment -%}
+<div class="lume-duo">
+  <div class="lume-duo__grid">
+    <a class="lume-duo__card" href="/products/lume-band" aria-label="Comprar Lume Band">
+      <img
+        src="{{ 'lume-band-lifestyle.jpg' | asset_url }}"
+        class="lume-duo__img"
+        loading="lazy"
+        alt="Lume Band no pulso durante treino"
+        width="1122"
+        height="1402"
+      >
+      <div class="lume-duo__overlay" aria-hidden="true"></div>
+      <div class="lume-duo__content">
+        <div class="lume-duo__text">
+          <h3 class="lume-duo__title">Lume Band</h3>
+          <p class="lume-duo__subtitle">Monitoramento contínuo, no pulso.</p>
+        </div>
+        <span class="lume-duo__btn">Comprar</span>
+      </div>
+    </a>
+    <a class="lume-duo__card" href="/products/lume-smart-ring" aria-label="Comprar Lume Ring">
+      <img
+        src="{{ 'lume-ring-lifestyle.jpg' | asset_url }}"
+        class="lume-duo__img"
+        loading="lazy"
+        alt="Lume Ring no dedo segurando barra de treino"
+        width="1122"
+        height="1402"
+      >
+      <div class="lume-duo__overlay" aria-hidden="true"></div>
+      <div class="lume-duo__content">
+        <div class="lume-duo__text">
+          <h3 class="lume-duo__title">Lume Ring</h3>
+          <p class="lume-duo__subtitle">Tecnologia sem distração.</p>
+        </div>
+        <span class="lume-duo__btn">Comprar</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<style>
+  .lume-duo { padding: clamp(48px, 8vh, 96px) clamp(16px, 4vw, 48px); }
+  .lume-duo__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+  .lume-duo__card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 24px;
+    aspect-ratio: 4 / 3.4;
+    text-decoration: none;
+    transform: translateZ(0);
+    transition: transform .4s cubic-bezier(.22,1,.36,1);
+  }
+  .lume-duo__card:hover { transform: scale(1.01); }
+  .lume-duo__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter .4s ease;
+  }
+  .lume-duo__card:hover .lume-duo__img { filter: brightness(1.05); }
+  .lume-duo__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 42%);
+  }
+  .lume-duo__content {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    padding: clamp(20px, 3vw, 36px);
+  }
+  .lume-duo__title {
+    margin: 0;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    color: #fff;
+    line-height: 1.15;
+  }
+  .lume-duo__subtitle {
+    margin: 6px 0 0;
+    font-size: clamp(.85rem, 1.1vw, 1rem);
+    color: rgba(255,255,255,.75);
+  }
+  .lume-duo__btn {
+    flex-shrink: 0;
+    background: #d7c3a3;
+    color: #171411;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    font-size: .95rem;
+    padding: .7em 1.6em;
+    border-radius: 999px;
+    transition: background .3s ease;
+  }
+  .lume-duo__card:hover .lume-duo__btn { background: #e8d9c0; }
+  @media (max-width: 767px) {
+    .lume-duo__grid { grid-template-columns: 1fr; }
+    .lume-duo__card { aspect-ratio: 4 / 5; }
+  }
+</style>

@@ -89,12 +89,8 @@
     </div>
   </section>
 
-  {%- comment -%} ===== 4 · BIG NUMBER ===== {%- endcomment -%}
-  <section class="lr-stat-hero">
-    <div class="lr-display lr-stat-hero__num lr-r" data-count="{{ section.settings.big_number }}" data-suffix="%">0%</div>
-    <p class="lr-display lr-stat-hero__label lr-r lr-r-d1">{{ section.settings.big_label }}</p>
-    <p class="lr-stat-hero__sub lr-r lr-r-d2">{{ section.settings.big_sub }}</p>
-  </section>
+  {%- comment -%} ===== 4 · LUME DUO (Band + Ring) ===== {%- endcomment -%}
+  {% render 'lume-duo-cards' %}
 
   {%- comment -%} ===== 5 · ACCURACY ===== {%- endcomment -%}
   <section class="lr-accuracy">
