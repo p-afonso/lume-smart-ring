@@ -167,13 +167,13 @@ html.lenis, html.lenis body {height:auto}
 #lume-app .watch {width:min(60vw,360px);aspect-ratio:.82;border-radius:52px;background:linear-gradient(160deg,#3a322a,#181410);border:2px solid #4a4036;box-shadow:var(--shadow);position:relative;display:grid;place-items:center}
 #lume-app .watch__screen {width:82%;height:86%;border-radius:40px;background:radial-gradient(circle at 40% 30%,#2b2f39,#0c0d10);border:1px solid rgba(255,255,255,.05)}
 #lume-app .watch__crown {position:absolute;right:-8px;top:42%;width:12px;height:44px;border-radius:6px;background:linear-gradient(#c9b492,#6b5a46)}
-#lume-app .past__text {position:relative;z-index:5;text-align:center;max-width:22ch}
+#lume-app .past__text {position:relative;z-index:5;text-align:center;max-width:46rem}
 #lume-app .past__line {margin-top:24px;font-size:clamp(1.3rem,3.4vw,2.4rem);font-family:"Manrope",sans-serif;font-weight:600;color:var(--muted);line-height:1.2}
 #lume-app .past__line span {color:var(--beige)}
 
 
 #lume-app .tech {padding:clamp(64px,9vh,110px) var(--pad);max-width:var(--maxw);margin:0 auto}
-#lume-app .tech__head {max-width:20ch;margin-bottom:64px}
+#lume-app .tech__head {max-width:46rem;margin-bottom:64px}
 #lume-app .tech__head .eyebrow {margin-bottom:18px}
 #lume-app .tech__grid {display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media (max-width:900px) {
@@ -281,7 +281,7 @@ html.lenis, html.lenis body {height:auto}
 #lume-app .app__copy .eyebrow {margin-bottom:18px}
 #lume-app .app__copy .lead {margin:24px 0 30px}
 #lume-app .app__badges {display:flex;gap:14px;flex-wrap:wrap}
-#lume-app .badge-store {padding:.7em 1.3em;border-radius:12px;border:1px solid var(--line);background:var(--card);font-family:"Manrope",sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:border-color .3s}
+#lume-app .badge-store {display:inline-flex;align-items:center;padding:.7em 1.3em;border-radius:12px;border:1px solid var(--line);background:var(--card);font-family:"Manrope",sans-serif;font-weight:600;font-size:.9rem;cursor:pointer;transition:border-color .3s;text-decoration:none;color:inherit}
 #lume-app .badge-store:hover {border-color:var(--beige)}
 #lume-app .app__phones {position:relative;display:grid;place-items:center;min-height:520px}
 #lume-app .phone {position:absolute;width:min(58vw,260px);aspect-ratio:9/19;border-radius:38px;background:linear-gradient(160deg,#2a241e,#14110e);border:2px solid #3a332b;box-shadow:var(--shadow);padding:12px}

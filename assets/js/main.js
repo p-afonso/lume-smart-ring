@@ -250,7 +250,7 @@
     const words = document.querySelectorAll('.hero__title .line > span');
     if (!words.length) return;
     if (instant) { words.forEach((w) => (w.style.transform = 'none')); return; }
-    gsap.to(words, { yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.12, delay: 0.2 });
+    gsap.to(words, { y: 0, yPercent: 0, duration: 1.2, ease: 'power4.out', stagger: 0.12, delay: 0.2 });
   }
 
   // Wrap each word of a [data-split] title in an overflow-hidden span for reveal
