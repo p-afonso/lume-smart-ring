@@ -109,9 +109,12 @@ h1, h2, h3, .h1, .h2, .h3 {
   letter-spacing: -.01em;
 }
 
-.button,
-button.button,
-a.button,
+/* Only real, styled CTA buttons. Exclude .button-unstyled — Horizon uses it
+   for icon/media/zoom controls (e.g. the product gallery zoom button); if we
+   paint those they cover the product image with a brown pill. */
+.button:not(.button-unstyled):not(.button-secondary),
+a.button:not(.button-unstyled):not(.button-secondary),
+button.button:not(.button-unstyled):not(.button-secondary),
 .shopify-payment-button__button {
   border-radius: 999px !important;
   font-family: "Inter", system-ui, sans-serif;
@@ -121,7 +124,7 @@ a.button,
   color: var(--lume-bg);
   transition: transform .35s var(--lume-ease), background-color .3s, color .3s, opacity .3s;
 }
-.button:hover,
+.button:not(.button-unstyled):not(.button-secondary):hover,
 .shopify-payment-button__button:hover {
   transform: translateY(-2px);
   background-color: var(--lume-brown-dark);
@@ -132,8 +135,11 @@ button.button-secondary {
   background: transparent;
   color: var(--lume-ink);
   border: 1px solid var(--lume-ink);
+  border-radius: 999px !important;
 }
 .button-secondary:hover { background: rgba(45, 45, 45, .06); }
+/* keep unstyled/icon buttons exactly as the theme intends */
+.button-unstyled { background: transparent !important; border-radius: 0 !important; color: inherit; }
 
 /* Product cards / galleries */
 .product-card,
@@ -142,12 +148,49 @@ button.button-secondary {
 .product-card { transition: transform .5s var(--lume-ease); }
 .product-card:hover { transform: translateY(-4px); }
 
-/* Product page: serif title, roomy price, pill variant buttons */
-.product-information h1 {
-  font-size: clamp(2rem, 4vw, 3.2rem);
+/* =========================================================
+   PRODUCT PAGE polish
+   ========================================================= */
+.product-information h1,
+.product-information .product-title {
+  font-family: "Instrument Serif", "Times New Roman", serif !important;
+  font-size: clamp(2.2rem, 4.4vw, 3.4rem);
   line-height: 1.02;
+  letter-spacing: -.01em;
 }
-.variant-option__button-label { border-radius: 999px !important; }
+/* Gallery media: soft rounded corners, no cropping of the render */
+.product-information__media .product-media,
+.media-gallery__grid .product-media-container,
+.product-media__image {
+  border-radius: 22px;
+  overflow: hidden;
+}
+.product-media__image { background: var(--lume-bg-2) !important; }
+
+/* Variant / size selectors as elegant pills */
+.variant-option__button-label,
+.variant-option__button-label--swatch,
+.product-form__input .variant-option label,
+fieldset .variant-option label {
+  border-radius: 999px !important;
+  font-family: "Inter", system-ui, sans-serif;
+  transition: border-color .3s, background .3s, color .3s;
+}
+.variant-option__button-label:hover { border-color: var(--lume-brown) !important; }
+/* selected variant */
+.variant-option__button-label--selected,
+input:checked + .variant-option__button-label {
+  background: var(--lume-ink) !important;
+  color: var(--lume-bg) !important;
+  border-color: var(--lume-ink) !important;
+}
+
+/* Quantity stepper + fieldset labels */
+.product-form__quantity, .quantity-selector { border-radius: 999px !important; }
+
+/* Related products heading in serif */
+.product-recommendations h2,
+.product-recommendations h3 { font-family: "Instrument Serif", serif; }
 
 /* Inputs (contact, search, newsletter) */
 .field input,

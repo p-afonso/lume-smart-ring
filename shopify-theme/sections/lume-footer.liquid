@@ -1,0 +1,170 @@
+{%- comment -%}
+  LUME — footer (Oura-style): dark rounded panel, serif newsletter,
+  payment icons, 4 link columns, legal bar. Self-contained + scoped.
+{%- endcomment -%}
+<style>
+  #lume-footer {
+    --lf-bg: #181818;
+    --lf-cream: #F7F3EC;
+    --lf-muted: #9A9188;
+    --lf-line: rgba(247, 243, 236, .14);
+    --lf-gold: #C9A97A;
+    --lf-brown: #6F4E37;
+    --lf-ease: cubic-bezier(.25, 1, .5, 1);
+    --lf-pad: clamp(24px, 5vw, 80px);
+    background: var(--lf-bg);
+    color: var(--lf-cream);
+    border-radius: 34px 34px 0 0;
+    margin-top: clamp(40px, 8vh, 96px);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+  }
+  #lume-footer * { box-sizing: border-box; }
+  #lume-footer a { color: inherit; text-decoration: none; }
+  #lume-footer .lf-in { max-width: 1440px; margin: 0 auto; padding: clamp(56px, 8vw, 96px) var(--lf-pad) 0; }
+
+  /* top row: wordmark + payment icons */
+  #lume-footer .lf-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding-bottom: clamp(40px, 6vw, 72px); }
+  #lume-footer .lf-word { font-family: "Instrument Serif", "Times New Roman", serif; font-size: clamp(2rem, 4vw, 3rem); line-height: 1; letter-spacing: .01em; }
+  #lume-footer .lf-pays { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  #lume-footer .lf-pays svg { height: 30px; width: auto; border-radius: 5px; background: #fff; padding: 3px; }
+
+  /* main grid: newsletter + columns */
+  #lume-footer .lf-grid { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: clamp(28px, 4vw, 56px); padding-bottom: clamp(48px, 7vw, 80px); }
+  @media (max-width: 1080px) { #lume-footer .lf-grid { grid-template-columns: 1fr 1fr; } #lume-footer .lf-news { grid-column: 1 / -1; } }
+  @media (max-width: 560px) { #lume-footer .lf-grid { grid-template-columns: 1fr; } }
+
+  #lume-footer .lf-news h2 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: clamp(1.6rem, 2.6vw, 2.3rem); line-height: 1.08; margin: 0 0 22px; max-width: 16ch; }
+  #lume-footer .lf-form { position: relative; max-width: 360px; }
+  #lume-footer .lf-form input[type="email"] {
+    width: 100%; background: rgba(247, 243, 236, .06); border: 1px solid var(--lf-line);
+    color: var(--lf-cream); border-radius: 999px; padding: 15px 54px 15px 22px; font: inherit; font-size: .95rem;
+  }
+  #lume-footer .lf-form input::placeholder { color: var(--lf-muted); }
+  #lume-footer .lf-form button {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    width: 40px; height: 40px; border-radius: 50%; border: 0; cursor: pointer;
+    background: var(--lf-gold); color: var(--lf-bg); font-size: 1.1rem; line-height: 1;
+    display: grid; place-items: center; transition: background .3s var(--lf-ease);
+  }
+  #lume-footer .lf-form button:hover { background: var(--lf-cream); }
+  #lume-footer .lf-note { color: var(--lf-muted); font-size: .78rem; margin-top: 14px; max-width: 34ch; }
+  #lume-footer .lf-note a { text-decoration: underline; }
+  #lume-footer .lf-success { color: var(--lf-gold); font-size: .85rem; margin-top: 12px; }
+
+  #lume-footer .lf-col h3 { font-size: .82rem; font-weight: 600; letter-spacing: .02em; margin: 0 0 18px; color: var(--lf-cream); }
+  #lume-footer .lf-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  #lume-footer .lf-col a { color: var(--lf-muted); font-size: .9rem; transition: color .25s var(--lf-ease); }
+  #lume-footer .lf-col a:hover { color: var(--lf-cream); }
+
+  /* legal bar */
+  #lume-footer .lf-legal { border-top: 1px solid var(--lf-line); padding: 26px var(--lf-pad) 40px; }
+  #lume-footer .lf-legal-in { max-width: 1440px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  #lume-footer .lf-legal-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  #lume-footer .lf-legal-links a { color: var(--lf-muted); font-size: .78rem; transition: color .25s; }
+  #lume-footer .lf-legal-links a:hover { color: var(--lf-cream); }
+  #lume-footer .lf-copy { color: var(--lf-muted); font-size: .78rem; width: 100%; }
+  @media (min-width: 720px) { #lume-footer .lf-copy { width: auto; order: 2; } }
+</style>
+
+<footer id="lume-footer" role="contentinfo">
+  <div class="lf-in">
+
+    <div class="lf-top">
+      <a href="{{ routes.root_url }}" class="lf-word" aria-label="Lume — início">Lume</a>
+      {%- if shop.enabled_payment_types.size > 0 -%}
+        <div class="lf-pays" aria-label="Formas de pagamento">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="lf-grid">
+      <div class="lf-news">
+        <h2>{{ section.settings.news_title }}</h2>
+        {%- form 'customer', class: 'lf-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <input type="email" name="contact[email]" placeholder="{{ section.settings.news_placeholder }}" aria-label="E-mail" required>
+          <button type="submit" aria-label="Assinar">&rarr;</button>
+          {%- if form.posted_successfully? -%}
+            <p class="lf-success">Pronto! Você está na lista Lume.</p>
+          {%- endif -%}
+        {%- endform -%}
+        <p class="lf-note">{{ section.settings.news_note }}</p>
+      </div>
+
+      <div class="lf-col">
+        <h3>Produto</h3>
+        <ul>
+          <li><a href="/products/lume-smart-ring">Lume Ring</a></li>
+          <li><a href="/#lr-finish">Acabamentos</a></li>
+          <li><a href="/collections/all">Loja</a></li>
+          <li><a href="/#app">Aplicativo</a></li>
+        </ul>
+      </div>
+
+      <div class="lf-col">
+        <h3>Empresa</h3>
+        <ul>
+          <li><a href="/pages/sobre">Sobre a Lume</a></li>
+          <li><a href="/#accuracy">Nossa ciência</a></li>
+          <li><a href="/pages/contact">Contato</a></li>
+        </ul>
+      </div>
+
+      <div class="lf-col">
+        <h3>Suporte</h3>
+        <ul>
+          <li><a href="/pages/faq">Perguntas frequentes</a></li>
+          <li><a href="/pages/garantia">Garantia e devoluções</a></li>
+          <li><a href="/pages/garantia">Envio e prazos</a></li>
+          <li><a href="/#lr-finish">Guia de tamanhos</a></li>
+        </ul>
+      </div>
+
+      <div class="lf-col">
+        <h3>Conecte-se</h3>
+        <ul>
+          {%- if section.settings.instagram != blank -%}<li><a href="{{ section.settings.instagram }}" target="_blank" rel="noopener">Instagram</a></li>{%- endif -%}
+          {%- if section.settings.tiktok != blank -%}<li><a href="{{ section.settings.tiktok }}" target="_blank" rel="noopener">TikTok</a></li>{%- endif -%}
+          {%- if section.settings.youtube != blank -%}<li><a href="{{ section.settings.youtube }}" target="_blank" rel="noopener">YouTube</a></li>{%- endif -%}
+          {%- if section.settings.facebook != blank -%}<li><a href="{{ section.settings.facebook }}" target="_blank" rel="noopener">Facebook</a></li>{%- endif -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="lf-legal">
+    <div class="lf-legal-in">
+      <nav class="lf-legal-links" aria-label="Políticas">
+        {%- if shop.privacy_policy != blank -%}<a href="{{ shop.privacy_policy.url }}">Privacidade</a>{%- else -%}<a href="/policies/privacy-policy">Privacidade</a>{%- endif -%}
+        {%- if shop.terms_of_service != blank -%}<a href="{{ shop.terms_of_service.url }}">Termos</a>{%- else -%}<a href="/policies/terms-of-service">Termos</a>{%- endif -%}
+        {%- if shop.refund_policy != blank -%}<a href="{{ shop.refund_policy.url }}">Reembolso</a>{%- endif -%}
+        {%- if shop.shipping_policy != blank -%}<a href="{{ shop.shipping_policy.url }}">Envio</a>{%- endif -%}
+      </nav>
+      <p class="lf-copy">© {{ 'now' | date: '%Y' }} Lume. {{ section.settings.copy_note }}</p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Lume Footer",
+  "settings": [
+    { "type": "header", "content": "Newsletter" },
+    { "type": "text", "id": "news_title", "label": "Título", "default": "Receba conteúdo, dicas e ofertas da Lume" },
+    { "type": "text", "id": "news_placeholder", "label": "Placeholder", "default": "Seu e-mail" },
+    { "type": "textarea", "id": "news_note", "label": "Nota", "default": "Cuidamos dos seus dados. Nada de spam, só o essencial." },
+
+    { "type": "header", "content": "Redes sociais" },
+    { "type": "text", "id": "instagram", "label": "Instagram (URL)", "default": "https://instagram.com" },
+    { "type": "text", "id": "tiktok", "label": "TikTok (URL)", "default": "https://tiktok.com" },
+    { "type": "text", "id": "youtube", "label": "YouTube (URL)" },
+    { "type": "text", "id": "facebook", "label": "Facebook (URL)" },
+
+    { "type": "header", "content": "Rodapé" },
+    { "type": "text", "id": "copy_note", "label": "Nota de copyright", "default": "Saúde silenciosa, todos os dias." }
+  ]
+}
+{% endschema %}
