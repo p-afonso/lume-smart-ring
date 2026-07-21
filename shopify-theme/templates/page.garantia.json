@@ -1,0 +1,111 @@
+{
+  "sections": {
+    "gar_hero": {
+      "type": "section",
+      "blocks": {
+        "g_eyebrow": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Compra protegida</p>",
+            "type_preset": "h6",
+            "case": "uppercase",
+            "letter_spacing": "loose",
+            "width": "100%",
+            "alignment": "center",
+            "wrap": "pretty"
+          },
+          "blocks": {}
+        },
+        "g_title": {
+          "type": "text",
+          "settings": {
+            "text": "<h1>Garantia e devoluções</h1>",
+            "type_preset": "h2",
+            "width": "100%",
+            "alignment": "center",
+            "wrap": "balance"
+          },
+          "blocks": {}
+        },
+        "g_sub": {
+          "type": "text",
+          "settings": {
+            "text": "<p>30 dias para testar no seu dia a dia e 12 meses de garantia contra defeitos de fabricação. Sem letras miúdas.</p>",
+            "type_preset": "paragraph",
+            "width": "100%",
+            "max_width": "narrow",
+            "alignment": "center"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": ["g_eyebrow", "g_title", "g_sub"],
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "padding-block-start": 72,
+        "padding-block-end": 40
+      }
+    },
+    "gar_detalhes": {
+      "type": "section",
+      "blocks": {
+        "g_acc": {
+          "type": "accordion",
+          "settings": {
+            "icon": "plus",
+            "dividers": true,
+            "type_preset": "h5"
+          },
+          "blocks": {
+            "ga_1": {
+              "type": "_accordion-row",
+              "settings": { "heading": "30 dias para testar" },
+              "blocks": {
+                "t": { "type": "text", "settings": { "text": "<p>Use o anel na sua rotina por até 30 dias após o recebimento. Se não fizer sentido para você, devolvemos o valor integral — basta acionar nosso suporte e postar o produto sem custo.</p>", "type_preset": "rte", "width": "100%", "alignment": "left" }, "blocks": {} }
+              },
+              "block_order": ["t"]
+            },
+            "ga_2": {
+              "type": "_accordion-row",
+              "settings": { "heading": "12 meses de garantia" },
+              "blocks": {
+                "t": { "type": "text", "settings": { "text": "<p>Cobrimos defeitos de fabricação por 12 meses a partir da compra: sensores, bateria, acabamento e base de carga. A troca é feita com reposição rápida e suporte em português.</p>", "type_preset": "rte", "width": "100%", "alignment": "left" }, "blocks": {} }
+              },
+              "block_order": ["t"]
+            },
+            "ga_3": {
+              "type": "_accordion-row",
+              "settings": { "heading": "O que a garantia não cobre" },
+              "blocks": {
+                "t": { "type": "text", "settings": { "text": "<p>Danos por mau uso, quedas com impacto extremo, riscos estéticos de uso cotidiano e violação do produto por terceiros.</p>", "type_preset": "rte", "width": "100%", "alignment": "left" }, "blocks": {} }
+              },
+              "block_order": ["t"]
+            },
+            "ga_4": {
+              "type": "_accordion-row",
+              "settings": { "heading": "Como acionar" },
+              "blocks": {
+                "t": { "type": "text", "settings": { "text": "<p>Fale com a gente pela página de contato informando o número do pedido. Respondemos em até 1 dia útil com as instruções de envio.</p>", "type_preset": "rte", "width": "100%", "alignment": "left" }, "blocks": {} }
+              },
+              "block_order": ["t"]
+            }
+          },
+          "block_order": ["ga_1", "ga_2", "ga_3", "ga_4"]
+        }
+      },
+      "block_order": ["g_acc"],
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 96
+      }
+    }
+  },
+  "order": ["gar_hero", "gar_detalhes"]
+}

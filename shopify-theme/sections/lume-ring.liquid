@@ -1,0 +1,457 @@
+{{ 'lume-ring.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  LUME RING — homepage v2 (cinematic scrollytelling)
+  Every media block has an image_picker + a graceful fallback
+  (verified stock photo or brand-toned placeholder). When the
+  Gravyx renders are generated they slot in via the theme editor
+  with zero code changes.
+{%- endcomment -%}
+{%- assign ph_hero = 'https://images.unsplash.com/photo-1651752090085-50375d90bf8b?auto=format&fit=crop&w=2400&h=1400&q=80' -%}
+{%- assign ph_pin = 'https://images.unsplash.com/photo-1651752090085-50375d90bf8b?auto=format&fit=crop&w=1800&h=1800&crop=entropy&q=85' -%}
+{%- assign ph_metal = 'https://images.unsplash.com/photo-1656055448548-e26753307fc7?auto=format&fit=crop&w=1600&h=1200&q=80' -%}
+{%- assign ph_dark = 'https://images.unsplash.com/photo-1611572705535-e4d6cd9a12cb?auto=format&fit=crop&w=2400&h=1200&q=80' -%}
+
+{%- assign buy = section.settings.buy_url | default: '/products/lume-smart-ring' -%}
+
+<div id="lume-ring">
+<script>
+  /* Reveal state before first paint (no flash); watchdog guarantees
+     content is never left hidden if lume-ring.js fails to boot. */
+  (function () {
+    var r = document.getElementById('lume-ring');
+    if (!r) return;
+    if (!('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    r.classList.add('anim');
+    window.__lrGuard = setTimeout(function () { r.classList.remove('anim'); }, 3000);
+  })();
+</script>
+
+  {%- comment -%} ===== 1 · HERO ===== {%- endcomment -%}
+  <section class="lr-hero">
+    <div class="lr-media lr-hero__media">
+      {%- if section.settings.hero_image -%}
+        {{ section.settings.hero_image | image_url: width: 2400 | image_tag: alt: 'Anel Lume em titânio sobre superfície escura', loading: 'eager', fetchpriority: 'high' }}
+      {%- else -%}
+        <img src="{{ 'lume-hero.jpg' | asset_url }}" alt="Anel Lume em titânio champagne sobre linho escuro" loading="eager" fetchpriority="high" width="1536" height="1024">
+      {%- endif -%}
+    </div>
+    <div class="lr-hero__scrim"></div>
+    <div class="lr-hero__in">
+      <p class="lr-eyebrow lr-hero__eyebrow lr-r">{{ section.settings.hero_eyebrow }}</p>
+      <h1 class="lr-display lr-hero__title lr-r lr-r-d1">{{ section.settings.hero_title }}</h1>
+      <p class="lr-hero__sub lr-r lr-r-d2">{{ section.settings.hero_sub }}</p>
+      <div class="lr-hero__cta lr-r lr-r-d3">
+        <a href="{{ buy }}" class="lr-btn lr-btn--cream">{{ section.settings.hero_cta }}</a>
+        <a href="#lr-finish" class="lr-btn lr-btn--ghost-l">{{ section.settings.hero_cta2 }}</a>
+      </div>
+    </div>
+    <div class="lr-hero__cue" aria-hidden="true"><span></span></div>
+  </section>
+
+  {%- comment -%} ===== 2 · MANIFESTO ===== {%- endcomment -%}
+  <section class="lr-manifesto">
+    <h2 class="lr-display lr-manifesto__t lr-words">{{ section.settings.manifesto }}</h2>
+    <p class="lr-lead lr-manifesto__s lr-r">{{ section.settings.manifesto_sub }}</p>
+  </section>
+
+  {%- comment -%} ===== 3 · PINNED SCROLLYTELLING ===== {%- endcomment -%}
+  <section class="lr-pin" data-pin>
+    <div class="lr-pin__stage">
+      <div class="lr-pin__media" data-pin-media>
+        {%- if section.settings.pin_image -%}
+          {{ section.settings.pin_image | image_url: width: 1800 | image_tag: alt: 'Anel Lume em close macro', loading: 'lazy' }}
+        {%- else -%}
+          <img src="{{ 'lume-ring-cut.png' | asset_url }}" alt="Anel Lume em titânio champagne" loading="lazy" width="1000" height="1000">
+        {%- endif -%}
+      </div>
+      <div class="lr-pin__glow"></div>
+      <div class="lr-pin__scrim"></div>
+
+      <div class="lr-caps">
+        <div class="lr-cap" data-from="0.02" data-to="0.31">
+          <p class="lr-eyebrow">{{ section.settings.pin_eyebrow }}</p>
+          <h2 class="lr-display lr-cap__t">{{ section.settings.pin_title_1 }}</h2>
+          <p class="lr-cap__s">{{ section.settings.pin_text_1 }}</p>
+        </div>
+        <div class="lr-cap" data-from="0.35" data-to="0.64">
+          <h2 class="lr-display lr-cap__t">{{ section.settings.pin_title_2 }}</h2>
+          <p class="lr-cap__s">{{ section.settings.pin_text_2 }}</p>
+        </div>
+        <div class="lr-cap" data-from="0.68" data-to="1">
+          <h2 class="lr-display lr-cap__t">{{ section.settings.pin_title_3 }}</h2>
+          <p class="lr-cap__s">{{ section.settings.pin_text_3 }}</p>
+        </div>
+      </div>
+
+      <div class="lr-pin__rail" aria-hidden="true"><i data-rail></i></div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 4 · BIG NUMBER ===== {%- endcomment -%}
+  <section class="lr-stat-hero">
+    <div class="lr-display lr-stat-hero__num lr-r" data-count="{{ section.settings.big_number }}" data-suffix="%">0%</div>
+    <p class="lr-display lr-stat-hero__label lr-r lr-r-d1">{{ section.settings.big_label }}</p>
+    <p class="lr-stat-hero__sub lr-r lr-r-d2">{{ section.settings.big_sub }}</p>
+  </section>
+
+  {%- comment -%} ===== 5 · ACCURACY ===== {%- endcomment -%}
+  <section class="lr-accuracy">
+    <div class="lr-accuracy__head">
+      <h2 class="lr-display lr-accuracy__title lr-r">{{ section.settings.acc_title }}</h2>
+      <p class="lr-lead lr-r lr-r-d1">{{ section.settings.acc_text }}</p>
+    </div>
+    <div class="lr-stats">
+      <div class="lr-stat lr-r">
+        <div class="lr-display lr-stat__num" data-count="99" data-suffix="%">0%</div>
+        <p class="lr-stat__t">Precisão de frequência cardíaca</p>
+        <p class="lr-stat__s">Validação interna contra ECG de referência</p>
+      </div>
+      <div class="lr-stat lr-r lr-r-d1">
+        <div class="lr-display lr-stat__num" data-count="95" data-suffix="%">0%</div>
+        <p class="lr-stat__t">Precisão nos estágios do sono</p>
+        <p class="lr-stat__s">Contra polissonografia em laboratório</p>
+      </div>
+      <div class="lr-stat lr-r lr-r-d2">
+        <div class="lr-display lr-stat__num" data-count="90" data-suffix="%">0%</div>
+        <p class="lr-stat__t">Relatam mais energia no dia a dia</p>
+        <p class="lr-stat__s">Pesquisa com membros após 60 dias</p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 6 · BATTERY ===== {%- endcomment -%}
+  <section class="lr-battery">
+    <div class="lr-media" data-parallax="0.14">
+      {%- if section.settings.battery_image -%}
+        {{ section.settings.battery_image | image_url: width: 2400 | image_tag: alt: 'Anel Lume na base de carregamento', loading: 'lazy' }}
+      {%- else -%}
+        <img src="{{ 'lume-battery.jpg' | asset_url }}" alt="Anel Lume na base de carregamento magnética" loading="lazy" width="1536" height="1024">
+      {%- endif -%}
+    </div>
+    <div class="lr-battery__in">
+      <p class="lr-display lr-battery__num lr-r">{{ section.settings.battery_num }}</p>
+      <p class="lr-battery__t lr-r lr-r-d1">{{ section.settings.battery_text }}</p>
+      <p class="lr-battery__note lr-r lr-r-d2">{{ section.settings.battery_note }}</p>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 7 · MATERIALS ===== {%- endcomment -%}
+  <section class="lr-materials">
+    <div class="lr-materials__media lr-media lr-r">
+      {%- if section.settings.material_image -%}
+        {{ section.settings.material_image | image_url: width: 1600 | image_tag: alt: 'Acabamento em titânio do anel Lume', loading: 'lazy' }}
+      {%- else -%}
+        <img src="{{ 'lume-material.jpg' | asset_url }}" alt="Macro do titânio escovado do anel Lume" loading="lazy" width="1536" height="1024">
+      {%- endif -%}
+    </div>
+    <div>
+      <h2 class="lr-display lr-materials__title lr-r">{{ section.settings.material_title }}</h2>
+      <p class="lr-lead lr-r lr-r-d1">{{ section.settings.material_text }}</p>
+      <div class="lr-chips lr-r lr-r-d2">
+        <span class="lr-chip">Titânio grau 5</span>
+        <span class="lr-chip">À prova d'água até 100 m</span>
+        <span class="lr-chip">IP68</span>
+        <span class="lr-chip">A partir de 3 g</span>
+        <span class="lr-chip">Hipoalergênico</span>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 8 · FEATURE TABS ===== {%- endcomment -%}
+  <section class="lr-tabs">
+    <div class="lr-tabs__head">
+      <h2 class="lr-display lr-tabs__title lr-r">{{ section.settings.tabs_title }}</h2>
+    </div>
+    <div class="lr-tabnav" role="tablist" aria-label="Pilares de saúde">
+      <button role="tab" aria-selected="true" aria-controls="lr-p0" id="lr-t0">Sono</button>
+      <button role="tab" aria-selected="false" aria-controls="lr-p1" id="lr-t1">Atividade</button>
+      <button role="tab" aria-selected="false" aria-controls="lr-p2" id="lr-t2">Prontidão</button>
+      <button role="tab" aria-selected="false" aria-controls="lr-p3" id="lr-t3">Estresse</button>
+      <button role="tab" aria-selected="false" aria-controls="lr-p4" id="lr-t4">Coração</button>
+      <button role="tab" aria-selected="false" aria-controls="lr-p5" id="lr-t5">Saúde feminina</button>
+    </div>
+
+    <div class="lr-tabpanel is-active" id="lr-p0" role="tabpanel" aria-labelledby="lr-t0">
+      <article class="lr-fcard"><h4>Nota de Sono</h4><p>Tempo total, regularidade, movimento e HRV resumidos em um número claro ao acordar.</p></article>
+      <article class="lr-fcard"><h4>Estágios da noite</h4><p>Profundo, REM e leve, mapeados minuto a minuto enquanto você dorme.</p></article>
+      <article class="lr-fcard"><h4>Oxigenação noturna</h4><p>SpO2 contínuo durante o sono, com alerta de variações relevantes.</p></article>
+      <article class="lr-fcard"><h4>Janela de descanso</h4><p>O app sugere o melhor horário para desacelerar com base no seu ritmo real.</p></article>
+    </div>
+    <div class="lr-tabpanel" id="lr-p1" role="tabpanel" aria-labelledby="lr-t1" hidden>
+      <article class="lr-fcard"><h4>Nota de Atividade</h4><p>Movimento e descanso equilibrados conforme sua recuperação do dia.</p></article>
+      <article class="lr-fcard"><h4>Detecção automática</h4><p>Caminhada, corrida e treinos reconhecidos sem apertar botão.</p></article>
+      <article class="lr-fcard"><h4>Gasto energético</h4><p>Calorias e passos acompanhados 24 horas, sem tela no pulso.</p></article>
+      <article class="lr-fcard"><h4>Metas que se adaptam</h4><p>A meta diária muda conforme o quanto seu corpo se recuperou.</p></article>
+    </div>
+    <div class="lr-tabpanel" id="lr-p2" role="tabpanel" aria-labelledby="lr-t2" hidden>
+      <article class="lr-fcard"><h4>Nota de Prontidão</h4><p>Um número que diz se o dia pede intensidade ou pausa.</p></article>
+      <article class="lr-fcard"><h4>Tendência térmica</h4><p>A temperatura de pele antecipa sinais antes de você sentir.</p></article>
+      <article class="lr-fcard"><h4>FC de repouso</h4><p>Sua linha de base medida todas as noites, sem esforço.</p></article>
+      <article class="lr-fcard"><h4>Equilíbrio de carga</h4><p>Os últimos dias comparados ao seu histórico de duas semanas.</p></article>
+    </div>
+    <div class="lr-tabpanel" id="lr-p3" role="tabpanel" aria-labelledby="lr-t3" hidden>
+      <article class="lr-fcard"><h4>Estresse do dia</h4><p>Momentos de tensão e recuperação identificados em tempo real.</p></article>
+      <article class="lr-fcard"><h4>Resiliência</h4><p>Como seu corpo responde à carga acumulada, semana após semana.</p></article>
+      <article class="lr-fcard"><h4>Pausas guiadas</h4><p>Respirações curtas para baixar a frequência em poucos minutos.</p></article>
+      <article class="lr-fcard"><h4>Etiquetas de hábito</h4><p>Café, álcool, treino: marque e veja o efeito real nos seus dados.</p></article>
+    </div>
+    <div class="lr-tabpanel" id="lr-p4" role="tabpanel" aria-labelledby="lr-t4" hidden>
+      <article class="lr-fcard"><h4>Idade cardiovascular</h4><p>A saúde das suas artérias comparada à média da sua idade.</p></article>
+      <article class="lr-fcard"><h4>Variabilidade (HRV)</h4><p>O termômetro do seu sistema nervoso, noite após noite.</p></article>
+      <article class="lr-fcard"><h4>FC contínua</h4><p>Frequência cardíaca de dia e de noite, sem interrupção.</p></article>
+      <article class="lr-fcard"><h4>Capacidade aeróbica</h4><p>Estimativa de VO2 máx. para acompanhar seu condicionamento.</p></article>
+    </div>
+    <div class="lr-tabpanel" id="lr-p5" role="tabpanel" aria-labelledby="lr-t5" hidden>
+      <article class="lr-fcard"><h4>Ciclo pelo corpo</h4><p>Previsão baseada na sua temperatura, não em médias genéricas.</p></article>
+      <article class="lr-fcard"><h4>Janela fértil</h4><p>Identificada por sinais fisiológicos reais, dia a dia.</p></article>
+      <article class="lr-fcard"><h4>Registro de sintomas</h4><p>Padrões que aparecem ao longo dos ciclos, organizados para você.</p></article>
+      <article class="lr-fcard"><h4>Modo gestação</h4><p>Acompanhamento que se adapta a cada fase da gravidez.</p></article>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 9 · LIFESTYLE ===== {%- endcomment -%}
+  <section class="lr-life">
+    <div class="lr-life__head">
+      <h2 class="lr-display lr-life__title lr-r">{{ section.settings.life_title }}</h2>
+    </div>
+    <div class="lr-life__track">
+      <figure class="lr-life__card" data-tone="a">
+        {%- if section.settings.life_image_1 -%}{{ section.settings.life_image_1 | image_url: width: 900 | image_tag: alt: 'Pessoa dormindo com o anel Lume', loading: 'lazy' }}{%- else -%}<img src="{{ 'lume-life-sono.jpg' | asset_url }}" alt="Pessoa dormindo com o anel Lume" loading="lazy" width="1000" height="1500">{%- endif -%}
+        <figcaption>Dormir</figcaption>
+      </figure>
+      <figure class="lr-life__card" data-tone="b">
+        {%- if section.settings.life_image_2 -%}{{ section.settings.life_image_2 | image_url: width: 900 | image_tag: alt: 'Pessoa treinando com o anel Lume', loading: 'lazy' }}{%- else -%}<img src="{{ 'lume-life-treino.jpg' | asset_url }}" alt="Mão com o anel Lume segurando kettlebell" loading="lazy" width="1000" height="1500">{%- endif -%}
+        <figcaption>Treinar</figcaption>
+      </figure>
+      <figure class="lr-life__card" data-tone="c">
+        {%- if section.settings.life_image_3 -%}{{ section.settings.life_image_3 | image_url: width: 900 | image_tag: alt: 'Pessoa trabalhando com o anel Lume', loading: 'lazy' }}{%- else -%}<img src="{{ 'lume-life-trabalho.jpg' | asset_url }}" alt="Mãos digitando com o anel Lume" loading="lazy" width="1000" height="1500">{%- endif -%}
+        <figcaption>Trabalhar</figcaption>
+      </figure>
+      <figure class="lr-life__card" data-tone="d">
+        {%- if section.settings.life_image_4 -%}{{ section.settings.life_image_4 | image_url: width: 900 | image_tag: alt: 'Pessoa viajando com o anel Lume', loading: 'lazy' }}{%- else -%}<img src="{{ 'lume-life-viagem.jpg' | asset_url }}" alt="Viajante com o anel Lume no aeroporto" loading="lazy" width="1000" height="1500">{%- endif -%}
+        <figcaption>Viajar</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 10 · IN THE BOX ===== {%- endcomment -%}
+  <section class="lr-box">
+    <div class="lr-box__in">
+      <h2 class="lr-display lr-box__title lr-r">O que vem na caixa</h2>
+      <div class="lr-box__grid">
+        <div class="lr-box__item lr-r"><strong>Anel Lume</strong><span>No acabamento e tamanho escolhidos.</span></div>
+        <div class="lr-box__item lr-r lr-r-d1"><strong>Base de carga</strong><span>Carregador magnético com cabo USB-C.</span></div>
+        <div class="lr-box__item lr-r lr-r-d2"><strong>Kit de medição</strong><span>Todos os tamanhos para acertar de primeira. Grátis.</span></div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 11 · TECH SPECS ===== {%- endcomment -%}
+  <section class="lr-specs">
+    <div class="lr-specs__in">
+      <h2 class="lr-display lr-specs__title lr-r">Especificações técnicas</h2>
+      <details class="lr-spec" open>
+        <summary>Sensores<i></i></summary>
+        <div class="lr-spec__body"><ul>
+          <li>LEDs vermelho e infravermelho para oxigenação do sangue</li>
+          <li>LEDs verde e infravermelho para FC, HRV e respiração 24/7</li>
+          <li>Sensor digital de tendências de temperatura</li>
+          <li>Acelerômetro 3D para movimento e atividade</li>
+        </ul></div>
+      </details>
+      <details class="lr-spec">
+        <summary>Compatibilidade<i></i></summary>
+        <div class="lr-spec__body"><ul>
+          <li>iOS 13+ e Android 8+</li>
+          <li>App em português, inglês e espanhol</li>
+          <li>Sem assinatura: todos os recursos inclusos</li>
+        </ul></div>
+      </details>
+      <details class="lr-spec">
+        <summary>Peso e dimensões<i></i></summary>
+        <div class="lr-spec__body"><ul>
+          <li>Largura 6,1 mm · espessura 2,3 mm</li>
+          <li>Peso a partir de 3 g, conforme o tamanho</li>
+          <li>Tamanhos 6 a 13</li>
+        </ul></div>
+      </details>
+      <details class="lr-spec">
+        <summary>Bateria<i></i></summary>
+        <div class="lr-spec__body"><ul>
+          <li>Até 7 dias por carga</li>
+          <li>Recarga completa em cerca de 90 minutos</li>
+          <li>Base magnética inclusa</li>
+        </ul></div>
+      </details>
+      <details class="lr-spec">
+        <summary>Materiais<i></i></summary>
+        <div class="lr-spec__body"><ul>
+          <li>Exterior e interior em titânio, sem emendas</li>
+          <li>Resistente à água até 100 m · IP68</li>
+          <li>Hipoalergênico</li>
+        </ul></div>
+      </details>
+      <details class="lr-spec">
+        <summary>Conectividade<i></i></summary>
+        <div class="lr-spec__body"><ul>
+          <li>Bluetooth de baixo consumo</li>
+          <li>Atualizações automáticas via app</li>
+          <li>Modo avião</li>
+        </ul></div>
+      </details>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 12 · FINISHES ===== {%- endcomment -%}
+  <section class="lr-finish" id="lr-finish">
+    <div class="lr-finish__in">
+      <h2 class="lr-display lr-finish__title lr-r">{{ section.settings.finish_title }}</h2>
+      <div class="lr-finish__grid">
+        <a href="{{ buy }}" class="lr-fin lr-r"><span class="lr-fin__swatch" style="--sw:conic-gradient(from 210deg,#5a4130,#c9a97a 18%,#f1e4cd 30%,#a5764d 48%,#3a2a1e 62%,#c29b6f 80%,#5a4130)"></span><p class="lr-fin__name">Areia Dourada</p><span class="lr-fin__badge">Novo acabamento</span><p class="lr-fin__price">R$ 1.590</p></a>
+        <a href="{{ buy }}" class="lr-fin lr-r lr-r-d1"><span class="lr-fin__swatch" style="--sw:conic-gradient(from 210deg,#6d6d70,#c9c9cd 18%,#f2f2f4 30%,#9a9aa0 48%,#3f3f43 62%,#c2c2c7 80%,#6d6d70)"></span><p class="lr-fin__name">Prata Titânio</p><p class="lr-fin__price">R$ 1.490</p></a>
+        <a href="{{ buy }}" class="lr-fin lr-r lr-r-d2"><span class="lr-fin__swatch" style="--sw:conic-gradient(from 210deg,#232326,#4e4e53 18%,#7e7e85 30%,#333338 48%,#131315 62%,#4a4a4f 80%,#232326)"></span><p class="lr-fin__name">Preto Fosco</p><p class="lr-fin__price">R$ 1.490</p></a>
+        <a href="{{ buy }}" class="lr-fin lr-r"><span class="lr-fin__swatch" style="--sw:conic-gradient(from 210deg,#6F4E37,#b98e5f 18%,#ecd3ae 30%,#96693f 48%,#4A3326 62%,#b78a58 80%,#6F4E37)"></span><p class="lr-fin__name">Marrom Terra</p><span class="lr-fin__badge">Exclusivo Lume</span><p class="lr-fin__price">R$ 1.690</p></a>
+        <a href="{{ buy }}" class="lr-fin lr-r lr-r-d1"><span class="lr-fin__swatch" style="--sw:conic-gradient(from 210deg,#6f4f4c,#c69490 18%,#efc9c4 30%,#a97570 48%,#4a3230 62%,#c08d88 80%,#6f4f4c)"></span><p class="lr-fin__name">Rosé Suave</p><p class="lr-fin__price">R$ 1.690</p></a>
+        <a href="{{ buy }}" class="lr-fin lr-r lr-r-d2"><span class="lr-fin__swatch" style="--sw:conic-gradient(from 210deg,#3c4046,#767c85 18%,#a5abb4 30%,#575d65 48%,#24272b 62%,#6d737c 80%,#3c4046)"></span><p class="lr-fin__name">Grafite</p><p class="lr-fin__price">R$ 1.590</p></a>
+      </div>
+      <div class="lr-fin__cta lr-r">
+        <a href="{{ buy }}" class="lr-btn lr-btn--brown lr-btn--xl">{{ section.settings.finish_cta }}</a>
+        <div class="lr-trust">
+          <span>Frete grátis</span><span>12x sem juros</span><span>30 dias para testar</span><span>Garantia de 12 meses</span>
+        </div>
+        <p class="lr-finish__note">Kit de medição enviado gratuitamente antes do anel definitivo.</p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 13 · REVIEWS ===== {%- endcomment -%}
+  <section class="lr-reviews">
+    <div class="lr-reviews__head">
+      <p class="lr-eyebrow lr-r">4,9 de 5 · avaliações verificadas</p>
+      <h2 class="lr-display lr-reviews__title lr-r lr-r-d1">Quem usa, não tira mais.</h2>
+    </div>
+    <div class="lr-reviews__grid">
+      <blockquote class="lr-review lr-r">
+        <div class="stars" aria-label="5 estrelas">★★★★★</div>
+        <p>"Duas semanas de uso me ensinaram mais sobre o meu sono do que anos de palpite. A nota da manhã virou ritual."</p>
+        <footer><span class="avatar" data-i="1"></span><cite>Mariana C.<small>São Paulo, SP</small></cite></footer>
+      </blockquote>
+      <blockquote class="lr-review lr-r lr-r-d1">
+        <div class="stars" aria-label="5 estrelas">★★★★★</div>
+        <p>"Treino, banho, mar. Esqueço que está no dedo — e a bateria atravessa a semana inteira sem drama."</p>
+        <footer><span class="avatar" data-i="2"></span><cite>Rafael T.<small>Florianópolis, SC</small></cite></footer>
+      </blockquote>
+      <blockquote class="lr-review lr-r lr-r-d2">
+        <div class="stars" aria-label="5 estrelas">★★★★★</div>
+        <p>"O alerta de estresse chegou antes de mim. Reorganizei meus dias de trabalho por causa dele."</p>
+        <footer><span class="avatar" data-i="3"></span><cite>Ana L.<small>Belo Horizonte, MG</small></cite></footer>
+      </blockquote>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 14 · FAQ ===== {%- endcomment -%}
+  <section class="lr-faq">
+    <div class="lr-faq__in">
+      <h2 class="lr-display lr-faq__title lr-r">Perguntas frequentes</h2>
+      <details class="lr-spec"><summary>Funciona com o meu celular?<i></i></summary><div class="lr-spec__body"><p>Sim. O app Lume roda em iOS 13+ e Android 8+, com sincronização por Bluetooth de baixo consumo.</p></div></details>
+      <details class="lr-spec"><summary>Quanto dura a bateria?<i></i></summary><div class="lr-spec__body"><p>Até 7 dias por carga, conforme o uso. A recarga completa leva cerca de 90 minutos na base magnética inclusa.</p></div></details>
+      <details class="lr-spec"><summary>Posso usar na água?<i></i></summary><div class="lr-spec__body"><p>Pode. Resistência de até 100 metros e certificação IP68: banho, piscina e mar liberados.</p></div></details>
+      <details class="lr-spec"><summary>Como acerto o tamanho?<i></i></summary><div class="lr-spec__body"><p>Enviamos gratuitamente um kit com todos os tamanhos antes do anel definitivo. Use por 24h e escolha com segurança.</p></div></details>
+      <details class="lr-spec"><summary>Existe assinatura?<i></i></summary><div class="lr-spec__body"><p>Não. Todos os recursos do app são inclusos para sempre. Seus dados são só seus.</p></div></details>
+      <details class="lr-spec"><summary>E se eu não me adaptar?<i></i></summary><div class="lr-spec__body"><p>Você tem 30 dias para testar e 12 meses de garantia. Se não fizer sentido, devolvemos o valor integral.</p></div></details>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 15 · FINAL CTA ===== {%- endcomment -%}
+  <section class="lr-final">
+    <div class="lr-final__glow"></div>
+    <div class="lr-final__in">
+      <p class="lr-eyebrow lr-r">{{ section.settings.final_eyebrow }}</p>
+      <h2 class="lr-display lr-final__title lr-r lr-r-d1">{{ section.settings.final_title }}</h2>
+      <p class="lr-final__sub lr-r lr-r-d2">{{ section.settings.final_sub }}</p>
+      <div class="lr-r lr-r-d3">
+        <a href="{{ buy }}" class="lr-btn lr-btn--cream lr-btn--xl">{{ section.settings.final_cta }}</a>
+      </div>
+      <div class="lr-trust lr-r lr-r-d3">
+        <span>Frete grátis</span><span>12x sem juros</span><span>30 dias para testar</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="{{ 'lume-ring.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Lume Ring",
+  "settings": [
+    { "type": "url", "id": "buy_url", "label": "Link do botão comprar" },
+
+    { "type": "header", "content": "1. Hero" },
+    { "type": "image_picker", "id": "hero_image", "label": "Imagem (macro do anel, escura)" },
+    { "type": "text", "id": "hero_eyebrow", "label": "Sobretítulo", "default": "Lume · Smart Ring" },
+    { "type": "text", "id": "hero_title", "label": "Título", "default": "Tecnologia que desaparece. Saúde que aparece." },
+    { "type": "textarea", "id": "hero_sub", "label": "Subtítulo", "default": "O anel em titânio que traduz sono, recuperação e energia em decisões diárias. Sem telas. Sem ruído." },
+    { "type": "text", "id": "hero_cta", "label": "CTA primário", "default": "Comprar agora" },
+    { "type": "text", "id": "hero_cta2", "label": "CTA secundário", "default": "Ver acabamentos" },
+
+    { "type": "header", "content": "2. Manifesto" },
+    { "type": "textarea", "id": "manifesto", "label": "Frase", "default": "Cinquenta métricas de saúde. Nenhum esforço." },
+    { "type": "textarea", "id": "manifesto_sub", "label": "Apoio", "default": "O menor smart ring do mundo mede o que importa enquanto você vive o seu dia." },
+
+    { "type": "header", "content": "3. Scrollytelling (pinado)" },
+    { "type": "image_picker", "id": "pin_image", "label": "Render do anel (quadrado)" },
+    { "type": "text", "id": "pin_eyebrow", "label": "Sobretítulo", "default": "Engenharia invisível" },
+    { "type": "text", "id": "pin_title_1", "label": "Capítulo 1 — título", "default": "Cinco sensores. Nenhum ruído." },
+    { "type": "textarea", "id": "pin_text_1", "label": "Capítulo 1 — texto", "default": "Frequência cardíaca, HRV, oxigenação, temperatura e movimento, medidos sem você perceber." },
+    { "type": "text", "id": "pin_title_2", "label": "Capítulo 2 — título", "default": "Titânio do centro à borda." },
+    { "type": "textarea", "id": "pin_text_2", "label": "Capítulo 2 — texto", "default": "Interior sem emendas, exterior resistente a riscos. Três gramas no seu dedo." },
+    { "type": "text", "id": "pin_title_3", "label": "Capítulo 3 — título", "default": "Sete noites. Uma carga." },
+    { "type": "textarea", "id": "pin_text_3", "label": "Capítulo 3 — texto", "default": "Uma semana de leituras contínuas. Noventa minutos para voltar ao dedo." },
+
+    { "type": "header", "content": "4. Número em destaque" },
+    { "type": "text", "id": "big_number", "label": "Número (dígitos)", "default": "40" },
+    { "type": "text", "id": "big_label", "label": "Legenda", "default": "Mais fino. Mais leve. Invisível." },
+    { "type": "text", "id": "big_sub", "label": "Apoio", "default": "Comparado à geração anterior." },
+
+    { "type": "header", "content": "5. Precisão" },
+    { "type": "text", "id": "acc_title", "label": "Título", "default": "Reconstruído para precisão clínica" },
+    { "type": "textarea", "id": "acc_text", "label": "Texto", "default": "Sensores que se adaptam ao seu corpo e entregam dados confiáveis, de dia e de noite." },
+
+    { "type": "header", "content": "6. Bateria" },
+    { "type": "image_picker", "id": "battery_image", "label": "Imagem de fundo" },
+    { "type": "text", "id": "battery_num", "label": "Destaque", "default": "1 semana" },
+    { "type": "text", "id": "battery_text", "label": "Texto", "default": "longe da tomada." },
+    { "type": "text", "id": "battery_note", "label": "Nota", "default": "Recarga completa em cerca de 90 minutos." },
+
+    { "type": "header", "content": "7. Materiais" },
+    { "type": "image_picker", "id": "material_image", "label": "Macro do titânio" },
+    { "type": "text", "id": "material_title", "label": "Título", "default": "Leve como um hábito." },
+    { "type": "textarea", "id": "material_text", "label": "Texto", "default": "Titânio de ponta a ponta, à prova d'água, feito para nunca sair do dedo." },
+
+    { "type": "header", "content": "8. Recursos" },
+    { "type": "text", "id": "tabs_title", "label": "Título", "default": "Um pilar de saúde para cada dia" },
+
+    { "type": "header", "content": "9. Lifestyle" },
+    { "type": "text", "id": "life_title", "label": "Título", "default": "Para cada hora do seu dia." },
+    { "type": "image_picker", "id": "life_image_1", "label": "Imagem — Dormir" },
+    { "type": "image_picker", "id": "life_image_2", "label": "Imagem — Treinar" },
+    { "type": "image_picker", "id": "life_image_3", "label": "Imagem — Trabalhar" },
+    { "type": "image_picker", "id": "life_image_4", "label": "Imagem — Viajar" },
+
+    { "type": "header", "content": "12. Acabamentos" },
+    { "type": "text", "id": "finish_title", "label": "Título", "default": "Escolha seu acabamento" },
+    { "type": "text", "id": "finish_cta", "label": "Botão", "default": "Comprar Lume Ring" },
+
+    { "type": "header", "content": "15. CTA final" },
+    { "type": "text", "id": "final_eyebrow", "label": "Sobretítulo", "default": "Lume · Geração III" },
+    { "type": "text", "id": "final_title", "label": "Título", "default": "A era da saúde silenciosa." },
+    { "type": "textarea", "id": "final_sub", "label": "Texto", "default": "Comece hoje a entender o que o seu corpo diz baixinho, todos os dias." },
+    { "type": "text", "id": "final_cta", "label": "Botão", "default": "Comprar Lume Ring" }
+  ],
+  "presets": [{ "name": "Lume Ring", "category": "Storytelling" }]
+}
+{% endschema %}

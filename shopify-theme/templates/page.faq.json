@@ -1,0 +1,111 @@
+{
+  "sections": {
+    "faq_main": {
+      "type": "section",
+      "blocks": {
+        "faq_eyebrow": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Suporte Lume</p>",
+            "type_preset": "h6",
+            "case": "uppercase",
+            "letter_spacing": "loose",
+            "width": "100%",
+            "alignment": "center",
+            "wrap": "pretty"
+          },
+          "blocks": {}
+        },
+        "faq_heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h1>Perguntas frequentes</h1>",
+            "type_preset": "h2",
+            "width": "100%",
+            "alignment": "center",
+            "wrap": "balance",
+            "padding-block-end": 24
+          },
+          "blocks": {}
+        },
+        "faq_accordion": {
+          "type": "accordion",
+          "settings": {
+            "icon": "plus",
+            "dividers": true,
+            "type_preset": "h5"
+          },
+          "blocks": {
+            "row_1": {
+              "type": "_accordion-row",
+              "settings": { "heading": "Funciona com o meu celular?" },
+              "blocks": {
+                "t": { "type": "text", "settings": { "text": "<p>Sim. O app Lume roda em iOS 13+ e Android 8+, com sincronização por Bluetooth de baixo consumo e atualizações automáticas.</p>", "type_preset": "rte", "width": "100%", "alignment": "left" }, "blocks": {} }
+              },
+              "block_order": ["t"]
+            },
+            "row_2": {
+              "type": "_accordion-row",
+              "settings": { "heading": "Quanto dura a bateria?" },
+              "blocks": {
+                "t": { "type": "text", "settings": { "text": "<p>Até 7 dias por carga, conforme o uso. A recarga completa leva cerca de 90 minutos na base magnética inclusa.</p>", "type_preset": "rte", "width": "100%", "alignment": "left" }, "blocks": {} }
+              },
+              "block_order": ["t"]
+            },
+            "row_3": {
+              "type": "_accordion-row",
+              "settings": { "heading": "Posso usar na água?" },
+              "blocks": {
+                "t": { "type": "text", "settings": { "text": "<p>Pode. Resistência de até 100 metros e certificação IP68: banho, piscina e mar liberados.</p>", "type_preset": "rte", "width": "100%", "alignment": "left" }, "blocks": {} }
+              },
+              "block_order": ["t"]
+            },
+            "row_4": {
+              "type": "_accordion-row",
+              "settings": { "heading": "Como acerto o tamanho?" },
+              "blocks": {
+                "t": { "type": "text", "settings": { "text": "<p>Enviamos gratuitamente um kit com todos os tamanhos antes do anel definitivo. Use por 24 horas e escolha com segurança.</p>", "type_preset": "rte", "width": "100%", "alignment": "left" }, "blocks": {} }
+              },
+              "block_order": ["t"]
+            },
+            "row_5": {
+              "type": "_accordion-row",
+              "settings": { "heading": "Existe assinatura?" },
+              "blocks": {
+                "t": { "type": "text", "settings": { "text": "<p>Não. Todos os recursos do app são inclusos para sempre. Seus dados são só seus.</p>", "type_preset": "rte", "width": "100%", "alignment": "left" }, "blocks": {} }
+              },
+              "block_order": ["t"]
+            },
+            "row_6": {
+              "type": "_accordion-row",
+              "settings": { "heading": "E se eu não me adaptar?" },
+              "blocks": {
+                "t": { "type": "text", "settings": { "text": "<p>Você tem 30 dias para testar e 12 meses de garantia. Se não fizer sentido, devolvemos o valor integral.</p>", "type_preset": "rte", "width": "100%", "alignment": "left" }, "blocks": {} }
+              },
+              "block_order": ["t"]
+            },
+            "row_7": {
+              "type": "_accordion-row",
+              "settings": { "heading": "Qual o prazo de entrega?" },
+              "blocks": {
+                "t": { "type": "text", "settings": { "text": "<p>Frete grátis para todo o Brasil, com rastreio. Prazo médio de 3 a 10 dias úteis conforme a região.</p>", "type_preset": "rte", "width": "100%", "alignment": "left" }, "blocks": {} }
+              },
+              "block_order": ["t"]
+            }
+          },
+          "block_order": ["row_1", "row_2", "row_3", "row_4", "row_5", "row_6", "row_7"]
+        }
+      },
+      "block_order": ["faq_eyebrow", "faq_heading", "faq_accordion"],
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "padding-block-start": 64,
+        "padding-block-end": 96
+      }
+    }
+  },
+  "order": ["faq_main"]
+}

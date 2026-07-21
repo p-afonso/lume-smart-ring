@@ -1,0 +1,101 @@
+{
+  "sections": {
+    "sobre_hero": {
+      "type": "section",
+      "blocks": {
+        "s_eyebrow": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Nossa história</p>",
+            "type_preset": "h6",
+            "case": "uppercase",
+            "letter_spacing": "loose",
+            "width": "100%",
+            "alignment": "center",
+            "wrap": "pretty"
+          },
+          "blocks": {}
+        },
+        "s_title": {
+          "type": "text",
+          "settings": {
+            "text": "<h1>Lume nasceu de uma pergunta simples: e se cuidar da saúde não pedisse esforço?</h1>",
+            "type_preset": "h2",
+            "width": "100%",
+            "max_width": "narrow",
+            "alignment": "center",
+            "wrap": "balance"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": ["s_eyebrow", "s_title"],
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 18,
+        "section_width": "page-width",
+        "padding-block-start": 72,
+        "padding-block-end": 48
+      }
+    },
+    "sobre_body": {
+      "type": "section",
+      "blocks": {
+        "b_1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Relógios pedem carga todo dia. Pulseiras pedem tela. Aplicativos pedem atenção. Nós fomos na direção contrária: um anel de titânio com três gramas, que mede o essencial em silêncio e devolve clareza, não notificações.</p>",
+            "type_preset": "rte",
+            "width": "100%",
+            "max_width": "narrow",
+            "alignment": "left"
+          },
+          "blocks": {}
+        },
+        "b_2": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Cada decisão do Lume segue o mesmo princípio: tecnologia boa é a que desaparece. Sensores clínicos no lugar de novidades barulhentas. Uma semana de bateria no lugar de mais um cabo na cabeceira. Dados seus, e de mais ninguém.</p>",
+            "type_preset": "rte",
+            "width": "100%",
+            "max_width": "narrow",
+            "alignment": "left"
+          },
+          "blocks": {}
+        },
+        "b_3": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Hoje, milhares de pessoas acordam, treinam e desaceleram guiadas pelo que o corpo diz baixinho. É para elas que continuamos refinando cada detalhe.</p>",
+            "type_preset": "rte",
+            "width": "100%",
+            "max_width": "narrow",
+            "alignment": "left"
+          },
+          "blocks": {}
+        },
+        "b_cta": {
+          "type": "button",
+          "settings": {
+            "label": "Conhecer o Lume Ring",
+            "link": "/products/lume-smart-ring",
+            "style_class": "button",
+            "width": "fit-content"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": ["b_1", "b_2", "b_3", "b_cta"],
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "gap": 24,
+        "section_width": "page-width",
+        "padding-block-start": 0,
+        "padding-block-end": 96
+      }
+    }
+  },
+  "order": ["sobre_hero", "sobre_body"]
+}

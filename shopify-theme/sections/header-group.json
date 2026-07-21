@@ -71,7 +71,7 @@
           "type": "_header-logo",
           "static": true,
           "settings": {
-            "hide_logo_on_home_page": true,
+            "hide_logo_on_home_page": false,
             "padding-block-start": 0,
             "padding-block-end": 0
           },
@@ -119,7 +119,8 @@
         "divider_size": "page-width",
         "border_width": 0,
         "background_color_top": "{{ settings.color_palette.background }}",
-        "enable_transparent_header_home": false,
+        "enable_transparent_header_home": true,
+        "text_color_transparent_home": "#F7F4EF",
         "enable_transparent_header_product": false,
         "enable_transparent_header_collection": false
       }
