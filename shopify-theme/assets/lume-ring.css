@@ -174,12 +174,29 @@
 #lume-ring .lr-hero .lr-btn--ghost-l { color: var(--ink); border-color: rgba(45, 45, 45, .45); }
 #lume-ring .lr-hero .lr-btn--ghost-l:hover { border-color: var(--ink); background: rgba(45, 45, 45, .06); }
 @media (max-width: 749px) {
-  #lume-ring .lr-hero { align-items: end; }
-  #lume-ring .lr-hero__in { max-width: 100%; padding-bottom: clamp(72px, 12vh, 120px); }
-  #lume-ring .lr-hero__media img { object-position: 68% 32%; }
-  #lume-ring .lr-hero__scrim {
-    background: linear-gradient(180deg, rgba(231, 208, 177, 0) 26%, rgba(231, 208, 177, .58) 56%, rgba(231, 208, 177, .96) 100%);
+  /* Empilhamento vertical estilo Oura: imagem no topo, texto centralizado abaixo */
+  #lume-ring .lr-hero {
+    min-height: auto; display: flex; flex-direction: column;
+    align-items: stretch; justify-items: stretch; text-align: center;
+    background: #e7d0b1;
   }
+  #lume-ring .lr-hero__media {
+    position: relative; inset: auto; flex: none;
+    width: 100%; height: 46vh; min-height: 330px;
+  }
+  #lume-ring .lr-hero__media img { object-position: 58% 42%; }
+  #lume-ring .lr-hero__scrim {
+    inset: 0 0 auto 0; height: 46vh; min-height: 330px;
+    background: linear-gradient(180deg, rgba(231, 208, 177, 0) 74%, rgba(231, 208, 177, 1) 100%);
+  }
+  #lume-ring .lr-hero__in {
+    position: relative; z-index: 2; max-width: 100%;
+    padding: 22px var(--pad) 40px; margin: 0 auto;
+  }
+  #lume-ring .lr-hero__title { font-size: clamp(2rem, 8vw, 3rem); margin-bottom: 20px; }
+  #lume-ring .lr-hero__sub { margin: 0 auto 26px; }
+  #lume-ring .lr-hero__cta { justify-content: center; }
+  #lume-ring .lr-hero__cue { display: none; }
 }
 #lume-ring .lr-hero__cue {
   position: absolute; z-index: 3; bottom: 26px; left: 50%; transform: translateX(-50%);
