@@ -1,0 +1,493 @@
+{%- comment -%}
+  LUME RING — página de vendas (PDP).
+
+  Preço, variantes e disponibilidade vêm SEMPRE do objeto `product`.
+  Nada de valor hardcoded: se o preço mudar no admin, a página segue.
+
+  O produto tem só a opção "Acabamento" (3 cores). O TAMANHO é enviado
+  como line item property, já que não existe variante de tamanho —
+  assim o pedido registra qual tamanho o cliente escolheu sem precisar
+  de 21 variantes.
+{%- endcomment -%}
+
+{%- assign v = product.selected_or_first_available_variant -%}
+
+<div id="pdp-{{ section.id }}" class="pdp">
+
+  {%- comment -%} ===== 1 · HERO / COMPRA ===== {%- endcomment -%}
+  <section class="pdp__hero">
+    <div class="pdp__gallery">
+      {%- for media in product.media limit: 6 -%}
+        <div class="pdp__shot{% if forloop.first %} is-on{% endif %}" data-shot="{{ forloop.index0 }}">
+          {{ media | image_url: width: 1400 | image_tag:
+             alt: media.alt | default: product.title,
+             loading: forloop.first | default: false | ternary: 'eager', 'lazy',
+             widths: '500, 800, 1200, 1400',
+             sizes: '(max-width: 749px) 100vw, 50vw' }}
+        </div>
+      {%- else -%}
+        <div class="pdp__shot is-on">{{ 'product-1' | placeholder_svg_tag: 'pdp__ph' }}</div>
+      {%- endfor -%}
+    </div>
+
+    <div class="pdp__buy">
+      <h1 class="pdp__title">{{ product.title }}</h1>
+
+      <div class="pdp__price" data-price>
+        <strong>{{ v.price | money }}</strong>
+        {%- if v.compare_at_price and v.compare_at_price > v.price -%}
+          <s>{{ v.compare_at_price | money }}</s>
+        {%- endif -%}
+      </div>
+
+      <form action="/cart/add" method="post" enctype="multipart/form-data" data-pdp-form>
+        <input type="hidden" name="id" value="{{ v.id }}" data-variant-id>
+
+        {%- comment -%} COR — vem das opções reais do produto {%- endcomment -%}
+        {%- for option in product.options_with_values -%}
+          <fieldset class="pdp__field">
+            <legend class="pdp__label">{{ option.name }}</legend>
+            <div class="pdp__swatches" role="radiogroup" aria-label="{{ option.name }}">
+              {%- for value in option.values -%}
+                <button type="button" class="pdp__swatch{% if value == v.title %} is-on{% endif %}"
+                        role="radio" aria-checked="{% if value == v.title %}true{% else %}false{% endif %}"
+                        data-opt-value="{{ value | escape }}" title="{{ value | escape }}">
+                  <span class="pdp__dot" data-tone="{{ value | handle }}"></span>
+                  <span class="pdp__swatchName">{{ value }}</span>
+                </button>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endfor -%}
+
+        {%- comment -%} TAMANHO — line item property (não há variante) {%- endcomment -%}
+        <fieldset class="pdp__field">
+          <legend class="pdp__label">
+            Tamanho
+            <button type="button" class="pdp__help" data-open-size>Descubra seu tamanho</button>
+          </legend>
+          <div class="pdp__sizes" role="radiogroup" aria-label="Tamanho">
+            {%- assign sizes = '7,8,9,10,11,12,13' | split: ',' -%}
+            {%- for s in sizes -%}
+              <button type="button" class="pdp__size" role="radio" aria-checked="false" data-size="{{ s }}">{{ s }}</button>
+            {%- endfor -%}
+          </div>
+          <input type="hidden" name="properties[Tamanho]" data-size-input>
+          <p class="pdp__warn" data-size-warn hidden>Escolha um tamanho para continuar.</p>
+        </fieldset>
+
+        <button type="submit" class="pdp__cta" data-add>
+          {%- if v.available -%}Adicionar ao carrinho{%- else -%}Esgotado{%- endif -%}
+        </button>
+      </form>
+
+      <ul class="pdp__trust">
+        <li>Frete grátis</li>
+        <li>30 dias para testar</li>
+        <li>Garantia de 12 meses</li>
+        <li>Sem assinatura</li>
+      </ul>
+
+      <p class="pdp__box">Na caixa: anel, base de carregamento magnética e kit de medição de tamanho.</p>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 2 · O QUE O LUME MONITORA ===== {%- endcomment -%}
+  <section class="pdp__block">
+    <h2 class="pdp__h2">Tudo que o Lume acompanha.</h2>
+    <div class="pdp__grid">
+      <article class="pdp__card"><h3>Frequência cardíaca</h3><p>Leitura contínua, 24 horas por dia, sem você perceber.</p></article>
+      <article class="pdp__card"><h3>Sono</h3><p>Estágios REM, leve e profundo, com um score claro ao acordar.</p></article>
+      <article class="pdp__card"><h3>Atividade</h3><p>Passos, calorias e treinos detectados automaticamente.</p></article>
+      <article class="pdp__card"><h3>Oxigenação (SpO2)</h3><p>Saturação de oxigênio no sangue medida durante a noite.</p></article>
+      <article class="pdp__card"><h3>Temperatura de pele</h3><p>Tendências que revelam sinais antes de você sentir.</p></article>
+      <article class="pdp__card"><h3>HRV e estresse</h3><p>A variabilidade cardíaca traduzida em prontidão diária.</p></article>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 3 · RESISTÊNCIA ===== {%- endcomment -%}
+  <section class="pdp__wide">
+    <video class="pdp__wideMedia" muted loop playsinline preload="none"
+           poster="{{ 'lume-ss-1.jpg' | asset_url }}" data-pdp-video>
+      <source data-src="{{ 'lume-ss-1.mp4' | asset_url }}" type="video/mp4">
+    </video>
+    <div class="pdp__wideCopy">
+      <p class="pdp__kicker">Resistência</p>
+      <h2 class="pdp__h2">IP68. À prova d'água até 100 metros.</h2>
+      <p class="pdp__lead">Banho, piscina e mar sem preocupação. Titânio grau 5, hipoalergênico, a partir de 3 gramas.</p>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 4 · O APP ===== {%- endcomment -%}
+  <section class="pdp__block pdp__block--app">
+    <div>
+      <p class="pdp__kicker">Aplicativo</p>
+      <h2 class="pdp__h2">Seus dados, com clareza.</h2>
+      <p class="pdp__lead">Milhares de leituras viram três números simples: Sono, Prontidão e Atividade. Sem assinatura — todos os recursos inclusos para sempre.</p>
+      <div class="pdp__apps">
+        <a class="pdp__appBtn" href="https://apps.apple.com/br/app/qring/id6473672621" target="_blank" rel="noopener">App Store</a>
+        <a class="pdp__appBtn" href="https://play.google.com/store/search?q=qring&amp;c=apps&amp;hl=pt_BR" target="_blank" rel="noopener">Google Play</a>
+      </div>
+      <p class="pdp__fine">Compatível com iOS 13+ e Android 8+.</p>
+    </div>
+    <div class="pdp__scores">
+      <div class="pdp__score"><span>Sono</span><strong>92</strong></div>
+      <div class="pdp__score"><span>Prontidão</span><strong>88</strong></div>
+      <div class="pdp__score"><span>Atividade</span><strong>75</strong></div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 5 · DIFERENCIAIS ===== {%- endcomment -%}
+  <section class="pdp__block">
+    <div class="pdp__cols">
+      <div><h3>Sensores discretos</h3><p>Toda a tecnologia por dentro. Por fora, só um anel — confortável o suficiente para usar 24 horas, inclusive dormindo.</p></div>
+      <div><h3>Titânio grau 5</h3><p>A partir de 3 gramas, hipoalergênico e resistente a riscos. Feito para não sair do dedo.</p></div>
+      <div><h3>Até 7 dias de bateria</h3><p>Uma carga por semana. A recarga completa leva cerca de 90 minutos na base magnética inclusa.</p></div>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 6 · COMPARATIVO (apenas atributos próprios) ===== {%- endcomment -%}
+  <section class="pdp__block">
+    <h2 class="pdp__h2">O que está incluso.</h2>
+    <table class="pdp__table">
+      <tbody>
+        <tr><td>Sem assinatura mensal</td><td class="yes">Incluso</td></tr>
+        <tr><td>Base de carregamento magnética</td><td class="yes">Na caixa</td></tr>
+        <tr><td>Kit de medição de tamanho</td><td class="yes">Na caixa</td></tr>
+        <tr><td>Bateria</td><td class="yes">Até 7 dias</td></tr>
+        <tr><td>Resistência à água</td><td class="yes">IP68 · 100 m</td></tr>
+        <tr><td>Compatibilidade</td><td class="yes">iOS 13+ e Android 8+</td></tr>
+        <tr><td>Frete para todo o Brasil</td><td class="yes">Grátis</td></tr>
+        <tr><td>Garantia</td><td class="yes">12 meses</td></tr>
+        <tr><td>Período de teste</td><td class="yes">30 dias</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  {%- comment -%} ===== 7 · FAQ ===== {%- endcomment -%}
+  <section class="pdp__block">
+    <h2 class="pdp__h2">Perguntas frequentes</h2>
+    <div class="pdp__faq">
+      <details><summary>O que é o Lume Ring?</summary><p>Um anel inteligente em titânio que acompanha sono, frequência cardíaca, variabilidade, oxigenação, temperatura e atividade 24 horas por dia — sem telas e sem notificações.</p></details>
+      <details><summary>Como descubro o tamanho certo?</summary><p>Use a nossa ferramenta de medição: você calibra a tela com um cartão de banco e ajusta um círculo até encaixar no seu anel. <a href="/pages/guia-de-tamanho">Abrir o guia de tamanho</a>. Um kit de medição também acompanha a compra.</p></details>
+      <details><summary>Em qual dedo devo usar?</summary><p>Indicador, médio ou anelar, preferencialmente da mão não dominante — a leitura fica mais estável.</p></details>
+      <details><summary>O que vem na caixa?</summary><p>O anel, a base de carregamento magnética e o kit de medição de tamanho.</p></details>
+      <details><summary>Como acompanho meus dados?</summary><p>Pelo aplicativo, que sincroniza automaticamente por Bluetooth e resume tudo em scores de 0 a 100.</p></details>
+      <details><summary>Quais aparelhos são compatíveis?</summary><p>iOS 13 ou superior e Android 8 ou superior.</p></details>
+      <details><summary>Preciso pagar assinatura?</summary><p>Não. Todos os recursos do app são inclusos para sempre.</p></details>
+    </div>
+  </section>
+
+  {%- comment -%} ===== 8 · CTA FINAL ===== {%- endcomment -%}
+  <section class="pdp__final">
+    <h2 class="pdp__h2">Comece hoje.</h2>
+    <p class="pdp__finalPrice" data-price-echo>{{ v.price | money }}</p>
+    <button type="button" class="pdp__cta pdp__cta--wide" data-scroll-top>Escolher meu Lume Ring</button>
+    <p class="pdp__fine">Frete grátis · 30 dias para testar · Garantia de 12 meses</p>
+  </section>
+
+  {%- comment -%} CTA fixo no mobile {%- endcomment -%}
+  <div class="pdp__sticky" data-sticky hidden>
+    <span data-price-sticky>{{ v.price | money }}</span>
+    <button type="button" class="pdp__cta" data-scroll-top>Adicionar ao carrinho</button>
+  </div>
+
+  {%- comment -%} Modal de tamanho {%- endcomment -%}
+  <dialog class="pdp__modal" data-size-modal>
+    <h3>Tabela de tamanhos</h3>
+    <table class="pdp__sizeTable">
+      <thead><tr><th>Tam.</th><th>Circunferência</th><th>Diâmetro</th></tr></thead>
+      <tbody>
+        <tr><td>7</td><td>53,6 mm</td><td>17,1 mm</td></tr>
+        <tr><td>8</td><td>55,9 mm</td><td>17,8 mm</td></tr>
+        <tr><td>9</td><td>58,8 mm</td><td>18,7 mm</td></tr>
+        <tr><td>10</td><td>61,2 mm</td><td>19,5 mm</td></tr>
+        <tr><td>11</td><td>64,0 mm</td><td>20,4 mm</td></tr>
+        <tr><td>12</td><td>66,3 mm</td><td>21,1 mm</td></tr>
+        <tr><td>13</td><td>69,0 mm</td><td>22,0 mm</td></tr>
+      </tbody>
+    </table>
+    <p class="pdp__fine">Quer medir com precisão? A ferramenta calibra a tela do seu aparelho com um cartão de banco.</p>
+    <a class="pdp__cta pdp__cta--wide" href="/pages/guia-de-tamanho">Abrir ferramenta de medição</a>
+    <button type="button" class="pdp__modalClose" data-close-size>Fechar</button>
+  </dialog>
+
+  <script type="application/json" data-variants>
+    {{ product.variants | json }}
+  </script>
+</div>
+
+<style>
+  #pdp-{{ section.id }} {
+    --p-ink: #2D2D2D; --p-dark: #181818; --p-cream: #F7F3EC;
+    --p-gold: #C9A97A; --p-beige: #E7D0B1; --p-line: #e5ddd0;
+    background: var(--p-cream); color: var(--p-ink);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+  }
+  #pdp-{{ section.id }} * { box-sizing: border-box; }
+  #pdp-{{ section.id }} img, #pdp-{{ section.id }} video { max-width: 100%; display: block; }
+
+  #pdp-{{ section.id }} .pdp__h2 {
+    font-family: "Instrument Serif", "Times New Roman", serif; font-weight: 400;
+    font-size: clamp(1.9rem, 4.6vw, 3rem); line-height: 1.06;
+    margin: 0 0 18px; color: var(--p-dark); text-wrap: balance;
+  }
+  #pdp-{{ section.id }} .pdp__kicker {
+    font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--p-gold); font-weight: 600; margin: 0 0 10px;
+  }
+  #pdp-{{ section.id }} .pdp__lead { font-size: 1.05rem; line-height: 1.6; color: rgba(45,45,45,.8); margin: 0; max-width: 46ch; }
+  #pdp-{{ section.id }} .pdp__fine { font-size: .82rem; color: rgba(45,45,45,.62); margin: 12px 0 0; }
+
+  /* ---- HERO ---- */
+  #pdp-{{ section.id }} .pdp__hero {
+    display: grid; gap: clamp(24px, 4vw, 56px);
+    padding: clamp(20px, 4vw, 56px);
+    max-width: 1400px; margin: 0 auto;
+  }
+  #pdp-{{ section.id }} .pdp__gallery { position: relative; border-radius: 24px; overflow: hidden; background: var(--p-beige); aspect-ratio: 1 / 1; }
+  #pdp-{{ section.id }} .pdp__shot { position: absolute; inset: 0; opacity: 0; transition: opacity .45s ease; }
+  #pdp-{{ section.id }} .pdp__shot.is-on { opacity: 1; }
+  #pdp-{{ section.id }} .pdp__shot img { width: 100%; height: 100%; object-fit: cover; }
+
+  #pdp-{{ section.id }} .pdp__title { font-family: "Instrument Serif", serif; font-weight: 400; font-size: clamp(2.1rem, 5vw, 3.2rem); margin: 0 0 10px; color: var(--p-dark); }
+  #pdp-{{ section.id }} .pdp__price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 26px; }
+  #pdp-{{ section.id }} .pdp__price strong { font-size: 1.7rem; color: var(--p-dark); }
+  #pdp-{{ section.id }} .pdp__price s { color: rgba(45,45,45,.5); }
+
+  #pdp-{{ section.id }} .pdp__field { border: 0; padding: 0; margin: 0 0 24px; }
+  #pdp-{{ section.id }} .pdp__label {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    width: 100%; font-size: .74rem; letter-spacing: .16em; text-transform: uppercase;
+    font-weight: 600; color: rgba(45,45,45,.7); margin-bottom: 12px; padding: 0;
+  }
+  #pdp-{{ section.id }} .pdp__help {
+    border: 0; background: none; color: var(--p-dark); font: inherit;
+    font-size: .74rem; letter-spacing: .04em; text-transform: none;
+    text-decoration: underline; cursor: pointer; padding: 6px;
+  }
+  #pdp-{{ section.id }} .pdp__swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+  #pdp-{{ section.id }} .pdp__swatch {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 48px;
+    padding: 0 16px; border: 1px solid var(--p-line); border-radius: 999px;
+    background: #fff; font: inherit; font-size: .9rem; cursor: pointer;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  #pdp-{{ section.id }} .pdp__swatch.is-on { border-color: var(--p-dark); box-shadow: 0 0 0 1px var(--p-dark) inset; }
+  #pdp-{{ section.id }} .pdp__dot { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(0,0,0,.15); }
+  #pdp-{{ section.id }} .pdp__dot[data-tone="preto-fosco"] { background: linear-gradient(145deg,#3a3a3d,#141416); }
+  #pdp-{{ section.id }} .pdp__dot[data-tone="prata-titanio"] { background: linear-gradient(145deg,#e9e9ee,#9a9aa0); }
+  #pdp-{{ section.id }} .pdp__dot[data-tone="dourado"] { background: linear-gradient(145deg,#f0d9ab,#b8894f); }
+
+  #pdp-{{ section.id }} .pdp__sizes { display: flex; flex-wrap: wrap; gap: 8px; }
+  #pdp-{{ section.id }} .pdp__size {
+    min-width: 48px; min-height: 48px; padding: 0 14px;
+    border: 1px solid var(--p-line); border-radius: 12px; background: #fff;
+    font: inherit; font-weight: 600; cursor: pointer; transition: all .18s;
+  }
+  #pdp-{{ section.id }} .pdp__size.is-on { background: var(--p-dark); color: var(--p-cream); border-color: var(--p-dark); }
+  #pdp-{{ section.id }} .pdp__warn { color: #a33; font-size: .85rem; margin: 10px 0 0; }
+
+  #pdp-{{ section.id }} .pdp__cta {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 100%; min-height: 54px; padding: 0 2em; border: 0;
+    border-radius: 999px; background: var(--p-dark); color: var(--p-cream);
+    font: inherit; font-weight: 600; font-size: 1rem; cursor: pointer;
+    text-decoration: none; transition: opacity .2s;
+  }
+  #pdp-{{ section.id }} .pdp__cta:hover { opacity: .88; }
+  #pdp-{{ section.id }} .pdp__cta--wide { max-width: 380px; margin: 0 auto; }
+
+  #pdp-{{ section.id }} .pdp__trust {
+    list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px;
+    padding: 0; margin: 22px 0 0; font-size: .86rem; color: rgba(45,45,45,.72);
+  }
+  #pdp-{{ section.id }} .pdp__trust li::before { content: "✓ "; color: var(--p-gold); }
+  #pdp-{{ section.id }} .pdp__box { font-size: .88rem; color: rgba(45,45,45,.7); margin-top: 14px; }
+
+  /* ---- blocos ---- */
+  #pdp-{{ section.id }} .pdp__block { padding: clamp(48px, 8vh, 96px) clamp(20px, 5vw, 56px); max-width: 1200px; margin: 0 auto; }
+  #pdp-{{ section.id }} .pdp__grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  #pdp-{{ section.id }} .pdp__card { background: #fff; border: 1px solid var(--p-line); border-radius: 18px; padding: 22px; }
+  #pdp-{{ section.id }} .pdp__card h3 { margin: 0 0 8px; font-size: 1.05rem; color: var(--p-dark); }
+  #pdp-{{ section.id }} .pdp__card p { margin: 0; font-size: .92rem; color: rgba(45,45,45,.75); line-height: 1.55; }
+
+  #pdp-{{ section.id }} .pdp__wide { position: relative; }
+  #pdp-{{ section.id }} .pdp__wideMedia { width: 100%; height: clamp(280px, 52vh, 560px); object-fit: cover; }
+  #pdp-{{ section.id }} .pdp__wideCopy { padding: clamp(28px, 5vw, 56px); max-width: 1200px; margin: 0 auto; }
+
+  #pdp-{{ section.id }} .pdp__block--app { display: grid; gap: 32px; }
+  #pdp-{{ section.id }} .pdp__apps { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  #pdp-{{ section.id }} .pdp__appBtn {
+    display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.4em;
+    border: 1px solid var(--p-line); border-radius: 12px; background: #fff;
+    color: var(--p-dark); text-decoration: none; font-weight: 600; font-size: .92rem;
+  }
+  #pdp-{{ section.id }} .pdp__scores { display: flex; gap: 12px; flex-wrap: wrap; }
+  #pdp-{{ section.id }} .pdp__score { flex: 1 1 120px; background: #fff; border: 1px solid var(--p-line); border-radius: 18px; padding: 20px; text-align: center; }
+  #pdp-{{ section.id }} .pdp__score span { display: block; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(45,45,45,.6); margin-bottom: 6px; }
+  #pdp-{{ section.id }} .pdp__score strong { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 2.4rem; color: var(--p-dark); }
+
+  #pdp-{{ section.id }} .pdp__cols { display: grid; gap: 28px; }
+  #pdp-{{ section.id }} .pdp__cols h3 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 1.5rem; margin: 0 0 8px; color: var(--p-dark); }
+  #pdp-{{ section.id }} .pdp__cols p { margin: 0; color: rgba(45,45,45,.75); line-height: 1.6; }
+
+  #pdp-{{ section.id }} .pdp__table { width: 100%; border-collapse: collapse; }
+  #pdp-{{ section.id }} .pdp__table td { padding: 14px 12px; border-bottom: 1px solid var(--p-line); }
+  #pdp-{{ section.id }} .pdp__table td.yes { text-align: right; font-weight: 600; color: var(--p-dark); }
+
+  #pdp-{{ section.id }} .pdp__faq details { border-bottom: 1px solid var(--p-line); }
+  #pdp-{{ section.id }} .pdp__faq summary { cursor: pointer; padding: 18px 0; font-weight: 600; color: var(--p-dark); list-style: none; }
+  #pdp-{{ section.id }} .pdp__faq summary::-webkit-details-marker { display: none; }
+  #pdp-{{ section.id }} .pdp__faq summary::after { content: "+"; float: right; color: var(--p-gold); }
+  #pdp-{{ section.id }} .pdp__faq details[open] summary::after { content: "−"; }
+  #pdp-{{ section.id }} .pdp__faq p { margin: 0 0 18px; color: rgba(45,45,45,.78); line-height: 1.6; }
+
+  #pdp-{{ section.id }} .pdp__final { text-align: center; padding: clamp(56px, 9vh, 110px) clamp(20px, 5vw, 56px); background: var(--p-beige); }
+  #pdp-{{ section.id }} .pdp__finalPrice { font-size: 1.5rem; font-weight: 600; color: var(--p-dark); margin: 0 0 22px; }
+
+  /* CTA fixo no mobile */
+  #pdp-{{ section.id }} .pdp__sticky {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(247,243,236,.96); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--p-line);
+  }
+  #pdp-{{ section.id }} .pdp__sticky span { font-weight: 600; color: var(--p-dark); white-space: nowrap; }
+  #pdp-{{ section.id }} .pdp__sticky .pdp__cta { min-height: 48px; }
+  @media (min-width: 750px) { #pdp-{{ section.id }} .pdp__sticky { display: none !important; } }
+
+  /* modal */
+  #pdp-{{ section.id }} .pdp__modal { border: 0; border-radius: 20px; padding: 26px; max-width: 460px; width: calc(100% - 32px); color: var(--p-ink); }
+  #pdp-{{ section.id }} .pdp__modal::backdrop { background: rgba(24,24,24,.55); }
+  #pdp-{{ section.id }} .pdp__modal h3 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 1.5rem; margin: 0 0 14px; color: var(--p-dark); }
+  #pdp-{{ section.id }} .pdp__sizeTable { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  #pdp-{{ section.id }} .pdp__sizeTable th { text-align: left; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(45,45,45,.6); padding: 8px; }
+  #pdp-{{ section.id }} .pdp__sizeTable td { padding: 8px; border-top: 1px solid var(--p-line); }
+  #pdp-{{ section.id }} .pdp__modalClose { display: block; width: 100%; margin-top: 12px; min-height: 44px; border: 1px solid var(--p-line); border-radius: 999px; background: #fff; font: inherit; cursor: pointer; }
+
+  /* ---- desktop ---- */
+  @media (min-width: 750px) {
+    #pdp-{{ section.id }} .pdp__hero { grid-template-columns: 1.1fr .9fr; align-items: start; padding-top: clamp(32px, 5vh, 72px); }
+    #pdp-{{ section.id }} .pdp__buy { position: sticky; top: 96px; }
+    #pdp-{{ section.id }} .pdp__grid { grid-template-columns: repeat(3, 1fr); }
+    #pdp-{{ section.id }} .pdp__cols { grid-template-columns: repeat(3, 1fr); gap: 40px; }
+    #pdp-{{ section.id }} .pdp__block--app { grid-template-columns: 1.1fr .9fr; align-items: center; }
+    #pdp-{{ section.id }} .pdp__cta { width: auto; min-width: 260px; }
+    #pdp-{{ section.id }} .pdp__wideCopy { position: absolute; inset: auto 0 0 0; color: var(--p-cream); background: linear-gradient(180deg, transparent, rgba(24,24,24,.75)); }
+    #pdp-{{ section.id }} .pdp__wideCopy .pdp__h2 { color: #fff; }
+    #pdp-{{ section.id }} .pdp__wideCopy .pdp__lead { color: rgba(247,243,236,.9); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pdp-{{ section.id }} .pdp__shot { transition: none; }
+  }
+</style>
+
+<script>
+(function () {
+  var root = document.getElementById('pdp-{{ section.id }}');
+  if (!root || root.dataset.init) return;
+  root.dataset.init = '1';
+
+  var variants = [];
+  try { variants = JSON.parse(root.querySelector('[data-variants]').textContent); } catch (e) {}
+
+  var form      = root.querySelector('[data-pdp-form]');
+  var idInput   = root.querySelector('[data-variant-id]');
+  var sizeInput = root.querySelector('[data-size-input]');
+  var sizeWarn  = root.querySelector('[data-size-warn]');
+  var addBtn    = root.querySelector('[data-add]');
+  var shots     = Array.prototype.slice.call(root.querySelectorAll('.pdp__shot'));
+  var priceEls  = Array.prototype.slice.call(root.querySelectorAll('[data-price] strong, [data-price-echo], [data-price-sticky]'));
+
+  function money(cents) {
+    return 'R$ ' + (cents / 100).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  /* ---- cor: troca variante, preço e foto ---- */
+  root.querySelectorAll('[data-opt-value]').forEach(function (btn, idx) {
+    btn.addEventListener('click', function () {
+      root.querySelectorAll('[data-opt-value]').forEach(function (b) {
+        b.classList.remove('is-on'); b.setAttribute('aria-checked', 'false');
+      });
+      btn.classList.add('is-on'); btn.setAttribute('aria-checked', 'true');
+
+      var val = btn.dataset.optValue;
+      var match = variants.filter(function (v) { return v.title === val; })[0];
+      if (match) {
+        idInput.value = match.id;
+        priceEls.forEach(function (el) { el.textContent = money(match.price); });
+        addBtn.textContent = match.available ? 'Adicionar ao carrinho' : 'Esgotado';
+        addBtn.disabled = !match.available;
+      }
+      // a galeria segue a ordem das cores
+      shots.forEach(function (s, i) { s.classList.toggle('is-on', i === idx); });
+    });
+  });
+
+  /* ---- tamanho: line item property ---- */
+  root.querySelectorAll('[data-size]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      root.querySelectorAll('[data-size]').forEach(function (b) {
+        b.classList.remove('is-on'); b.setAttribute('aria-checked', 'false');
+      });
+      btn.classList.add('is-on'); btn.setAttribute('aria-checked', 'true');
+      sizeInput.value = btn.dataset.size;
+      sizeWarn.hidden = true;
+    });
+  });
+
+  form.addEventListener('submit', function (e) {
+    if (!sizeInput.value) {
+      e.preventDefault();
+      sizeWarn.hidden = false;
+      root.querySelector('.pdp__sizes').scrollIntoView({ block: 'center' });
+    }
+  });
+
+  /* ---- modal de tamanho ---- */
+  var modal = root.querySelector('[data-size-modal]');
+  root.querySelector('[data-open-size]').addEventListener('click', function () {
+    if (modal.showModal) modal.showModal();
+    else window.location.href = '/pages/guia-de-tamanho';
+  });
+  root.querySelector('[data-close-size]').addEventListener('click', function () { modal.close(); });
+  modal.addEventListener('click', function (e) { if (e.target === modal) modal.close(); });
+
+  /* ---- CTA fixo no mobile: aparece ao sair do hero ---- */
+  var sticky = root.querySelector('[data-sticky]');
+  var hero = root.querySelector('.pdp__hero');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { sticky.hidden = en.isIntersecting; });
+    }, { threshold: 0.15 }).observe(hero);
+  }
+  root.querySelectorAll('[data-scroll-top]').forEach(function (b) {
+    b.addEventListener('click', function () { hero.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  });
+
+  /* ---- vídeo da faixa de resistência: carrega e toca ao entrar ---- */
+  var vid = root.querySelector('[data-pdp-video]');
+  if (vid && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) { if (!vid.paused) vid.pause(); return; }
+        var s = vid.querySelector('source[data-src]');
+        if (s && !s.src) { s.src = s.dataset.src; vid.load(); }
+        var p = vid.play(); if (p && p.catch) p.catch(function () {});
+      });
+    }, { threshold: 0.25 }).observe(vid);
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Lume Ring — PDP",
+  "tag": "section",
+  "settings": [],
+  "presets": [{ "name": "Lume Ring — PDP", "category": "Lume" }]
+}
+{% endschema %}

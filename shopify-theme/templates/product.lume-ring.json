@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "pdp": {
+      "type": "lume-ring-pdp",
+      "settings": {}
+    }
+  },
+  "order": ["pdp"]
+}
