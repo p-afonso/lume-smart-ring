@@ -4,6 +4,14 @@
       "type": "lume-ring",
       "settings": {}
     },
+    "scroll_story": {
+      "type": "lume-scrollstory",
+      "settings": {
+        "buy_url": "/products/lume-smart-ring",
+        "cta_primary": "Comprar Lume Ring",
+        "cta_secondary": "Descubra seu tamanho"
+      }
+    },
     "size_guide": {
       "type": "lume-size-guide",
       "settings": {
@@ -13,5 +21,5 @@
       }
     }
   },
-  "order": ["lume_ring", "size_guide"]
+  "order": ["lume_ring", "scroll_story", "size_guide"]
 }
