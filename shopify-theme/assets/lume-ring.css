@@ -339,6 +339,9 @@
   max-width: var(--maxw); margin: 0 auto;
 }
 @media (max-width: 880px) { #lume-ring .lr-materials { grid-template-columns: 1fr; } }
+#lume-ring .lr-materials--noimg { grid-template-columns: 1fr; max-width: 860px; text-align: center; }
+#lume-ring .lr-materials--noimg .lr-lead { margin-left: auto; margin-right: auto; }
+#lume-ring .lr-materials--noimg .lr-chips { justify-content: center; }
 #lume-ring .lr-materials__media { border-radius: 26px; overflow: hidden; aspect-ratio: 4/3; }
 #lume-ring .lr-materials__title { font-size: clamp(2.1rem, 4.6vw, 3.8rem); }
 #lume-ring .lr-materials .lr-lead { margin-top: 18px; }

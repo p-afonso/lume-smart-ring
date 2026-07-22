@@ -56,39 +56,6 @@
     <p class="lr-lead lr-manifesto__s lr-r">{{ section.settings.manifesto_sub }}</p>
   </section>
 
-  {%- comment -%} ===== 3 · PINNED SCROLLYTELLING ===== {%- endcomment -%}
-  <section class="lr-pin" data-pin>
-    <div class="lr-pin__stage">
-      <div class="lr-pin__media" data-pin-media>
-        {%- if section.settings.pin_image -%}
-          {{ section.settings.pin_image | image_url: width: 1800 | image_tag: alt: 'Anel Lume em close macro', loading: 'lazy' }}
-        {%- else -%}
-          <img src="{{ 'lume-ring-cut.png' | asset_url }}" alt="Anel Lume em titânio champagne" loading="lazy" width="1000" height="1000">
-        {%- endif -%}
-      </div>
-      <div class="lr-pin__glow"></div>
-      <div class="lr-pin__scrim"></div>
-
-      <div class="lr-caps">
-        <div class="lr-cap" data-from="0.02" data-to="0.31">
-          <p class="lr-eyebrow">{{ section.settings.pin_eyebrow }}</p>
-          <h2 class="lr-display lr-cap__t">{{ section.settings.pin_title_1 }}</h2>
-          <p class="lr-cap__s">{{ section.settings.pin_text_1 }}</p>
-        </div>
-        <div class="lr-cap" data-from="0.35" data-to="0.64">
-          <h2 class="lr-display lr-cap__t">{{ section.settings.pin_title_2 }}</h2>
-          <p class="lr-cap__s">{{ section.settings.pin_text_2 }}</p>
-        </div>
-        <div class="lr-cap" data-from="0.68" data-to="1">
-          <h2 class="lr-display lr-cap__t">{{ section.settings.pin_title_3 }}</h2>
-          <p class="lr-cap__s">{{ section.settings.pin_text_3 }}</p>
-        </div>
-      </div>
-
-      <div class="lr-pin__rail" aria-hidden="true"><i data-rail></i></div>
-    </div>
-  </section>
-
   {%- comment -%} ===== 4 · LUME DUO (Band + Ring) ===== {%- endcomment -%}
   {% render 'lume-duo-cards' %}
 
@@ -119,13 +86,11 @@
 
   {%- comment -%} ===== 6 · BATTERY ===== {%- endcomment -%}
   <section class="lr-battery">
-    <div class="lr-media" data-parallax="0.14">
-      {%- if section.settings.battery_image -%}
+    {%- if section.settings.battery_image -%}
+      <div class="lr-media" data-parallax="0.14">
         {{ section.settings.battery_image | image_url: width: 2400 | image_tag: alt: 'Anel Lume na base de carregamento', loading: 'lazy' }}
-      {%- else -%}
-        <img src="{{ 'lume-battery.jpg' | asset_url }}" alt="Anel Lume na base de carregamento magnética" loading="lazy" width="1536" height="1024">
-      {%- endif -%}
-    </div>
+      </div>
+    {%- endif -%}
     <div class="lr-battery__in">
       <p class="lr-display lr-battery__num lr-r">{{ section.settings.battery_num }}</p>
       <p class="lr-battery__t lr-r lr-r-d1">{{ section.settings.battery_text }}</p>
@@ -134,14 +99,12 @@
   </section>
 
   {%- comment -%} ===== 7 · MATERIALS ===== {%- endcomment -%}
-  <section class="lr-materials">
-    <div class="lr-materials__media lr-media lr-r">
-      {%- if section.settings.material_image -%}
+  <section class="lr-materials{% unless section.settings.material_image %} lr-materials--noimg{% endunless %}">
+    {%- if section.settings.material_image -%}
+      <div class="lr-materials__media lr-media lr-r">
         {{ section.settings.material_image | image_url: width: 1600 | image_tag: alt: 'Acabamento em titânio do anel Lume', loading: 'lazy' }}
-      {%- else -%}
-        <img src="{{ 'lume-material.jpg' | asset_url }}" alt="Macro do titânio escovado do anel Lume" loading="lazy" width="1536" height="1024">
-      {%- endif -%}
-    </div>
+      </div>
+    {%- endif -%}
     <div>
       <h2 class="lr-display lr-materials__title lr-r">{{ section.settings.material_title }}</h2>
       <p class="lr-lead lr-r lr-r-d1">{{ section.settings.material_text }}</p>
@@ -376,15 +339,6 @@
     { "type": "textarea", "id": "manifesto", "label": "Frase", "default": "Cinquenta métricas de saúde. Nenhum esforço." },
     { "type": "textarea", "id": "manifesto_sub", "label": "Apoio", "default": "O menor smart ring do mundo mede o que importa enquanto você vive o seu dia." },
 
-    { "type": "header", "content": "3. Scrollytelling (pinado)" },
-    { "type": "image_picker", "id": "pin_image", "label": "Render do anel (quadrado)" },
-    { "type": "text", "id": "pin_eyebrow", "label": "Sobretítulo", "default": "Engenharia invisível" },
-    { "type": "text", "id": "pin_title_1", "label": "Capítulo 1 — título", "default": "Cinco sensores. Nenhum ruído." },
-    { "type": "textarea", "id": "pin_text_1", "label": "Capítulo 1 — texto", "default": "Frequência cardíaca, HRV, oxigenação, temperatura e movimento, medidos sem você perceber." },
-    { "type": "text", "id": "pin_title_2", "label": "Capítulo 2 — título", "default": "Titânio do centro à borda." },
-    { "type": "textarea", "id": "pin_text_2", "label": "Capítulo 2 — texto", "default": "Interior sem emendas, exterior resistente a riscos. Três gramas no seu dedo." },
-    { "type": "text", "id": "pin_title_3", "label": "Capítulo 3 — título", "default": "Sete noites. Uma carga." },
-    { "type": "textarea", "id": "pin_text_3", "label": "Capítulo 3 — texto", "default": "Uma semana de leituras contínuas. Noventa minutos para voltar ao dedo." },
 
     { "type": "header", "content": "4. Número em destaque" },
     { "type": "text", "id": "big_number", "label": "Número (dígitos)", "default": "40" },
