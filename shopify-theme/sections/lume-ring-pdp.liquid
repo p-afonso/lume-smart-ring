@@ -21,65 +21,95 @@
         <div class="pdp__shot{% if forloop.first %} is-on{% endif %}" data-shot="{{ forloop.index0 }}">
           {{ media | image_url: width: 1400 | image_tag:
              alt: media.alt | default: product.title,
-             loading: forloop.first | default: false | ternary: 'eager', 'lazy',
+             loading: 'lazy',
              widths: '500, 800, 1200, 1400',
-             sizes: '(max-width: 749px) 100vw, 50vw' }}
+             sizes: '(max-width: 749px) 100vw, 55vw' }}
         </div>
       {%- else -%}
         <div class="pdp__shot is-on">{{ 'product-1' | placeholder_svg_tag: 'pdp__ph' }}</div>
       {%- endfor -%}
     </div>
 
-    <div class="pdp__buy">
-      <h1 class="pdp__title">{{ product.title }}</h1>
+    <div class="pdp__panel">
+      <div class="pdp__card">
+        <h1 class="pdp__title">{{ product.title }}</h1>
 
-      <div class="pdp__price" data-price>
-        <strong>{{ v.price | money }}</strong>
-        {%- if v.compare_at_price and v.compare_at_price > v.price -%}
-          <s>{{ v.compare_at_price | money }}</s>
-        {%- endif -%}
-      </div>
+        <div class="pdp__row pdp__row--price">
+          <div class="pdp__price" data-price>
+            <strong>{{ v.price | money }}</strong>
+            {%- if v.compare_at_price and v.compare_at_price > v.price -%}
+              <s>{{ v.compare_at_price | money }}</s>
+            {%- endif -%}
+          </div>
+          {%- if section.settings.show_installments and section.settings.installments > 1 -%}
+            {%- assign parcela = v.price | divided_by: section.settings.installments -%}
+            <p class="pdp__inst">ou {{ section.settings.installments }}× de <strong>{{ parcela | money }}</strong> · sem juros</p>
+          {%- endif -%}
+        </div>
 
-      <form action="/cart/add" method="post" enctype="multipart/form-data" data-pdp-form>
-        <input type="hidden" name="id" value="{{ v.id }}" data-variant-id>
+        <form action="/cart/add" method="post" enctype="multipart/form-data" data-pdp-form>
+          <input type="hidden" name="id" value="{{ v.id }}" data-variant-id>
 
-        {%- comment -%} COR — vem das opções reais do produto {%- endcomment -%}
-        {%- for option in product.options_with_values -%}
-          <fieldset class="pdp__field">
-            <legend class="pdp__label">{{ option.name }}</legend>
-            <div class="pdp__swatches" role="radiogroup" aria-label="{{ option.name }}">
-              {%- for value in option.values -%}
-                <button type="button" class="pdp__swatch{% if value == v.title %} is-on{% endif %}"
-                        role="radio" aria-checked="{% if value == v.title %}true{% else %}false{% endif %}"
-                        data-opt-value="{{ value | escape }}" title="{{ value | escape }}">
-                  <span class="pdp__dot" data-tone="{{ value | handle }}"></span>
-                  <span class="pdp__swatchName">{{ value }}</span>
-                </button>
+          {%- for option in product.options_with_values -%}
+            <div class="pdp__row">
+              <span class="pdp__rowLabel">{{ option.name | upcase }}</span>
+              <div class="pdp__dots" role="radiogroup" aria-label="{{ option.name }}">
+                {%- for value in option.values -%}
+                  <button type="button" class="pdp__dot{% if value == v.title %} is-on{% endif %}"
+                          role="radio" aria-checked="{% if value == v.title %}true{% else %}false{% endif %}"
+                          data-opt-value="{{ value | escape }}" aria-label="{{ value | escape }}" title="{{ value | escape }}">
+                    <i data-tone="{{ value | handle }}"></i>
+                  </button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+
+          <div class="pdp__row">
+            <span class="pdp__rowLabel">TAMANHO</span>
+            <div class="pdp__sizes" role="radiogroup" aria-label="Tamanho">
+              {%- assign sizes = '7,8,9,10,11,12,13' | split: ',' -%}
+              {%- for s in sizes -%}
+                <button type="button" class="pdp__size" role="radio" aria-checked="false" data-size="{{ s }}">{{ s }}</button>
               {%- endfor -%}
             </div>
-          </fieldset>
-        {%- endfor -%}
-
-        {%- comment -%} TAMANHO — line item property (não há variante) {%- endcomment -%}
-        <fieldset class="pdp__field">
-          <legend class="pdp__label">
-            Tamanho
-            <button type="button" class="pdp__help" data-open-size>Descubra seu tamanho</button>
-          </legend>
-          <div class="pdp__sizes" role="radiogroup" aria-label="Tamanho">
-            {%- assign sizes = '7,8,9,10,11,12,13' | split: ',' -%}
-            {%- for s in sizes -%}
-              <button type="button" class="pdp__size" role="radio" aria-checked="false" data-size="{{ s }}">{{ s }}</button>
-            {%- endfor -%}
           </div>
+
           <input type="hidden" name="properties[Tamanho]" data-size-input>
           <p class="pdp__warn" data-size-warn hidden>Escolha um tamanho para continuar.</p>
-        </fieldset>
 
-        <button type="submit" class="pdp__cta" data-add>
-          {%- if v.available -%}Adicionar ao carrinho{%- else -%}Esgotado{%- endif -%}
-        </button>
-      </form>
+          <button type="button" class="pdp__sizeGuide" data-open-size>
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="2" y="8" width="20" height="8" rx="2"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/></svg>
+            Descubra seu tamanho
+            <svg class="pdp__chev" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+
+          <button type="submit" class="pdp__cta" data-add>
+            <span>{% if v.available %}Adicionar ao carrinho{% else %}Esgotado{% endif %}</span>
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12h11.2L21 7H6"/></svg>
+          </button>
+        </form>
+      </div>
+
+      {%- comment -%} Brinde: base de carregamento. Preço vem do produto real. {%- endcomment -%}
+      {%- assign dock = all_products['base-de-carregamento-lume'] -%}
+      <div class="pdp__gift">
+        <div class="pdp__giftThumb">
+          {%- if dock and dock.featured_image -%}
+            {{ dock.featured_image | image_url: width: 160 | image_tag: alt: dock.title, loading: 'lazy' }}
+          {%- else -%}
+            <span class="pdp__giftIcon" aria-hidden="true"></span>
+          {%- endif -%}
+        </div>
+        <div class="pdp__giftText">
+          <strong>Base de Carregamento</strong>
+          <span>Inclusa na sua compra</span>
+        </div>
+        <div class="pdp__giftPrice">
+          {%- if dock and dock.price > 0 -%}<s>{{ dock.price | money }}</s>{%- endif -%}
+          <em>Grátis</em>
+        </div>
+      </div>
 
       <ul class="pdp__trust">
         <li>Frete grátis</li>
@@ -87,8 +117,6 @@
         <li>Garantia de 12 meses</li>
         <li>Sem assinatura</li>
       </ul>
-
-      <p class="pdp__box">Na caixa: anel, base de carregamento magnética e kit de medição de tamanho.</p>
     </div>
   </section>
 
@@ -221,7 +249,8 @@
   #pdp-{{ section.id }} {
     --p-ink: #2D2D2D; --p-dark: #181818; --p-cream: #F7F3EC;
     --p-gold: #C9A97A; --p-beige: #E7D0B1; --p-line: #e5ddd0;
-    background: var(--p-cream); color: var(--p-ink);
+    --p-accent: #1B6EF3;
+    background: #fff; color: var(--p-ink);
     font-family: "Inter", system-ui, -apple-system, sans-serif;
   }
   #pdp-{{ section.id }} * { box-sizing: border-box; }
@@ -239,71 +268,129 @@
   #pdp-{{ section.id }} .pdp__lead { font-size: 1.05rem; line-height: 1.6; color: rgba(45,45,45,.8); margin: 0; max-width: 46ch; }
   #pdp-{{ section.id }} .pdp__fine { font-size: .82rem; color: rgba(45,45,45,.62); margin: 12px 0 0; }
 
-  /* ---- HERO ---- */
+  /* ---- HERO (layout de referência: galeria clara + card branco) ---- */
   #pdp-{{ section.id }} .pdp__hero {
-    display: grid; gap: clamp(24px, 4vw, 56px);
-    padding: clamp(20px, 4vw, 56px);
-    max-width: 1400px; margin: 0 auto;
+    display: grid; gap: 20px;
+    padding: 0 0 clamp(24px, 4vw, 48px);
+    background: #fff;
   }
-  #pdp-{{ section.id }} .pdp__gallery { position: relative; border-radius: 24px; overflow: hidden; background: var(--p-beige); aspect-ratio: 1 / 1; }
-  #pdp-{{ section.id }} .pdp__shot { position: absolute; inset: 0; opacity: 0; transition: opacity .45s ease; }
+  #pdp-{{ section.id }} .pdp__gallery {
+    position: relative; overflow: hidden;
+    background: linear-gradient(160deg,#f4f4f5,#e9e9ea);
+    aspect-ratio: 1 / 1;
+  }
+  #pdp-{{ section.id }} .pdp__shot { position: absolute; inset: 0; opacity: 0; transition: opacity .4s ease; }
   #pdp-{{ section.id }} .pdp__shot.is-on { opacity: 1; }
   #pdp-{{ section.id }} .pdp__shot img { width: 100%; height: 100%; object-fit: cover; }
 
-  #pdp-{{ section.id }} .pdp__title { font-family: "Instrument Serif", serif; font-weight: 400; font-size: clamp(2.1rem, 5vw, 3.2rem); margin: 0 0 10px; color: var(--p-dark); }
-  #pdp-{{ section.id }} .pdp__price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 26px; }
-  #pdp-{{ section.id }} .pdp__price strong { font-size: 1.7rem; color: var(--p-dark); }
-  #pdp-{{ section.id }} .pdp__price s { color: rgba(45,45,45,.5); }
+  #pdp-{{ section.id }} .pdp__panel { display: grid; gap: 14px; padding: 0 clamp(16px, 4vw, 28px); }
+  #pdp-{{ section.id }} .pdp__card {
+    background: #fff; border: 1px solid #ececed; border-radius: 22px;
+    padding: clamp(22px, 3.4vw, 34px);
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  #pdp-{{ section.id }} .pdp__title {
+    font-family: "Instrument Serif", "Times New Roman", serif; font-weight: 400;
+    font-size: clamp(2.1rem, 5vw, 3.1rem); line-height: 1.04;
+    margin: 0 0 4px; color: #111; letter-spacing: -.01em;
+  }
 
-  #pdp-{{ section.id }} .pdp__field { border: 0; padding: 0; margin: 0 0 24px; }
-  #pdp-{{ section.id }} .pdp__label {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    width: 100%; font-size: .74rem; letter-spacing: .16em; text-transform: uppercase;
-    font-weight: 600; color: rgba(45,45,45,.7); margin-bottom: 12px; padding: 0;
+  /* linhas com rótulo à esquerda e controle à direita, separadas por hairline */
+  #pdp-{{ section.id }} .pdp__row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+    padding: 18px 0; border-top: 1px solid #ececed;
   }
-  #pdp-{{ section.id }} .pdp__help {
-    border: 0; background: none; color: var(--p-dark); font: inherit;
-    font-size: .74rem; letter-spacing: .04em; text-transform: none;
-    text-decoration: underline; cursor: pointer; padding: 6px;
+  #pdp-{{ section.id }} .pdp__row--price { display: block; }
+  #pdp-{{ section.id }} .pdp__rowLabel {
+    font-size: .74rem; letter-spacing: .14em; font-weight: 600; color: #8b8b90;
   }
-  #pdp-{{ section.id }} .pdp__swatches { display: flex; flex-wrap: wrap; gap: 10px; }
-  #pdp-{{ section.id }} .pdp__swatch {
-    display: inline-flex; align-items: center; gap: 8px; min-height: 48px;
-    padding: 0 16px; border: 1px solid var(--p-line); border-radius: 999px;
-    background: #fff; font: inherit; font-size: .9rem; cursor: pointer;
-    transition: border-color .2s, box-shadow .2s;
-  }
-  #pdp-{{ section.id }} .pdp__swatch.is-on { border-color: var(--p-dark); box-shadow: 0 0 0 1px var(--p-dark) inset; }
-  #pdp-{{ section.id }} .pdp__dot { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(0,0,0,.15); }
-  #pdp-{{ section.id }} .pdp__dot[data-tone="preto-fosco"] { background: linear-gradient(145deg,#3a3a3d,#141416); }
-  #pdp-{{ section.id }} .pdp__dot[data-tone="prata-titanio"] { background: linear-gradient(145deg,#e9e9ee,#9a9aa0); }
-  #pdp-{{ section.id }} .pdp__dot[data-tone="dourado"] { background: linear-gradient(145deg,#f0d9ab,#b8894f); }
 
-  #pdp-{{ section.id }} .pdp__sizes { display: flex; flex-wrap: wrap; gap: 8px; }
+  #pdp-{{ section.id }} .pdp__price { display: flex; align-items: baseline; gap: 12px; }
+  #pdp-{{ section.id }} .pdp__price strong { font-size: clamp(1.9rem, 4vw, 2.5rem); font-weight: 700; color: #111; letter-spacing: -.02em; }
+  #pdp-{{ section.id }} .pdp__price s { color: #9a9aa0; font-size: 1.05rem; }
+  #pdp-{{ section.id }} .pdp__inst { margin: 6px 0 0; font-size: .95rem; color: #6b6b70; }
+  #pdp-{{ section.id }} .pdp__inst strong { color: #111; font-weight: 600; }
+
+  /* cor: só bolinhas */
+  #pdp-{{ section.id }} .pdp__dots { display: flex; gap: 10px; }
+  #pdp-{{ section.id }} .pdp__dot {
+    width: 34px; height: 34px; padding: 0; border-radius: 50%;
+    border: 2px solid transparent; background: none; cursor: pointer;
+    display: grid; place-items: center; transition: border-color .18s;
+  }
+  #pdp-{{ section.id }} .pdp__dot i {
+    width: 26px; height: 26px; border-radius: 50%; display: block;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
+  }
+  #pdp-{{ section.id }} .pdp__dot.is-on { border-color: #111; }
+  #pdp-{{ section.id }} .pdp__dot i[data-tone="preto-fosco"] { background: linear-gradient(145deg,#3a3a3d,#101012); }
+  #pdp-{{ section.id }} .pdp__dot i[data-tone="prata-titanio"] { background: linear-gradient(145deg,#eeeef2,#b9b9c0); }
+  #pdp-{{ section.id }} .pdp__dot i[data-tone="dourado"] { background: linear-gradient(145deg,#f3d9a6,#c79a4e); }
+
+  /* tamanho: pílulas compactas */
+  #pdp-{{ section.id }} .pdp__sizes { display: flex; gap: 6px; flex-wrap: wrap; }
   #pdp-{{ section.id }} .pdp__size {
-    min-width: 48px; min-height: 48px; padding: 0 14px;
-    border: 1px solid var(--p-line); border-radius: 12px; background: #fff;
-    font: inherit; font-weight: 600; cursor: pointer; transition: all .18s;
+    width: 44px; height: 44px; padding: 0;
+    border: 1px solid #e3e3e5; border-radius: 14px; background: #fff;
+    font: inherit; font-size: .95rem; font-weight: 500; color: #111;
+    cursor: pointer; transition: all .16s;
   }
-  #pdp-{{ section.id }} .pdp__size.is-on { background: var(--p-dark); color: var(--p-cream); border-color: var(--p-dark); }
-  #pdp-{{ section.id }} .pdp__warn { color: #a33; font-size: .85rem; margin: 10px 0 0; }
+  #pdp-{{ section.id }} .pdp__size:hover { border-color: #c9c9cd; }
+  #pdp-{{ section.id }} .pdp__size.is-on { background: #111; color: #fff; border-color: #111; font-weight: 600; }
+  #pdp-{{ section.id }} .pdp__warn { color: #c0392b; font-size: .85rem; margin: 10px 0 0; }
 
-  #pdp-{{ section.id }} .pdp__cta {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 100%; min-height: 54px; padding: 0 2em; border: 0;
-    border-radius: 999px; background: var(--p-dark); color: var(--p-cream);
-    font: inherit; font-weight: 600; font-size: 1rem; cursor: pointer;
-    text-decoration: none; transition: opacity .2s;
+  /* botão do guia de tamanho: largura total, contornado */
+  #pdp-{{ section.id }} .pdp__sizeGuide {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; min-height: 52px; margin: 18px 0 12px;
+    border: 1px solid #e3e3e5; border-radius: 999px; background: #fff;
+    font: inherit; font-size: .95rem; color: #111; cursor: pointer;
+    transition: border-color .18s;
   }
-  #pdp-{{ section.id }} .pdp__cta:hover { opacity: .88; }
+  #pdp-{{ section.id }} .pdp__sizeGuide:hover { border-color: #111; }
+  #pdp-{{ section.id }} .pdp__chev { margin-left: 2px; color: #9a9aa0; }
+
+  /* CTA principal */
+  #pdp-{{ section.id }} .pdp__cta {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; min-height: 58px; padding: 0 2em; border: 0;
+    border-radius: 999px; background: var(--p-accent); color: #fff;
+    font: inherit; font-weight: 600; font-size: 1.02rem; cursor: pointer;
+    text-decoration: none; transition: filter .18s;
+  }
+  #pdp-{{ section.id }} .pdp__cta:hover { filter: brightness(1.07); }
+  #pdp-{{ section.id }} .pdp__cta[disabled] { background: #c9c9cd; cursor: not-allowed; }
   #pdp-{{ section.id }} .pdp__cta--wide { max-width: 380px; margin: 0 auto; }
+
+  /* card do brinde */
+  #pdp-{{ section.id }} .pdp__gift {
+    display: flex; align-items: center; gap: 14px;
+    background: #fff; border: 1px solid #ececed; border-radius: 18px;
+    padding: 14px 18px;
+  }
+  #pdp-{{ section.id }} .pdp__giftThumb {
+    width: 54px; height: 54px; flex: none; border-radius: 12px;
+    background: linear-gradient(150deg,#3a3a3d,#141416);
+    display: grid; place-items: center; overflow: hidden;
+  }
+  #pdp-{{ section.id }} .pdp__giftThumb img { width: 100%; height: 100%; object-fit: cover; }
+  #pdp-{{ section.id }} .pdp__giftText { flex: 1; min-width: 0; }
+  #pdp-{{ section.id }} .pdp__giftText strong { display: block; font-size: .98rem; color: #111; }
+  #pdp-{{ section.id }} .pdp__giftText span { font-size: .86rem; color: #8b8b90; }
+  #pdp-{{ section.id }} .pdp__giftPrice { text-align: right; flex: none; }
+  #pdp-{{ section.id }} .pdp__giftPrice s { display: block; font-size: .82rem; color: #9a9aa0; }
+  #pdp-{{ section.id }} .pdp__giftPrice em {
+    display: inline-block; margin-top: 4px; font-style: normal; font-weight: 600;
+    font-size: .8rem; color: #1a7f4b; background: #e7f6ee;
+    padding: .25em .8em; border-radius: 999px;
+  }
 
   #pdp-{{ section.id }} .pdp__trust {
     list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px;
-    padding: 0; margin: 22px 0 0; font-size: .86rem; color: rgba(45,45,45,.72);
+    padding: 0 4px; margin: 4px 0 0; font-size: .86rem; color: #6b6b70;
   }
-  #pdp-{{ section.id }} .pdp__trust li::before { content: "✓ "; color: var(--p-gold); }
-  #pdp-{{ section.id }} .pdp__box { font-size: .88rem; color: rgba(45,45,45,.7); margin-top: 14px; }
+  #pdp-{{ section.id }} .pdp__trust li::before { content: "✓ "; color: var(--p-accent); }
 
   /* ---- blocos ---- */
   #pdp-{{ section.id }} .pdp__block { padding: clamp(48px, 8vh, 96px) clamp(20px, 5vw, 56px); max-width: 1200px; margin: 0 auto; }
@@ -369,12 +456,13 @@
 
   /* ---- desktop ---- */
   @media (min-width: 750px) {
-    #pdp-{{ section.id }} .pdp__hero { grid-template-columns: 1.1fr .9fr; align-items: start; padding-top: clamp(32px, 5vh, 72px); }
-    #pdp-{{ section.id }} .pdp__buy { position: sticky; top: 96px; }
+    #pdp-{{ section.id }} .pdp__hero { grid-template-columns: 1.15fr .85fr; align-items: start; gap: 28px; padding: 0 clamp(16px,3vw,32px) clamp(32px,5vh,64px); }
+    #pdp-{{ section.id }} .pdp__gallery { border-radius: 22px; aspect-ratio: 4/5; }
+    #pdp-{{ section.id }} .pdp__panel { position: sticky; top: 96px; padding: 0; }
     #pdp-{{ section.id }} .pdp__grid { grid-template-columns: repeat(3, 1fr); }
     #pdp-{{ section.id }} .pdp__cols { grid-template-columns: repeat(3, 1fr); gap: 40px; }
     #pdp-{{ section.id }} .pdp__block--app { grid-template-columns: 1.1fr .9fr; align-items: center; }
-    #pdp-{{ section.id }} .pdp__cta { width: auto; min-width: 260px; }
+    #pdp-{{ section.id }} .pdp__cta--wide { width: auto; min-width: 280px; }
     #pdp-{{ section.id }} .pdp__wideCopy { position: absolute; inset: auto 0 0 0; color: var(--p-cream); background: linear-gradient(180deg, transparent, rgba(24,24,24,.75)); }
     #pdp-{{ section.id }} .pdp__wideCopy .pdp__h2 { color: #fff; }
     #pdp-{{ section.id }} .pdp__wideCopy .pdp__lead { color: rgba(247,243,236,.9); }
@@ -487,7 +575,12 @@
 {
   "name": "Lume Ring — PDP",
   "tag": "section",
-  "settings": [],
+  "settings": [
+    { "type": "header", "content": "Parcelamento" },
+    { "type": "paragraph", "content": "Só ative se o seu gateway realmente oferecer parcelamento sem juros — anunciar condição que não existe é propaganda enganosa." },
+    { "type": "checkbox", "id": "show_installments", "label": "Exibir parcelamento", "default": false },
+    { "type": "range", "id": "installments", "label": "Número de parcelas", "min": 2, "max": 12, "step": 1, "default": 4 }
+  ],
   "presets": [{ "name": "Lume Ring — PDP", "category": "Lume" }]
 }
 {% endschema %}
