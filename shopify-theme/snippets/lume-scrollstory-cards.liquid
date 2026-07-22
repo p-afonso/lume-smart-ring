@@ -14,12 +14,15 @@
 {%- endcomment -%}
 
 {%- assign ss_buy = buy | default: '/products/lume-smart-ring' -%}
+{%- comment -%} cor de moldura de cada clipe, amostrada das bordas do 1º quadro {%- endcomment -%}
+{%- assign ss_bg = '#988976,#e0d0ba,#22110b,#d2bda4,#b18e6b,#9a7f64' | split: ',' -%}
 
 <div class="lss" data-lss>
   {%- comment -%} PALCO FIXO — os 6 vídeos empilhados {%- endcomment -%}
   <div class="lss__stage" aria-hidden="true">
     {%- for i in (1..6) -%}
-      <div class="lss__layer{% if forloop.first %} is-on{% endif %}" data-layer="{{ i }}">
+      <div class="lss__layer{% if forloop.first %} is-on{% endif %}" data-layer="{{ i }}"
+           style="background: {{ ss_bg[forloop.index0] }}">
         <video class="lss__video" data-lss-video
                muted loop playsinline preload="none"
                poster="{{ 'lume-ss-' | append: i | append: '.jpg' | asset_url }}"
@@ -177,6 +180,25 @@
   .lss__btn--solid { background: var(--ss-cream); color: var(--ss-dark); }
   .lss__btn--ghost { border-color: rgba(247,243,236,.55); color: var(--ss-cream); }
   .lss__btn--ghost:hover { background: rgba(247,243,236,.12); }
+
+  /* ---------- MOBILE: mostrar o QUADRO INTEIRO do vídeo ----------
+     O clipe é 16:9 e a tela do celular é ~9:19. Com "cover" o vídeo
+     era cortado nas laterais e a composição sumia. Com "contain" o
+     quadro aparece inteiro; a moldura usa a cor da própria cena, e o
+     texto ocupa a área livre embaixo. */
+  @media (max-width: 749px) {
+    .lss__layer video {
+      object-fit: contain;
+      object-position: center 30%;
+    }
+    /* scrim mais forte embaixo: o texto fica sobre a cor da cena,
+       que varia de clara a escura conforme o capítulo */
+    .lss__scrim {
+      background: linear-gradient(180deg,
+        rgba(24,24,24,.30) 0%, rgba(24,24,24,0) 18%,
+        rgba(24,24,24,0) 34%, rgba(24,24,24,.55) 62%, rgba(24,24,24,.88) 100%);
+    }
+  }
 
   @media (min-width: 750px) {
     .lss__cap { max-width: 38rem; }
