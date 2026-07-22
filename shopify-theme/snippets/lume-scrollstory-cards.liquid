@@ -1,273 +1,191 @@
 {%- comment -%}
-  LUME — História de scroll cinematográfica (6 capítulos).
-  Renderizada dentro de lume-ring.liquid logo APÓS o hero, para a
-  experiência começar assim que o usuário rola.
+  LUME — História de scroll cinematográfica (pinned scrollytelling).
 
-  4 camadas de movimento:
-    0. prefers-reduced-motion -> tudo estático (vence todas)
-    1. mobile  -> CSS Scroll-Driven Animations nativo (compositor)
-    2. desktop -> GSAP + ScrollTrigger no .page-wrapper
-    3. fallback-> IntersectionObserver (uma vez)
-  Watchdog: se o JS não bootar em 3s, revela tudo.
+  Estrutura: um PALCO fixo (position: sticky) segura os 6 vídeos empilhados,
+  que fazem crossfade entre si. O texto de cada capítulo rola POR CIMA do
+  vídeo. Resultado: o vídeo acompanha a rolagem, em vez de a página virar
+  uma pilha de blocos de tela cheia.
+
+  - sticky é CSS puro -> "o vídeo acompanha o scroll" nunca depende de JS
+  - troca de capítulo via IntersectionObserver + transição CSS
+  - cada vídeo carrega e toca só quando é o capítulo ativo; pausa ao sair
+  - sem IO / sem JS -> primeiro vídeo + todos os textos visíveis
+  - prefers-reduced-motion -> só os posters, sem autoplay
 {%- endcomment -%}
 
 {%- assign ss_buy = buy | default: '/products/lume-smart-ring' -%}
 
 <div class="lss" data-lss>
-  <script>
-    (function () {
-      var r = document.querySelector('[data-lss]');
-      if (!r) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      r.classList.add('lss--anim');
-      window.__lssGuard = setTimeout(function () { r.classList.remove('lss--anim'); }, 3000);
-    })();
-  </script>
-
-  <section class="lss__ch" data-ch="1">
-    <div class="lss__media">
-      <video class="lss__video" data-lss-video
-             muted loop playsinline preload="none"
-             poster="{{ 'lume-ss-1.jpg' | asset_url }}"
-             aria-label="Macro do titânio do anel Lume"
-             width="1280" height="716">
-        <source data-src="{{ 'lume-ss-1.mp4' | asset_url }}" type="video/mp4">
-      </video>
-      <noscript>
-        <img src="{{ 'lume-ss-1.jpg' | asset_url }}" alt="Macro do titânio do anel Lume" width="1600" height="893">
-      </noscript>
-    </div>
-    <div class="lss__copy">
-      <p class="lss__kicker">Titânio grau 5</p>
-      <h2 class="lss__title">Três gramas no seu dedo.</h2>
-      <p class="lss__text">Titânio aeroespacial com acabamento espelhado. Resistente a riscos, hipoalergênico, à prova d'água até 100 metros.</p>
-      <div class="lss__chips">
-        <span class="lss__chip">Titânio grau 5</span>
-        <span class="lss__chip">À prova d'água até 100 m</span>
-        <span class="lss__chip">IP68</span>
-        <span class="lss__chip">A partir de 3 g</span>
-        <span class="lss__chip">Hipoalergênico</span>
+  {%- comment -%} PALCO FIXO — os 6 vídeos empilhados {%- endcomment -%}
+  <div class="lss__stage" aria-hidden="true">
+    {%- for i in (1..6) -%}
+      <div class="lss__layer{% if forloop.first %} is-on{% endif %}" data-layer="{{ i }}">
+        <video class="lss__video" data-lss-video
+               muted loop playsinline preload="none"
+               poster="{{ 'lume-ss-' | append: i | append: '.jpg' | asset_url }}"
+               width="1280" height="716">
+          <source data-src="{{ 'lume-ss-' | append: i | append: '.mp4' | asset_url }}" type="video/mp4">
+        </video>
       </div>
-    </div>
-  </section>
+    {%- endfor -%}
+    <div class="lss__scrim"></div>
+  </div>
 
-  <section class="lss__ch" data-ch="2">
-    <div class="lss__media">
-      <video class="lss__video" data-lss-video
-             muted loop playsinline preload="none"
-             poster="{{ 'lume-ss-2.jpg' | asset_url }}"
-             aria-label="Módulo de sensores interno do anel Lume"
-             width="1280" height="716">
-        <source data-src="{{ 'lume-ss-2.mp4' | asset_url }}" type="video/mp4">
-      </video>
-      <noscript>
-        <img src="{{ 'lume-ss-2.jpg' | asset_url }}" alt="Módulo de sensores interno do anel Lume" width="1600" height="893">
-      </noscript>
-    </div>
-    <div class="lss__copy">
-      <p class="lss__kicker">Engenharia invisível</p>
-      <h2 class="lss__title">Sensores que não aparecem.</h2>
-      <p class="lss__text">Frequência cardíaca, variabilidade, oxigenação, temperatura e movimento — medidos sem você perceber.</p>
-    </div>
-  </section>
+  {%- comment -%} TRILHA — o texto rola por cima do palco {%- endcomment -%}
+  <div class="lss__track">
 
-  <section class="lss__ch" data-ch="3">
-    <div class="lss__media">
-      <video class="lss__video" data-lss-video
-             muted loop playsinline preload="none"
-             poster="{{ 'lume-ss-3.jpg' | asset_url }}"
-             aria-label="Anel Lume em repouso durante a noite"
-             width="1280" height="716">
-        <source data-src="{{ 'lume-ss-3.mp4' | asset_url }}" type="video/mp4">
-      </video>
-      <noscript>
-        <img src="{{ 'lume-ss-3.jpg' | asset_url }}" alt="Anel Lume em repouso durante a noite" width="1600" height="893">
-      </noscript>
-    </div>
-    <div class="lss__copy">
-      <p class="lss__kicker">Sono</p>
-      <h2 class="lss__title">Noites melhores. Dias melhores.</h2>
-      <p class="lss__text">Cada estágio da noite medido com precisão e traduzido em um único número claro ao acordar.</p>
-    </div>
-  </section>
-
-  <section class="lss__ch" data-ch="4">
-    <div class="lss__media">
-      <video class="lss__video" data-lss-video
-             muted loop playsinline preload="none"
-             poster="{{ 'lume-ss-4.jpg' | asset_url }}"
-             aria-label="Anel Lume sob a luz do dia"
-             width="1280" height="716">
-        <source data-src="{{ 'lume-ss-4.mp4' | asset_url }}" type="video/mp4">
-      </video>
-      <noscript>
-        <img src="{{ 'lume-ss-4.jpg' | asset_url }}" alt="Anel Lume sob a luz do dia" width="1600" height="893">
-      </noscript>
-    </div>
-    <div class="lss__copy">
-      <p class="lss__kicker">Monitoramento contínuo</p>
-      <h2 class="lss__title">Seu corpo, 24 horas por dia.</h2>
-      <p class="lss__text">Da primeira hora do sono ao fim do treino. Sem telas, sem notificações, sem ruído.</p>
-    </div>
-  </section>
-
-  <section class="lss__ch" data-ch="5">
-    <div class="lss__media">
-      <video class="lss__video" data-lss-video
-             muted loop playsinline preload="none"
-             poster="{{ 'lume-ss-5.jpg' | asset_url }}"
-             aria-label="Anel Lume na base de carregamento magnética"
-             width="1280" height="716">
-        <source data-src="{{ 'lume-ss-5.mp4' | asset_url }}" type="video/mp4">
-      </video>
-      <noscript>
-        <img src="{{ 'lume-ss-5.jpg' | asset_url }}" alt="Anel Lume na base de carregamento magnética" width="1600" height="893">
-      </noscript>
-    </div>
-    <div class="lss__copy">
-      <p class="lss__kicker">Autonomia</p>
-      <h2 class="lss__title">Uma semana longe da tomada.</h2>
-      <p class="lss__text">Até 7 dias por carga. A recarga completa leva cerca de 90 minutos na base magnética inclusa.</p>
-    </div>
-  </section>
-
-  <section class="lss__ch" data-ch="6">
-    <div class="lss__media">
-      <video class="lss__video" data-lss-video
-             muted loop playsinline preload="none"
-             poster="{{ 'lume-ss-6.jpg' | asset_url }}"
-             aria-label="Os três acabamentos do anel Lume"
-             width="1280" height="716">
-        <source data-src="{{ 'lume-ss-6.mp4' | asset_url }}" type="video/mp4">
-      </video>
-      <noscript>
-        <img src="{{ 'lume-ss-6.jpg' | asset_url }}" alt="Os três acabamentos do anel Lume" width="1600" height="893">
-      </noscript>
-    </div>
-    <div class="lss__copy">
-      <p class="lss__kicker">Três acabamentos</p>
-      <h2 class="lss__title">Escolha o seu.</h2>
-      <p class="lss__text">Preto Fosco, Prata Titânio e Dourado. O mesmo anel, o mesmo desempenho — o acabamento é seu.</p>
-      <div class="lss__cta">
-        <a class="lss__btn lss__btn--solid" href="{{ ss_buy }}">Comprar Lume Ring</a>
-        <a class="lss__btn lss__btn--ghost" href="/pages/guia-de-tamanho">Descubra seu tamanho</a>
+    <section class="lss__step" data-step="1">
+      <div class="lss__cap">
+        <p class="lss__kicker">Titânio grau 5</p>
+        <h2 class="lss__title">Três gramas no seu dedo.</h2>
+        <p class="lss__text">Titânio aeroespacial com acabamento espelhado. Resistente a riscos, hipoalergênico, à prova d'água até 100 metros.</p>
+        <div class="lss__chips">
+          <span class="lss__chip">Titânio grau 5</span>
+          <span class="lss__chip">100 m</span>
+          <span class="lss__chip">IP68</span>
+          <span class="lss__chip">3 g</span>
+          <span class="lss__chip">Hipoalergênico</span>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="lss__step" data-step="2">
+      <div class="lss__cap">
+        <p class="lss__kicker">Engenharia invisível</p>
+        <h2 class="lss__title">Sensores que não aparecem.</h2>
+        <p class="lss__text">Frequência cardíaca, variabilidade, oxigenação, temperatura e movimento — medidos sem você perceber.</p>
+      </div>
+    </section>
+
+    <section class="lss__step" data-step="3">
+      <div class="lss__cap">
+        <p class="lss__kicker">Sono</p>
+        <h2 class="lss__title">Noites melhores. Dias melhores.</h2>
+        <p class="lss__text">Cada estágio da noite medido com precisão e traduzido em um único número claro ao acordar.</p>
+      </div>
+    </section>
+
+    <section class="lss__step" data-step="4">
+      <div class="lss__cap">
+        <p class="lss__kicker">Monitoramento contínuo</p>
+        <h2 class="lss__title">Seu corpo, 24 horas por dia.</h2>
+        <p class="lss__text">Da primeira hora do sono ao fim do treino. Sem telas, sem notificações, sem ruído.</p>
+      </div>
+    </section>
+
+    <section class="lss__step" data-step="5">
+      <div class="lss__cap">
+        <p class="lss__kicker">Autonomia</p>
+        <h2 class="lss__title">Uma semana longe da tomada.</h2>
+        <p class="lss__text">Até 7 dias por carga. A recarga completa leva cerca de 90 minutos na base magnética inclusa.</p>
+      </div>
+    </section>
+
+    <section class="lss__step lss__step--last" data-step="6">
+      <div class="lss__cap">
+        <p class="lss__kicker">Três acabamentos</p>
+        <h2 class="lss__title">Escolha o seu.</h2>
+        <p class="lss__text">Preto Fosco, Prata Titânio e Dourado. O mesmo anel, o mesmo desempenho — o acabamento é seu.</p>
+        <div class="lss__cta">
+          <a class="lss__btn lss__btn--solid" href="{{ ss_buy }}">Comprar Lume Ring</a>
+          <a class="lss__btn lss__btn--ghost" href="/pages/guia-de-tamanho">Descubra seu tamanho</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
 </div>
 
 <style>
   .lss {
     --ss-ink: #2D2D2D; --ss-dark: #181818; --ss-cream: #F7F3EC;
     --ss-gold: #C9A97A; --ss-beige: #E7D0B1;
-    background: var(--ss-beige); color: var(--ss-ink);
+    position: relative;
+    background: var(--ss-dark);
     font-family: "Inter", system-ui, -apple-system, sans-serif;
   }
   .lss * { box-sizing: border-box; }
 
-  /* mobile-first: empilhado */
-  .lss__ch { display: flex; flex-direction: column; background: var(--ss-beige); }
-  .lss__media { position: relative; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; }
-  .lss__media img,
-  .lss__media video { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .lss__copy {
-    text-align: center;
-    padding: 30px clamp(20px, 6vw, 48px) clamp(56px, 10vh, 90px);
-    max-width: 46rem; margin: 0 auto;
+  /* ---------- PALCO FIXO ---------- */
+  .lss__stage {
+    position: sticky; top: 0;
+    height: 100svh; width: 100%;
+    overflow: hidden;
+    margin-bottom: -100svh;   /* puxa a trilha para sobrepor o palco */
+    z-index: 0;
   }
+  .lss__layer {
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity .9s cubic-bezier(.4,0,.2,1);
+  }
+  .lss__layer.is-on { opacity: 1; }
+  .lss__layer video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* scrim para o texto ficar legível sobre qualquer quadro */
+  .lss__scrim {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg,
+      rgba(24,24,24,.45) 0%, rgba(24,24,24,0) 28%,
+      rgba(24,24,24,0) 45%, rgba(24,24,24,.78) 100%);
+  }
+
+  /* ---------- TRILHA (texto rolando por cima) ---------- */
+  .lss__track { position: relative; z-index: 1; }
+  .lss__step {
+    min-height: 88svh;
+    display: flex; align-items: flex-end;
+    padding: 0 clamp(20px, 5vw, 72px) clamp(48px, 9vh, 96px);
+  }
+  .lss__step--last { min-height: 100svh; }
+
+  .lss__cap {
+    max-width: 34rem; color: var(--ss-cream);
+    opacity: 0; transform: translateY(28px);
+    transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
+  }
+  .lss__step.is-on .lss__cap { opacity: 1; transform: none; }
+  /* sem JS: tudo visível */
+  .lss:not([data-init]) .lss__cap { opacity: 1; transform: none; }
+
   .lss__kicker {
     font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
-    color: var(--ss-gold); font-weight: 600; margin: 0 0 14px;
+    color: var(--ss-gold); font-weight: 600; margin: 0 0 12px;
   }
   .lss__title {
     font-family: "Instrument Serif", "Times New Roman", serif; font-weight: 400;
-    font-size: clamp(2rem, 8vw, 3.4rem); line-height: 1.05;
-    margin: 0 0 16px; color: var(--ss-dark); text-wrap: balance;
+    font-size: clamp(2.1rem, 6vw, 4rem); line-height: 1.04;
+    margin: 0 0 14px; color: #fff; text-wrap: balance;
+    text-shadow: 0 2px 24px rgba(0,0,0,.35);
   }
   .lss__text {
     font-size: clamp(1rem, 1.5vw, 1.15rem); line-height: 1.6;
-    color: rgba(45,45,45,.78); margin: 0 auto; max-width: 42ch;
+    color: rgba(247,243,236,.9); margin: 0; max-width: 40ch;
+    text-shadow: 0 1px 16px rgba(0,0,0,.4);
   }
-  .lss__chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; justify-content: center; }
+  .lss__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
   .lss__chip {
-    border: 1px solid rgba(45,45,45,.22); border-radius: 999px;
-    padding: .5em 1.1em; font-size: .82rem; color: var(--ss-ink);
+    border: 1px solid rgba(247,243,236,.4); border-radius: 999px;
+    padding: .45em 1em; font-size: .78rem; color: rgba(247,243,236,.92);
   }
-  .lss__cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 32px; }
+  .lss__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
   .lss__btn {
     display: inline-flex; align-items: center; justify-content: center;
     min-height: 48px; padding: 0 1.8em; border-radius: 999px;
     font-weight: 600; font-size: .98rem; text-decoration: none;
     border: 1px solid transparent; transition: background .25s, border-color .25s;
   }
-  .lss__btn--solid { background: var(--ss-dark); color: var(--ss-cream); }
-  .lss__btn--ghost { border-color: rgba(45,45,45,.4); color: var(--ss-ink); }
+  .lss__btn--solid { background: var(--ss-cream); color: var(--ss-dark); }
+  .lss__btn--ghost { border-color: rgba(247,243,236,.55); color: var(--ss-cream); }
+  .lss__btn--ghost:hover { background: rgba(247,243,236,.12); }
 
-  /* desktop: lado a lado, alternando */
   @media (min-width: 750px) {
-    .lss__ch {
-      flex-direction: row; align-items: center;
-      min-height: 100svh; gap: clamp(28px, 5vw, 72px);
-      padding: 0 clamp(28px, 5vw, 80px);
-      max-width: 1500px; margin: 0 auto;
-    }
-    .lss__ch:nth-child(even) { flex-direction: row-reverse; }
-    .lss__media { flex: 1 1 55%; aspect-ratio: 16 / 10; border-radius: 24px; }
-    .lss__copy { flex: 1 1 45%; text-align: left; padding: 0; margin: 0; }
-    .lss__text { margin: 0; }
-    .lss__chips, .lss__cta { justify-content: flex-start; }
-    .lss__title { font-size: clamp(2.4rem, 3.6vw, 4rem); }
+    .lss__cap { max-width: 38rem; }
+    .lss__step { padding-bottom: clamp(64px, 11vh, 120px); }
   }
 
-  /* CAMADA 3 · fallback: estado oculto só quando o JS está vivo */
-  .lss--anim .lss__media img,
-  .lss--anim .lss__media video,
-  .lss--anim .lss__copy > * { opacity: 0; transform: translateY(24px); }
-  .lss .lss-in .lss__media img,
-  .lss .lss-in .lss__media video,
-  .lss .lss-in .lss__copy > * {
-    opacity: 1; transform: none;
-    transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
-  }
-  .lss .lss-in .lss__copy > *:nth-child(2) { transition-delay: .08s; }
-  .lss .lss-in .lss__copy > *:nth-child(3) { transition-delay: .16s; }
-  .lss .lss-in .lss__copy > *:nth-child(4) { transition-delay: .24s; }
-
-  /* CAMADA 1 · MOBILE: CSS scroll-driven nativo */
-  @supports (animation-timeline: view()) {
-    @media (max-width: 749px) {
-      .lss--anim .lss__media img,
-      .lss--anim .lss__media video,
-  .lss--anim .lss__media video,
-      .lss--anim .lss__copy > * { opacity: 1; transform: none; }
-      .lss__media img,
-      .lss__media video {
-        animation: lss-media linear both;
-        animation-timeline: view();
-        animation-range: entry 0% cover 55%;
-      }
-      .lss__copy > * {
-        animation: lss-rise linear both;
-        animation-timeline: view();
-        animation-range: entry 8% cover 42%;
-      }
-      @keyframes lss-media {
-        from { opacity: .35; transform: scale(1.08); }
-        to   { opacity: 1;   transform: scale(1); }
-      }
-      @keyframes lss-rise {
-        from { opacity: 0; transform: translateY(26px); }
-        to   { opacity: 1; transform: none; }
-      }
-    }
-  }
-
-  /* CAMADA 0 · reduced motion vence tudo */
   @media (prefers-reduced-motion: reduce) {
-    .lss .lss__media img, .lss .lss__media video, .lss .lss__copy > * {
-      opacity: 1 !important; transform: none !important;
-      animation: none !important; transition: none !important;
-    }
+    .lss__layer { transition: none; }
+    .lss__cap { opacity: 1 !important; transform: none !important; transition: none !important; }
   }
 </style>
 
@@ -275,106 +193,61 @@
 (function () {
   var root = document.querySelector('[data-lss]');
   if (!root || root.dataset.init) return;
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var layers = Array.prototype.slice.call(root.querySelectorAll('.lss__layer'));
+  var steps  = Array.prototype.slice.call(root.querySelectorAll('.lss__step'));
+  var vids   = Array.prototype.slice.call(root.querySelectorAll('[data-lss-video]'));
+
+  function loadVideo(v) {
+    if (!v || v.dataset.loaded) return;
+    v.dataset.loaded = '1';
+    var s = v.querySelector('source[data-src]');
+    if (s && !s.src) { s.src = s.dataset.src; v.load(); }
+  }
+
+  function play(v) {
+    if (!v || reduce) return;
+    loadVideo(v);
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+  }
+
+  function activate(idx) {
+    layers.forEach(function (l, i) {
+      var on = (i === idx);
+      l.classList.toggle('is-on', on);
+      var v = l.querySelector('video');
+      if (!v || reduce) return;
+      if (on) play(v);
+      else if (!v.paused) v.pause();
+    });
+    // pré-carrega o próximo para a troca não piscar
+    if (layers[idx + 1] && !reduce) loadVideo(layers[idx + 1].querySelector('video'));
+  }
+
+  function revealAll() {
+    steps.forEach(function (s) { s.classList.add('is-on'); });
+    play(vids[0]);
+  }
+
+  if (!('IntersectionObserver' in window)) { revealAll(); return; }
+
   root.dataset.init = '1';
 
-  if (window.__lssGuard) clearTimeout(window.__lssGuard);
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    root.classList.remove('lss--anim'); return;
-  }
-
-
-  /* ---- vídeos: carrega e toca só quando o capítulo entra na tela ---- */
-  (function initVideos() {
-    var vids = Array.prototype.slice.call(root.querySelectorAll('[data-lss-video]'));
-    if (!vids.length) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    function load(v) {
-      if (v.dataset.loaded) return;
-      v.dataset.loaded = '1';
-      var s = v.querySelector('source[data-src]');
-      if (s) { s.src = s.dataset.src; v.load(); }
-    }
-    if (!('IntersectionObserver' in window)) { vids.forEach(load); return; }
-
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        var v = e.target;
-        if (e.isIntersecting) {
-          load(v);
-          var p = v.play();
-          if (p && p.catch) p.catch(function () {});
-        } else if (!v.paused) {
-          v.pause();
-        }
-      });
-    }, { threshold: 0.25, rootMargin: '200px 0px' });
-    vids.forEach(function (v) { io.observe(v); });
-  })();
-
-  var chapters = Array.prototype.slice.call(root.querySelectorAll('.lss__ch'));
-  var isMobile = window.matchMedia('(max-width: 749px)').matches;
-  var nativeTimeline = window.CSS && CSS.supports && CSS.supports('animation-timeline: view()');
-
-  // CAMADA 1 — mobile com scroll-driven nativo: o CSS cuida de tudo.
-  if (isMobile && nativeTimeline) return;
-
-  function scroller() {
-    var pw = document.querySelector('.page-wrapper');
-    if (pw && pw.scrollHeight > pw.clientHeight + 40) return pw;
-    return null;
-  }
-
-  // CAMADA 2 — desktop com GSAP + ScrollTrigger
-  function initGSAP() {
-    var gsap = window.gsap, ST = window.ScrollTrigger;
-    if (!gsap || !ST) return false;
-    gsap.registerPlugin(ST);
-    var sc = scroller();
-    if (sc) ST.defaults({ scroller: sc });
-
-    chapters.forEach(function (ch) {
-      var img = ch.querySelector('.lss__media video, .lss__media img');
-      var bits = ch.querySelectorAll('.lss__copy > *');
-      var trig = { trigger: ch, start: 'top 78%', once: true };
-      gsap.fromTo(img, { opacity: 0, scale: 1.06 },
-        { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out', scrollTrigger: trig });
-      gsap.fromTo(bits, { opacity: 0, y: 26 },
-        { opacity: 1, y: 0, duration: .9, stagger: .08, ease: 'power3.out', scrollTrigger: trig });
-      gsap.fromTo(img, { yPercent: -3 }, {
-        yPercent: 3, ease: 'none',
-        scrollTrigger: { trigger: ch, start: 'top bottom', end: 'bottom top', scrub: true }
-      });
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-on');
+      activate(parseInt(e.target.dataset.step, 10) - 1);
     });
+  }, { threshold: 0.5 });
+  steps.forEach(function (s) { io.observe(s); });
 
-    root.classList.remove('lss--anim');
-    window.addEventListener('load', function () { ST.refresh(); });
-    [300, 1200].forEach(function (t) { setTimeout(function () { ST.refresh(); }, t); });
-    return true;
-  }
+  // rede de segurança: se o IO não disparar, revela tudo
+  setTimeout(function () {
+    if (!root.querySelector('.lss__step.is-on')) revealAll();
+  }, 2500);
 
-  // CAMADA 3 — fallback IntersectionObserver
-  function initIO() {
-    if (!('IntersectionObserver' in window)) { root.classList.remove('lss--anim'); return; }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        e.target.classList.add('lss-in');
-        io.unobserve(e.target);
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
-    chapters.forEach(function (ch) { io.observe(ch); });
-    setTimeout(function () {
-      if (!root.querySelector('.lss-in')) root.classList.remove('lss--anim');
-    }, 2500);
-  }
-
-  var tries = 0;
-  (function waitGSAP() {
-    if (initGSAP()) return;
-    if (++tries > 60) { initIO(); return; }
-    requestAnimationFrame(waitGSAP);
-  })();
+  activate(0);
 })();
 </script>
