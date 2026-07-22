@@ -15,12 +15,12 @@
 
 {%- assign ss_buy = buy | default: '/products/lume-smart-ring' -%}
 {%- comment -%} cor de moldura de cada clipe, amostrada do 1º quadro {%- endcomment -%}
-{%- assign ss_bg = '#988976,#e0d0ba,#22110b,#d2bda4,#b18e6b' | split: ',' -%}
+{%- assign ss_bg = '#988976,#e0d0ba,#22110b,#d2bda4' | split: ',' -%}
 
 <div class="lss" data-lss>
-  {%- comment -%} PALCO FIXO — os 5 clipes empilhados {%- endcomment -%}
+  {%- comment -%} PALCO FIXO — os 4 clipes empilhados {%- endcomment -%}
   <div class="lss__stage" aria-hidden="true">
-    {%- for i in (1..5) -%}
+    {%- for i in (1..4) -%}
       <div class="lss__layer{% if forloop.first %} is-on{% endif %}" data-layer="{{ i }}"
            style="background: {{ ss_bg[forloop.index0] }}">
         <video class="lss__video" data-lss-video
@@ -68,25 +68,18 @@
       </div>
     </section>
 
-    <section class="lss__step" data-step="4">
+    <section class="lss__step lss__step--last" data-step="4">
       <div class="lss__cap">
         <p class="lss__kicker">Monitoramento contínuo</p>
         <h2 class="lss__title">Seu corpo, 24 horas por dia.</h2>
         <p class="lss__text">Da primeira hora do sono ao fim do treino. Sem telas, sem notificações, sem ruído.</p>
-      </div>
-    </section>
-
-    <section class="lss__step lss__step--last" data-step="5">
-      <div class="lss__cap">
-        <p class="lss__kicker">Autonomia</p>
-        <h2 class="lss__title">Uma semana longe da tomada.</h2>
-        <p class="lss__text">Até 7 dias por carga. A recarga completa leva cerca de 90 minutos na base magnética inclusa.</p>
         <div class="lss__cta">
           <a class="lss__btn lss__btn--solid" href="{{ ss_buy }}">Comprar Lume Ring</a>
           <a class="lss__btn lss__btn--ghost" href="/pages/guia-de-tamanho">Descubra seu tamanho</a>
         </div>
       </div>
     </section>
+
 
   </div>
 </div>
