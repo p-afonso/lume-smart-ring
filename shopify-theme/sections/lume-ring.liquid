@@ -50,17 +50,20 @@
     <div class="lr-hero__cue" aria-hidden="true"><span></span></div>
   </section>
 
-  {%- comment -%} ===== 2 · HISTÓRIA DE SCROLL (logo após o hero) ===== {%- endcomment -%}
-  {% render 'lume-scrollstory-cards', buy: buy %}
+  {%- comment -%} ===== 2 · HISTÓRIA · parte 1 (material + sensores) ===== {%- endcomment -%}
+  {% render 'lume-scrollstory-cards', buy: buy, chapters: '1,2' %}
+
+  {%- comment -%} ===== 3 · LUME DUO (Band + Ring) ===== {%- endcomment -%}
+  {% render 'lume-duo-cards' %}
+
+  {%- comment -%} ===== 4 · HISTÓRIA · parte 2 (sono + 24h) ===== {%- endcomment -%}
+  {% render 'lume-scrollstory-cards', buy: buy, chapters: '3,4', with_assets: true %}
 
   {%- comment -%} ===== 3 · MANIFESTO ===== {%- endcomment -%}
   <section class="lr-manifesto">
     <h2 class="lr-display lr-manifesto__t lr-words">{{ section.settings.manifesto }}</h2>
     <p class="lr-lead lr-manifesto__s lr-r">{{ section.settings.manifesto_sub }}</p>
   </section>
-
-  {%- comment -%} ===== 4 · LUME DUO (Band + Ring) ===== {%- endcomment -%}
-  {% render 'lume-duo-cards' %}
 
   {%- comment -%} ===== 5 · ACCURACY ===== {%- endcomment -%}
   <section class="lr-accuracy">

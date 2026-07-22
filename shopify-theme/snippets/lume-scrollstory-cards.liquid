@@ -6,23 +6,36 @@
   rolagem define o currentTime do clipe — rolar pra baixo avança o
   quadro, rolar pra cima volta. Nada de loop automático.
 
+  PARAMETRIZÁVEL: aceita `chapters` (ex.: "1,2") para renderizar só um
+  trecho da história, permitindo intercalar outras seções entre os
+  capítulos. Cada instância vira um palco sticky independente.
+
+  Uso:
+    {% render 'lume-scrollstory-cards', buy: buy, chapters: '1,2' %}
+    ... outra seção ...
+    {% render 'lume-scrollstory-cards', buy: buy, chapters: '3,4', with_assets: true %}
+
   - sticky é CSS puro -> o pin nunca depende de JS
-  - scrub via rAF no scroller real do tema (.page-wrapper)
+  - scrub com throttle por TEMPO (flag booleana pode emperrar)
   - só o clipe ativo (e o próximo) são baixados
   - sem JS -> primeiro clipe + todos os textos visíveis
   - prefers-reduced-motion -> só os posters, sem scrub
 {%- endcomment -%}
 
 {%- assign ss_buy = buy | default: '/products/lume-smart-ring' -%}
+{%- assign ss_chapters = chapters | default: '1,2,3,4' -%}
+{%- assign ss_list = ss_chapters | split: ',' -%}
 {%- comment -%} cor de moldura de cada clipe, amostrada do 1º quadro {%- endcomment -%}
 {%- assign ss_bg = '#988976,#e0d0ba,#22110b,#d2bda4' | split: ',' -%}
 
 <div class="lss" data-lss>
-  {%- comment -%} PALCO FIXO — os 4 clipes empilhados {%- endcomment -%}
+  {%- comment -%} PALCO FIXO — só os clipes deste trecho {%- endcomment -%}
   <div class="lss__stage" aria-hidden="true">
-    {%- for i in (1..4) -%}
+    {%- for n in ss_list -%}
+      {%- assign i = n | plus: 0 -%}
+      {%- assign bgi = i | minus: 1 -%}
       <div class="lss__layer{% if forloop.first %} is-on{% endif %}" data-layer="{{ i }}"
-           style="background: {{ ss_bg[forloop.index0] }}">
+           style="background: {{ ss_bg[bgi] }}">
         <video class="lss__video" data-lss-video
                muted playsinline preload="none"
                poster="{{ 'lume-ss-' | append: i | append: '.jpg' | asset_url }}"
@@ -36,54 +49,51 @@
 
   {%- comment -%} TRILHA — o texto rola por cima do palco {%- endcomment -%}
   <div class="lss__track">
-
-    <section class="lss__step" data-step="1">
-      <div class="lss__cap">
-        <p class="lss__kicker">Titânio grau 5</p>
-        <h2 class="lss__title">Três gramas no seu dedo.</h2>
-        <p class="lss__text">Titânio aeroespacial com acabamento espelhado. Resistente a riscos, hipoalergênico, à prova d'água até 100 metros.</p>
-        <div class="lss__chips">
-          <span class="lss__chip">Titânio grau 5</span>
-          <span class="lss__chip">100 m</span>
-          <span class="lss__chip">IP68</span>
-          <span class="lss__chip">3 g</span>
-          <span class="lss__chip">Hipoalergênico</span>
+    {%- for n in ss_list -%}
+      {%- assign i = n | plus: 0 -%}
+      <section class="lss__step{% if forloop.last %} lss__step--last{% endif %}" data-step="{{ forloop.index }}">
+        <div class="lss__cap">
+          {%- case i -%}
+            {%- when 1 -%}
+              <p class="lss__kicker">Titânio grau 5</p>
+              <h2 class="lss__title">Três gramas no seu dedo.</h2>
+              <p class="lss__text">Titânio aeroespacial com acabamento espelhado. Resistente a riscos, hipoalergênico, à prova d'água até 100 metros.</p>
+              <div class="lss__chips">
+                <span class="lss__chip">Titânio grau 5</span>
+                <span class="lss__chip">100 m</span>
+                <span class="lss__chip">IP68</span>
+                <span class="lss__chip">3 g</span>
+                <span class="lss__chip">Hipoalergênico</span>
+              </div>
+            {%- when 2 -%}
+              <p class="lss__kicker">Engenharia invisível</p>
+              <h2 class="lss__title">Sensores que não aparecem.</h2>
+              <p class="lss__text">Frequência cardíaca, variabilidade, oxigenação, temperatura e movimento — medidos sem você perceber.</p>
+            {%- when 3 -%}
+              <p class="lss__kicker">Sono</p>
+              <h2 class="lss__title">Noites melhores. Dias melhores.</h2>
+              <p class="lss__text">Cada estágio da noite medido com precisão e traduzido em um único número claro ao acordar.</p>
+            {%- when 4 -%}
+              <p class="lss__kicker">Monitoramento contínuo</p>
+              <h2 class="lss__title">Seu corpo, 24 horas por dia.</h2>
+              <p class="lss__text">Da primeira hora do sono ao fim do treino. Sem telas, sem notificações, sem ruído.</p>
+              <div class="lss__cta">
+                <a class="lss__btn lss__btn--solid" href="{{ ss_buy }}">Comprar Lume Ring</a>
+                <a class="lss__btn lss__btn--ghost" href="/pages/guia-de-tamanho">Descubra seu tamanho</a>
+              </div>
+          {%- endcase -%}
         </div>
-      </div>
-    </section>
-
-    <section class="lss__step" data-step="2">
-      <div class="lss__cap">
-        <p class="lss__kicker">Engenharia invisível</p>
-        <h2 class="lss__title">Sensores que não aparecem.</h2>
-        <p class="lss__text">Frequência cardíaca, variabilidade, oxigenação, temperatura e movimento — medidos sem você perceber.</p>
-      </div>
-    </section>
-
-    <section class="lss__step" data-step="3">
-      <div class="lss__cap">
-        <p class="lss__kicker">Sono</p>
-        <h2 class="lss__title">Noites melhores. Dias melhores.</h2>
-        <p class="lss__text">Cada estágio da noite medido com precisão e traduzido em um único número claro ao acordar.</p>
-      </div>
-    </section>
-
-    <section class="lss__step lss__step--last" data-step="4">
-      <div class="lss__cap">
-        <p class="lss__kicker">Monitoramento contínuo</p>
-        <h2 class="lss__title">Seu corpo, 24 horas por dia.</h2>
-        <p class="lss__text">Da primeira hora do sono ao fim do treino. Sem telas, sem notificações, sem ruído.</p>
-        <div class="lss__cta">
-          <a class="lss__btn lss__btn--solid" href="{{ ss_buy }}">Comprar Lume Ring</a>
-          <a class="lss__btn lss__btn--ghost" href="/pages/guia-de-tamanho">Descubra seu tamanho</a>
-        </div>
-      </div>
-    </section>
-
-
+      </section>
+    {%- endfor -%}
   </div>
 </div>
 
+{%- comment -%}
+  CSS e JS saem só uma vez. Como {% render %} isola o escopo, quem chama
+  passa with_assets: true na ÚLTIMA instância — assim o script roda depois
+  de todos os [data-lss] existirem no DOM e inicializa todos de uma vez.
+{%- endcomment -%}
+{%- if with_assets -%}
 <style>
   .lss {
     --ss-ink: #2D2D2D; --ss-dark: #181818; --ss-cream: #F7F3EC;
@@ -189,97 +199,96 @@
 </style>
 
 <script>
+/* Inicializa TODAS as instâncias de [data-lss]. Cada uma é um palco
+   independente, com seu próprio conjunto de clipes e seu próprio scrub. */
 (function () {
-  var root = document.querySelector('[data-lss]');
-  if (!root || root.dataset.init) return;
-
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var layers = Array.prototype.slice.call(root.querySelectorAll('.lss__layer'));
-  var steps  = Array.prototype.slice.call(root.querySelectorAll('.lss__step'));
-  var vids   = layers.map(function (l) { return l.querySelector('video'); });
 
-  function revealAll() {
-    steps.forEach(function (s) { s.classList.add('is-on'); });
-  }
-  if (reduce) { revealAll(); return; }
+  function initOne(root) {
+    if (root.dataset.init) return;
 
-  root.dataset.init = '1';
+    var layers = Array.prototype.slice.call(root.querySelectorAll('.lss__layer'));
+    var steps  = Array.prototype.slice.call(root.querySelectorAll('.lss__step'));
+    var vids   = layers.map(function (l) { return l.querySelector('video'); });
 
-  function loadVideo(v) {
-    if (!v || v.dataset.loaded) return;
-    v.dataset.loaded = '1';
-    var s = v.querySelector('source[data-src]');
-    if (s && !s.src) {
-      s.src = s.dataset.src; v.preload = 'auto'; v.load();
-      // a duração só existe depois dos metadados; sem isso o primeiro
-      // update() retorna cedo e o clipe fica parado no quadro 0
-      v.addEventListener('loadedmetadata', onScroll, { once: true });
-      v.addEventListener('canplay', onScroll, { once: true });
+    if (reduce) { steps.forEach(function (s) { s.classList.add('is-on'); }); return; }
+    root.dataset.init = '1';
+
+    function loadVideo(v) {
+      if (!v || v.dataset.loaded) return;
+      v.dataset.loaded = '1';
+      var s = v.querySelector('source[data-src]');
+      if (s && !s.src) {
+        s.src = s.dataset.src; v.preload = 'auto'; v.load();
+        // a duração só existe depois dos metadados; sem isso o primeiro
+        // update() retorna cedo e o clipe fica parado no quadro 0
+        v.addEventListener('loadedmetadata', onScroll, { once: true });
+        v.addEventListener('canplay', onScroll, { once: true });
+      }
     }
-  }
 
-  var active = -1;
-  function setActive(i) {
-    if (i === active) return;
-    active = i;
-    layers.forEach(function (l, k) { l.classList.toggle('is-on', k === i); });
-    steps.forEach(function (s, k) { if (k <= i) s.classList.add('is-on'); });
-    loadVideo(vids[i]);
-    loadVideo(vids[i + 1]);   // próximo, para a troca não piscar
-  }
-
-  /* ---- o scroll dirige o vídeo: progresso do passo -> currentTime ---- */
-  function update() {
-    var vh = window.innerHeight || document.documentElement.clientHeight;
-    var best = 0, bestDist = Infinity;
-
-    for (var i = 0; i < steps.length; i++) {
-      var r = steps[i].getBoundingClientRect();
-      var d = Math.abs((r.top + r.height / 2) - vh / 2);
-      if (d < bestDist) { bestDist = d; best = i; }
+    var active = -1;
+    function setActive(i) {
+      if (i === active) return;
+      active = i;
+      layers.forEach(function (l, k) { l.classList.toggle('is-on', k === i); });
+      steps.forEach(function (s, k) { if (k <= i) s.classList.add('is-on'); });
+      loadVideo(vids[i]);
+      loadVideo(vids[i + 1]);
     }
-    setActive(best);
 
-    var step = steps[best], v = vids[best];
-    if (!v || !v.duration || !isFinite(v.duration)) return;
+    function update() {
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      var best = 0, bestDist = Infinity;
+      for (var i = 0; i < steps.length; i++) {
+        var r = steps[i].getBoundingClientRect();
+        var d = Math.abs((r.top + r.height / 2) - vh / 2);
+        if (d < bestDist) { bestDist = d; best = i; }
+      }
+      setActive(best);
 
-    var rect = step.getBoundingClientRect();
-    // 0 quando o passo entra por baixo, 1 quando termina de sair por cima
-    var p = (vh - rect.top) / (rect.height + vh);
-    p = p < 0 ? 0 : (p > 1 ? 1 : p);
+      var step = steps[best], v = vids[best];
+      if (!v || !v.duration || !isFinite(v.duration)) return;
 
-    var t = p * (v.duration - 0.06);
-    if (Math.abs(v.currentTime - t) > 0.02 && !v.seeking) {
-      try { v.currentTime = t; } catch (e) {}
+      var rect = step.getBoundingClientRect();
+      var p = (vh - rect.top) / (rect.height + vh);
+      p = p < 0 ? 0 : (p > 1 ? 1 : p);
+
+      var t = p * (v.duration - 0.06);
+      if (Math.abs(v.currentTime - t) > 0.02 && !v.seeking) {
+        try { v.currentTime = t; } catch (e) {}
+      }
     }
+
+    /* Throttle por TEMPO, não por flag booleana.
+       Com rAF + flag, se um frame não vier (aba oculta, aba em segundo
+       plano, throttling do navegador), a flag fica presa em true e a
+       rolagem para de mexer no vídeo para sempre. */
+    var lastRun = 0;
+    function onScroll() {
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      if (now - lastRun < 16) return;
+      lastRun = now;
+      try { update(); } catch (e) {}
+    }
+
+    var pw = document.querySelector('.page-wrapper');
+    var target = (pw && pw.scrollHeight > pw.clientHeight + 40) ? pw : window;
+    target.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+
+    setTimeout(function () {
+      if (!root.querySelector('.lss__step.is-on')) {
+        steps.forEach(function (s) { s.classList.add('is-on'); });
+      }
+    }, 2500);
+
+    loadVideo(vids[0]);
+    setActive(0);
+    update();
   }
 
-  /* Throttle por TEMPO, não por flag booleana.
-     Com rAF + flag, se um frame não vier (aba oculta, aba em segundo
-     plano, throttling do navegador), a flag fica presa em true e a
-     rolagem para de mexer no vídeo para sempre. Um limiar de tempo
-     não tem como emperrar. */
-  var lastRun = 0;
-  function onScroll() {
-    var now = (window.performance && performance.now) ? performance.now() : Date.now();
-    if (now - lastRun < 16) return;   // ~60fps
-    lastRun = now;
-    try { update(); } catch (e) {}
-  }
-
-  // o tema rola dentro de .page-wrapper, não na window
-  var pw = document.querySelector('.page-wrapper');
-  var target = (pw && pw.scrollHeight > pw.clientHeight + 40) ? pw : window;
-  target.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-
-  // rede de segurança: se nada ativar em 2,5s, revela os textos
-  setTimeout(function () {
-    if (!root.querySelector('.lss__step.is-on')) revealAll();
-  }, 2500);
-
-  loadVideo(vids[0]);
-  setActive(0);
-  update();
+  Array.prototype.slice.call(document.querySelectorAll('[data-lss]')).forEach(initOne);
 })();
 </script>
+{%- endif -%}
