@@ -339,6 +339,7 @@
   max-width: var(--maxw); margin: 0 auto;
 }
 @media (max-width: 880px) { #lume-ring .lr-materials { grid-template-columns: 1fr; } }
+@media (max-width: 749px) { #lume-ring .lr-materials__media { aspect-ratio: 4 / 5; } }
 #lume-ring .lr-materials--noimg { grid-template-columns: 1fr; max-width: 860px; text-align: center; }
 #lume-ring .lr-materials--noimg .lr-lead { margin-left: auto; margin-right: auto; }
 #lume-ring .lr-materials--noimg .lr-chips { justify-content: center; }

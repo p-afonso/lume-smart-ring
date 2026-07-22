@@ -86,11 +86,16 @@
 
   {%- comment -%} ===== 6 · BATTERY ===== {%- endcomment -%}
   <section class="lr-battery">
-    {%- if section.settings.battery_image -%}
-      <div class="lr-media" data-parallax="0.14">
-        {{ section.settings.battery_image | image_url: width: 2400 | image_tag: alt: 'Anel Lume na base de carregamento', loading: 'lazy' }}
-      </div>
-    {%- endif -%}
+    <div class="lr-media" data-parallax="0.14">
+      {%- if section.settings.battery_image -%}
+        {{ section.settings.battery_image | image_url: width: 2400 | image_tag: alt: 'Anel Lume na base de carregamento magnética', loading: 'lazy' }}
+      {%- else -%}
+        <picture>
+          <source media="(max-width: 749px)" srcset="{{ 'lume-battery-mobile.jpg' | asset_url }}" width="805" height="1000">
+          <img src="{{ 'lume-battery.jpg' | asset_url }}" alt="Anel Lume na base de carregamento magnética" loading="lazy" width="1800" height="1004">
+        </picture>
+      {%- endif -%}
+    </div>
     <div class="lr-battery__in">
       <p class="lr-display lr-battery__num lr-r">{{ section.settings.battery_num }}</p>
       <p class="lr-battery__t lr-r lr-r-d1">{{ section.settings.battery_text }}</p>
@@ -99,12 +104,17 @@
   </section>
 
   {%- comment -%} ===== 7 · MATERIALS ===== {%- endcomment -%}
-  <section class="lr-materials{% unless section.settings.material_image %} lr-materials--noimg{% endunless %}">
-    {%- if section.settings.material_image -%}
-      <div class="lr-materials__media lr-media lr-r">
+  <section class="lr-materials">
+    <div class="lr-materials__media lr-media lr-r">
+      {%- if section.settings.material_image -%}
         {{ section.settings.material_image | image_url: width: 1600 | image_tag: alt: 'Acabamento em titânio do anel Lume', loading: 'lazy' }}
-      </div>
-    {%- endif -%}
+      {%- else -%}
+        <picture>
+          <source media="(max-width: 749px)" srcset="{{ 'lume-material-mobile.jpg' | asset_url }}" width="805" height="1000">
+          <img src="{{ 'lume-material.jpg' | asset_url }}" alt="Macro do titânio do anel Lume sobre travertino" loading="lazy" width="1800" height="1344">
+        </picture>
+      {%- endif -%}
+    </div>
     <div>
       <h2 class="lr-display lr-materials__title lr-r">{{ section.settings.material_title }}</h2>
       <p class="lr-lead lr-r lr-r-d1">{{ section.settings.material_text }}</p>
