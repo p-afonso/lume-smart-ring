@@ -120,6 +120,59 @@
     </div>
   </section>
 
+  {%- comment -%} ===== 1.5 · ANATOMIA (exploded view + acordeão) ===== {%- endcomment -%}
+  <section class="pdp__anat">
+    <div class="pdp__anatMedia">
+      <video class="pdp__anatVideo" muted playsinline preload="none"
+             poster="{{ 'lume-anatomy.jpg' | asset_url }}" data-anat-video
+             aria-label="Anel Lume se abrindo em camadas" width="1000" height="556">
+        <source data-src="{{ 'lume-anatomy.mp4' | asset_url }}" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="pdp__anatList" data-anat>
+      <div class="pdp__anatItem is-open">
+        <button type="button" class="pdp__anatHead" aria-expanded="true" aria-controls="anat-1">
+          <span class="pdp__anatSign" aria-hidden="true"></span>
+          <span class="pdp__anatTitle">Sensores avançados</span>
+        </button>
+        <div class="pdp__anatBody" id="anat-1">
+          <p>Frequência cardíaca, variabilidade (HRV), oxigenação (SpO₂), temperatura de pele e acelerômetro 3D. Compacto e discreto, pensado para a sua rotina, recuperação e descanso.</p>
+        </div>
+      </div>
+
+      <div class="pdp__anatItem">
+        <button type="button" class="pdp__anatHead" aria-expanded="false" aria-controls="anat-2">
+          <span class="pdp__anatSign" aria-hidden="true"></span>
+          <span class="pdp__anatTitle">Resistência à água</span>
+        </button>
+        <div class="pdp__anatBody" id="anat-2" hidden>
+          <p>IP68, à prova d'água até 100 metros. Banho, piscina e mar sem precisar tirar do dedo.</p>
+        </div>
+      </div>
+
+      <div class="pdp__anatItem">
+        <button type="button" class="pdp__anatHead" aria-expanded="false" aria-controls="anat-3">
+          <span class="pdp__anatSign" aria-hidden="true"></span>
+          <span class="pdp__anatTitle">Alta durabilidade</span>
+        </button>
+        <div class="pdp__anatBody" id="anat-3" hidden>
+          <p>Titânio grau 5, hipoalergênico, a partir de 3 gramas e resistente a riscos.</p>
+        </div>
+      </div>
+
+      <div class="pdp__anatItem">
+        <button type="button" class="pdp__anatHead" aria-expanded="false" aria-controls="anat-4">
+          <span class="pdp__anatSign" aria-hidden="true"></span>
+          <span class="pdp__anatTitle">Por que usar um anel?</span>
+        </button>
+        <div class="pdp__anatBody" id="anat-4" hidden>
+          <p>No dedo a leitura fica mais estável que no pulso, e o formato é confortável o bastante para dormir — sem tela, sem notificação, sem ruído.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   {%- comment -%} ===== 2 · O QUE O LUME MONITORA ===== {%- endcomment -%}
   <section class="pdp__block">
     <h2 class="pdp__h2">Tudo que o Lume acompanha.</h2>
@@ -471,6 +524,56 @@
   @media (prefers-reduced-motion: reduce) {
     #pdp-{{ section.id }} .pdp__shot { transition: none; }
   }
+
+  /* ---- ANATOMIA (exploded view + acordeão) ---- */
+  #pdp-{{ section.id }} .pdp__anat {
+    display: grid; gap: 8px; align-items: center;
+    background: #fff; padding: clamp(32px, 6vh, 72px) clamp(16px, 4vw, 48px);
+    max-width: 1200px; margin: 0 auto;
+  }
+  #pdp-{{ section.id }} .pdp__anatMedia { display: grid; place-items: center; }
+  #pdp-{{ section.id }} .pdp__anatVideo { width: 100%; max-width: 460px; height: auto; display: block; }
+
+  #pdp-{{ section.id }} .pdp__anatItem { border-top: 1px solid #ececed; }
+  #pdp-{{ section.id }} .pdp__anatItem:last-child { border-bottom: 1px solid #ececed; }
+  #pdp-{{ section.id }} .pdp__anatHead {
+    display: flex; align-items: center; gap: 16px;
+    width: 100%; min-height: 68px; padding: 12px 0;
+    background: none; border: 0; cursor: pointer; font: inherit; text-align: left;
+  }
+  #pdp-{{ section.id }} .pdp__anatSign {
+    flex: none; width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid #e3e3e5; display: grid; place-items: center;
+    position: relative; transition: background .2s, border-color .2s;
+  }
+  #pdp-{{ section.id }} .pdp__anatSign::before,
+  #pdp-{{ section.id }} .pdp__anatSign::after {
+    content: ""; position: absolute; background: #111; border-radius: 2px;
+    transition: transform .25s ease, background .2s;
+  }
+  #pdp-{{ section.id }} .pdp__anatSign::before { width: 13px; height: 1.6px; }
+  #pdp-{{ section.id }} .pdp__anatSign::after { width: 1.6px; height: 13px; }
+  #pdp-{{ section.id }} .pdp__anatItem.is-open .pdp__anatSign { background: #111; border-color: #111; }
+  #pdp-{{ section.id }} .pdp__anatItem.is-open .pdp__anatSign::before { background: #fff; transform: rotate(45deg); }
+  #pdp-{{ section.id }} .pdp__anatItem.is-open .pdp__anatSign::after { background: #fff; transform: rotate(45deg); }
+  #pdp-{{ section.id }} .pdp__anatTitle {
+    flex: 1; font-family: "Instrument Serif", "Times New Roman", serif;
+    font-weight: 400; font-size: clamp(1.15rem, 2.4vw, 1.5rem); color: #111;
+  }
+  #pdp-{{ section.id }} .pdp__anatItem.is-open .pdp__anatTitle { font-weight: 400; }
+  #pdp-{{ section.id }} .pdp__anatBody p {
+    margin: 0 0 22px; padding-left: 54px;
+    color: #6b6b70; line-height: 1.65; font-size: .98rem; max-width: 48ch;
+  }
+
+  @media (min-width: 900px) {
+    #pdp-{{ section.id }} .pdp__anat { grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); }
+    #pdp-{{ section.id }} .pdp__anatVideo { max-width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pdp-{{ section.id }} .pdp__anatSign::before, #pdp-{{ section.id }} .pdp__anatSign::after { transition: none; }
+  }
 </style>
 
 <script>
@@ -568,6 +671,47 @@
       });
     }, { threshold: 0.25 }).observe(vid);
   }
+
+  /* ---- anatomia: acordeão + vídeo toca uma vez ao entrar ---- */
+  (function () {
+    var wrap = root.querySelector('[data-anat]');
+    if (!wrap) return;
+    var items = Array.prototype.slice.call(wrap.querySelectorAll('.pdp__anatItem'));
+
+    items.forEach(function (item) {
+      var head = item.querySelector('.pdp__anatHead');
+      var body = item.querySelector('.pdp__anatBody');
+      head.addEventListener('click', function () {
+        var abrir = !item.classList.contains('is-open');
+        items.forEach(function (o) {
+          o.classList.remove('is-open');
+          o.querySelector('.pdp__anatHead').setAttribute('aria-expanded', 'false');
+          o.querySelector('.pdp__anatBody').hidden = true;
+        });
+        if (abrir) {
+          item.classList.add('is-open');
+          head.setAttribute('aria-expanded', 'true');
+          body.hidden = false;
+        }
+      });
+    });
+
+    var vid = root.querySelector('[data-anat-video]');
+    if (!vid) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    function tocar() {
+      var s = vid.querySelector('source[data-src]');
+      if (s && !s.src) { s.src = s.dataset.src; vid.load(); }
+      var p = vid.play(); if (p && p.catch) p.catch(function () {});
+    }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { tocar(); io.unobserve(e.target); } });
+      }, { threshold: 0.35 });
+      io.observe(vid);
+    } else { tocar(); }
+  })();
 })();
 </script>
 
