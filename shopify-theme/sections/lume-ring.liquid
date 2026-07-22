@@ -50,7 +50,10 @@
     <div class="lr-hero__cue" aria-hidden="true"><span></span></div>
   </section>
 
-  {%- comment -%} ===== 2 · MANIFESTO ===== {%- endcomment -%}
+  {%- comment -%} ===== 2 · HISTÓRIA DE SCROLL (logo após o hero) ===== {%- endcomment -%}
+  {% render 'lume-scrollstory-cards', buy: buy %}
+
+  {%- comment -%} ===== 3 · MANIFESTO ===== {%- endcomment -%}
   <section class="lr-manifesto">
     <h2 class="lr-display lr-manifesto__t lr-words">{{ section.settings.manifesto }}</h2>
     <p class="lr-lead lr-manifesto__s lr-r">{{ section.settings.manifesto_sub }}</p>
@@ -84,49 +87,7 @@
     </div>
   </section>
 
-  {%- comment -%} ===== 6 · BATTERY ===== {%- endcomment -%}
-  <section class="lr-battery">
-    <div class="lr-media" data-parallax="0.14">
-      {%- if section.settings.battery_image -%}
-        {{ section.settings.battery_image | image_url: width: 2400 | image_tag: alt: 'Anel Lume na base de carregamento magnética', loading: 'lazy' }}
-      {%- else -%}
-        <picture>
-          <source media="(max-width: 749px)" srcset="{{ 'lume-battery-mobile.jpg' | asset_url }}" width="805" height="1000">
-          <img src="{{ 'lume-battery.jpg' | asset_url }}" alt="Anel Lume na base de carregamento magnética" loading="lazy" width="1800" height="1004">
-        </picture>
-      {%- endif -%}
-    </div>
-    <div class="lr-battery__in">
-      <p class="lr-display lr-battery__num lr-r">{{ section.settings.battery_num }}</p>
-      <p class="lr-battery__t lr-r lr-r-d1">{{ section.settings.battery_text }}</p>
-      <p class="lr-battery__note lr-r lr-r-d2">{{ section.settings.battery_note }}</p>
-    </div>
-  </section>
 
-  {%- comment -%} ===== 7 · MATERIALS ===== {%- endcomment -%}
-  <section class="lr-materials">
-    <div class="lr-materials__media lr-media lr-r">
-      {%- if section.settings.material_image -%}
-        {{ section.settings.material_image | image_url: width: 1600 | image_tag: alt: 'Acabamento em titânio do anel Lume', loading: 'lazy' }}
-      {%- else -%}
-        <picture>
-          <source media="(max-width: 749px)" srcset="{{ 'lume-material-mobile.jpg' | asset_url }}" width="805" height="1000">
-          <img src="{{ 'lume-material.jpg' | asset_url }}" alt="Macro do titânio do anel Lume sobre travertino" loading="lazy" width="1800" height="1344">
-        </picture>
-      {%- endif -%}
-    </div>
-    <div>
-      <h2 class="lr-display lr-materials__title lr-r">{{ section.settings.material_title }}</h2>
-      <p class="lr-lead lr-r lr-r-d1">{{ section.settings.material_text }}</p>
-      <div class="lr-chips lr-r lr-r-d2">
-        <span class="lr-chip">Titânio grau 5</span>
-        <span class="lr-chip">À prova d'água até 100 m</span>
-        <span class="lr-chip">IP68</span>
-        <span class="lr-chip">A partir de 3 g</span>
-        <span class="lr-chip">Hipoalergênico</span>
-      </div>
-    </div>
-  </section>
 
   {%- comment -%} ===== 8 · FEATURE TABS ===== {%- endcomment -%}
   <section class="lr-tabs">

@@ -1,0 +1,308 @@
+{%- comment -%}
+  LUME — História de scroll cinematográfica (6 capítulos).
+  Renderizada dentro de lume-ring.liquid logo APÓS o hero, para a
+  experiência começar assim que o usuário rola.
+
+  4 camadas de movimento:
+    0. prefers-reduced-motion -> tudo estático (vence todas)
+    1. mobile  -> CSS Scroll-Driven Animations nativo (compositor)
+    2. desktop -> GSAP + ScrollTrigger no .page-wrapper
+    3. fallback-> IntersectionObserver (uma vez)
+  Watchdog: se o JS não bootar em 3s, revela tudo.
+{%- endcomment -%}
+
+{%- assign ss_buy = buy | default: '/products/lume-smart-ring' -%}
+
+<div class="lss" data-lss>
+  <script>
+    (function () {
+      var r = document.querySelector('[data-lss]');
+      if (!r) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      r.classList.add('lss--anim');
+      window.__lssGuard = setTimeout(function () { r.classList.remove('lss--anim'); }, 3000);
+    })();
+  </script>
+
+  <section class="lss__ch" data-ch="1">
+    <div class="lss__media">
+      <picture>
+        <source media="(max-width: 749px)" srcset="{{ 'lume-ss-1-mobile.jpg' | asset_url }}">
+        <img src="{{ 'lume-ss-1.jpg' | asset_url }}" alt="Macro do titânio do anel Lume" loading="lazy" width="1600" height="893">
+      </picture>
+    </div>
+    <div class="lss__copy">
+      <p class="lss__kicker">Titânio grau 5</p>
+      <h2 class="lss__title">Três gramas no seu dedo.</h2>
+      <p class="lss__text">Titânio aeroespacial com acabamento espelhado. Resistente a riscos, hipoalergênico, à prova d'água até 100 metros.</p>
+      <div class="lss__chips">
+        <span class="lss__chip">Titânio grau 5</span>
+        <span class="lss__chip">À prova d'água até 100 m</span>
+        <span class="lss__chip">IP68</span>
+        <span class="lss__chip">A partir de 3 g</span>
+        <span class="lss__chip">Hipoalergênico</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="lss__ch" data-ch="2">
+    <div class="lss__media">
+      <picture>
+        <source media="(max-width: 749px)" srcset="{{ 'lume-ss-2-mobile.jpg' | asset_url }}">
+        <img src="{{ 'lume-ss-2.jpg' | asset_url }}" alt="Módulo de sensores interno do anel Lume" loading="lazy" width="1600" height="893">
+      </picture>
+    </div>
+    <div class="lss__copy">
+      <p class="lss__kicker">Engenharia invisível</p>
+      <h2 class="lss__title">Sensores que não aparecem.</h2>
+      <p class="lss__text">Frequência cardíaca, variabilidade, oxigenação, temperatura e movimento — medidos sem você perceber.</p>
+    </div>
+  </section>
+
+  <section class="lss__ch" data-ch="3">
+    <div class="lss__media">
+      <picture>
+        <source media="(max-width: 749px)" srcset="{{ 'lume-ss-3-mobile.jpg' | asset_url }}">
+        <img src="{{ 'lume-ss-3.jpg' | asset_url }}" alt="Anel Lume em repouso durante a noite" loading="lazy" width="1600" height="893">
+      </picture>
+    </div>
+    <div class="lss__copy">
+      <p class="lss__kicker">Sono</p>
+      <h2 class="lss__title">Noites melhores. Dias melhores.</h2>
+      <p class="lss__text">Cada estágio da noite medido com precisão e traduzido em um único número claro ao acordar.</p>
+    </div>
+  </section>
+
+  <section class="lss__ch" data-ch="4">
+    <div class="lss__media">
+      <picture>
+        <source media="(max-width: 749px)" srcset="{{ 'lume-ss-4-mobile.jpg' | asset_url }}">
+        <img src="{{ 'lume-ss-4.jpg' | asset_url }}" alt="Anel Lume sob a luz do dia" loading="lazy" width="1600" height="893">
+      </picture>
+    </div>
+    <div class="lss__copy">
+      <p class="lss__kicker">Monitoramento contínuo</p>
+      <h2 class="lss__title">Seu corpo, 24 horas por dia.</h2>
+      <p class="lss__text">Da primeira hora do sono ao fim do treino. Sem telas, sem notificações, sem ruído.</p>
+    </div>
+  </section>
+
+  <section class="lss__ch" data-ch="5">
+    <div class="lss__media">
+      <picture>
+        <source media="(max-width: 749px)" srcset="{{ 'lume-ss-5-mobile.jpg' | asset_url }}">
+        <img src="{{ 'lume-ss-5.jpg' | asset_url }}" alt="Anel Lume na base de carregamento magnética" loading="lazy" width="1600" height="893">
+      </picture>
+    </div>
+    <div class="lss__copy">
+      <p class="lss__kicker">Autonomia</p>
+      <h2 class="lss__title">Uma semana longe da tomada.</h2>
+      <p class="lss__text">Até 7 dias por carga. A recarga completa leva cerca de 90 minutos na base magnética inclusa.</p>
+    </div>
+  </section>
+
+  <section class="lss__ch" data-ch="6">
+    <div class="lss__media">
+      <picture>
+        <source media="(max-width: 749px)" srcset="{{ 'lume-ss-6-mobile.jpg' | asset_url }}">
+        <img src="{{ 'lume-ss-6.jpg' | asset_url }}" alt="Os três acabamentos do anel Lume" loading="lazy" width="1600" height="893">
+      </picture>
+    </div>
+    <div class="lss__copy">
+      <p class="lss__kicker">Três acabamentos</p>
+      <h2 class="lss__title">Escolha o seu.</h2>
+      <p class="lss__text">Preto Fosco, Prata Titânio e Dourado. O mesmo anel, o mesmo desempenho — o acabamento é seu.</p>
+      <div class="lss__cta">
+        <a class="lss__btn lss__btn--solid" href="{{ ss_buy }}">Comprar Lume Ring</a>
+        <a class="lss__btn lss__btn--ghost" href="/pages/guia-de-tamanho">Descubra seu tamanho</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .lss {
+    --ss-ink: #2D2D2D; --ss-dark: #181818; --ss-cream: #F7F3EC;
+    --ss-gold: #C9A97A; --ss-beige: #E7D0B1;
+    background: var(--ss-beige); color: var(--ss-ink);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+  }
+  .lss * { box-sizing: border-box; }
+
+  /* mobile-first: empilhado */
+  .lss__ch { display: flex; flex-direction: column; background: var(--ss-beige); }
+  .lss__media { position: relative; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; }
+  .lss__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .lss__copy {
+    text-align: center;
+    padding: 30px clamp(20px, 6vw, 48px) clamp(56px, 10vh, 90px);
+    max-width: 46rem; margin: 0 auto;
+  }
+  .lss__kicker {
+    font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--ss-gold); font-weight: 600; margin: 0 0 14px;
+  }
+  .lss__title {
+    font-family: "Instrument Serif", "Times New Roman", serif; font-weight: 400;
+    font-size: clamp(2rem, 8vw, 3.4rem); line-height: 1.05;
+    margin: 0 0 16px; color: var(--ss-dark); text-wrap: balance;
+  }
+  .lss__text {
+    font-size: clamp(1rem, 1.5vw, 1.15rem); line-height: 1.6;
+    color: rgba(45,45,45,.78); margin: 0 auto; max-width: 42ch;
+  }
+  .lss__chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; justify-content: center; }
+  .lss__chip {
+    border: 1px solid rgba(45,45,45,.22); border-radius: 999px;
+    padding: .5em 1.1em; font-size: .82rem; color: var(--ss-ink);
+  }
+  .lss__cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 32px; }
+  .lss__btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 48px; padding: 0 1.8em; border-radius: 999px;
+    font-weight: 600; font-size: .98rem; text-decoration: none;
+    border: 1px solid transparent; transition: background .25s, border-color .25s;
+  }
+  .lss__btn--solid { background: var(--ss-dark); color: var(--ss-cream); }
+  .lss__btn--ghost { border-color: rgba(45,45,45,.4); color: var(--ss-ink); }
+
+  /* desktop: lado a lado, alternando */
+  @media (min-width: 750px) {
+    .lss__ch {
+      flex-direction: row; align-items: center;
+      min-height: 100svh; gap: clamp(28px, 5vw, 72px);
+      padding: 0 clamp(28px, 5vw, 80px);
+      max-width: 1500px; margin: 0 auto;
+    }
+    .lss__ch:nth-child(even) { flex-direction: row-reverse; }
+    .lss__media { flex: 1 1 55%; aspect-ratio: 16 / 10; border-radius: 24px; }
+    .lss__copy { flex: 1 1 45%; text-align: left; padding: 0; margin: 0; }
+    .lss__text { margin: 0; }
+    .lss__chips, .lss__cta { justify-content: flex-start; }
+    .lss__title { font-size: clamp(2.4rem, 3.6vw, 4rem); }
+  }
+
+  /* CAMADA 3 · fallback: estado oculto só quando o JS está vivo */
+  .lss--anim .lss__media img,
+  .lss--anim .lss__copy > * { opacity: 0; transform: translateY(24px); }
+  .lss .lss-in .lss__media img,
+  .lss .lss-in .lss__copy > * {
+    opacity: 1; transform: none;
+    transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
+  }
+  .lss .lss-in .lss__copy > *:nth-child(2) { transition-delay: .08s; }
+  .lss .lss-in .lss__copy > *:nth-child(3) { transition-delay: .16s; }
+  .lss .lss-in .lss__copy > *:nth-child(4) { transition-delay: .24s; }
+
+  /* CAMADA 1 · MOBILE: CSS scroll-driven nativo */
+  @supports (animation-timeline: view()) {
+    @media (max-width: 749px) {
+      .lss--anim .lss__media img,
+      .lss--anim .lss__copy > * { opacity: 1; transform: none; }
+      .lss__media img {
+        animation: lss-media linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 55%;
+      }
+      .lss__copy > * {
+        animation: lss-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 8% cover 42%;
+      }
+      @keyframes lss-media {
+        from { opacity: .35; transform: scale(1.08); }
+        to   { opacity: 1;   transform: scale(1); }
+      }
+      @keyframes lss-rise {
+        from { opacity: 0; transform: translateY(26px); }
+        to   { opacity: 1; transform: none; }
+      }
+    }
+  }
+
+  /* CAMADA 0 · reduced motion vence tudo */
+  @media (prefers-reduced-motion: reduce) {
+    .lss .lss__media img, .lss .lss__copy > * {
+      opacity: 1 !important; transform: none !important;
+      animation: none !important; transition: none !important;
+    }
+  }
+</style>
+
+<script>
+(function () {
+  var root = document.querySelector('[data-lss]');
+  if (!root || root.dataset.init) return;
+  root.dataset.init = '1';
+
+  if (window.__lssGuard) clearTimeout(window.__lssGuard);
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    root.classList.remove('lss--anim'); return;
+  }
+
+  var chapters = Array.prototype.slice.call(root.querySelectorAll('.lss__ch'));
+  var isMobile = window.matchMedia('(max-width: 749px)').matches;
+  var nativeTimeline = window.CSS && CSS.supports && CSS.supports('animation-timeline: view()');
+
+  // CAMADA 1 — mobile com scroll-driven nativo: o CSS cuida de tudo.
+  if (isMobile && nativeTimeline) return;
+
+  function scroller() {
+    var pw = document.querySelector('.page-wrapper');
+    if (pw && pw.scrollHeight > pw.clientHeight + 40) return pw;
+    return null;
+  }
+
+  // CAMADA 2 — desktop com GSAP + ScrollTrigger
+  function initGSAP() {
+    var gsap = window.gsap, ST = window.ScrollTrigger;
+    if (!gsap || !ST) return false;
+    gsap.registerPlugin(ST);
+    var sc = scroller();
+    if (sc) ST.defaults({ scroller: sc });
+
+    chapters.forEach(function (ch) {
+      var img = ch.querySelector('.lss__media img');
+      var bits = ch.querySelectorAll('.lss__copy > *');
+      var trig = { trigger: ch, start: 'top 78%', once: true };
+      gsap.fromTo(img, { opacity: 0, scale: 1.06 },
+        { opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out', scrollTrigger: trig });
+      gsap.fromTo(bits, { opacity: 0, y: 26 },
+        { opacity: 1, y: 0, duration: .9, stagger: .08, ease: 'power3.out', scrollTrigger: trig });
+      gsap.fromTo(img, { yPercent: -3 }, {
+        yPercent: 3, ease: 'none',
+        scrollTrigger: { trigger: ch, start: 'top bottom', end: 'bottom top', scrub: true }
+      });
+    });
+
+    root.classList.remove('lss--anim');
+    window.addEventListener('load', function () { ST.refresh(); });
+    [300, 1200].forEach(function (t) { setTimeout(function () { ST.refresh(); }, t); });
+    return true;
+  }
+
+  // CAMADA 3 — fallback IntersectionObserver
+  function initIO() {
+    if (!('IntersectionObserver' in window)) { root.classList.remove('lss--anim'); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('lss-in');
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+    chapters.forEach(function (ch) { io.observe(ch); });
+    setTimeout(function () {
+      if (!root.querySelector('.lss-in')) root.classList.remove('lss--anim');
+    }, 2500);
+  }
+
+  var tries = 0;
+  (function waitGSAP() {
+    if (initGSAP()) return;
+    if (++tries > 60) { initIO(); return; }
+    requestAnimationFrame(waitGSAP);
+  })();
+})();
+</script>
