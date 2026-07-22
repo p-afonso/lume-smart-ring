@@ -125,7 +125,7 @@
     <div class="pdp__anatMedia">
       <video class="pdp__anatVideo" muted playsinline preload="none"
              poster="{{ 'lume-anatomy.jpg' | asset_url }}" data-anat-video
-             aria-label="Anel Lume se abrindo em camadas" width="1000" height="556">
+             aria-label="Anel Lume se abrindo em camadas" width="700" height="900">
         <source data-src="{{ 'lume-anatomy.mp4' | asset_url }}" type="video/mp4">
       </video>
     </div>
@@ -529,10 +529,10 @@
   #pdp-{{ section.id }} .pdp__anat {
     display: grid; gap: 8px; align-items: center;
     background: #fff; padding: clamp(32px, 6vh, 72px) clamp(16px, 4vw, 48px);
-    max-width: 1200px; margin: 0 auto;
+    max-width: 1440px; margin: 0 auto;
   }
   #pdp-{{ section.id }} .pdp__anatMedia { display: grid; place-items: center; }
-  #pdp-{{ section.id }} .pdp__anatVideo { width: 100%; max-width: 460px; height: auto; display: block; }
+  #pdp-{{ section.id }} .pdp__anatVideo { width: 100%; max-width: 560px; height: auto; display: block; margin: 0 auto; }
 
   #pdp-{{ section.id }} .pdp__anatItem { border-top: 1px solid #ececed; }
   #pdp-{{ section.id }} .pdp__anatItem:last-child { border-bottom: 1px solid #ececed; }
@@ -567,7 +567,7 @@
   }
 
   @media (min-width: 900px) {
-    #pdp-{{ section.id }} .pdp__anat { grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 72px); }
+    #pdp-{{ section.id }} .pdp__anat { grid-template-columns: 1.25fr 1fr; gap: clamp(32px, 5vw, 80px); }
     #pdp-{{ section.id }} .pdp__anatVideo { max-width: 100%; }
   }
 
